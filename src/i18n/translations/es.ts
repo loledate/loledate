@@ -47,6 +47,17 @@ export const es = {
     step3Desc: 'Provincia, elo, rol e intereses.',
     step4Title: 'Conecta',
     step4Desc: 'Haz match y habla.',
+    faqTitle: 'Preguntas frecuentes',
+    faq1Q: '¿Qué es Lol-edate?',
+    faq1A:
+      'Una plataforma de matchmaking para jugadores de League of Legends. Te empareja por elo, rol, mains e intereses para duoQ, amistad o citas.',
+    faq2Q: '¿Es gratis?',
+    faq2A: 'Sí. Registrarte, crear perfil, descubrir jugadores y chatear es gratuito.',
+    faq3Q: '¿Cómo encuentro duo para ranked?',
+    faq3A:
+      'Completa tu perfil con Riot ID, elo y rol, usa los filtros en Descubrir y haz match con jugadores compatibles.',
+    faq4Q: '¿Está afiliado a Riot Games?',
+    faq4A: 'No. Lol-edate no está afiliado, respaldado ni patrocinado por Riot Games.',
     footerDisclaimer: 'No afiliado a Riot Games.',
     joinDiscord: 'Únete al Discord',
   },
@@ -279,6 +290,7 @@ export const es = {
   presence: {
     online: 'En línea',
     offline: 'Desconectado',
+    lastSeen: 'Última conexión {{time}}',
   },
   avatar: {
     invalidFormat: 'Formato no válido. Usa JPG, PNG, WebP o GIF.',

@@ -8,9 +8,11 @@ import {
 } from 'react'
 import { useAuth } from './AuthContext'
 import { isSupabaseConfigured, requireSupabase } from '../lib/supabase'
+import { touchLastSeen } from '../lib/lastSeen'
 
 interface PresenceContextType {
   isOnline: (userId: string) => boolean
+  getLastSeen: (userId: string) => string | null
 }
 
 const PresenceContext = createContext<PresenceContextType | null>(null)
@@ -28,9 +30,22 @@ function collectOnlineIds(
   return ids
 }
 
+function markLeftUsers(
+  previous: Set<string>,
+  next: Set<string>,
+  at: string
+): Record<string, string> {
+  const updates: Record<string, string> = {}
+  for (const id of previous) {
+    if (!next.has(id)) updates[id] = at
+  }
+  return updates
+}
+
 export function PresenceProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   const [onlineIds, setOnlineIds] = useState<Set<string>>(new Set())
+  const [lastSeenMap, setLastSeenMap] = useState<Record<string, string>>({})
 
   useEffect(() => {
     if (!user || !isSupabaseConfigured) {
@@ -43,13 +58,28 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
       config: { presence: { key: user.id } },
     })
 
+    let previousOnline = new Set<string>()
+
     const sync = () => {
-      setOnlineIds(collectOnlineIds(channel.presenceState()))
+      const nextOnline = collectOnlineIds(channel.presenceState())
+      const leftAt = new Date().toISOString()
+      const leftUpdates = markLeftUsers(previousOnline, nextOnline, leftAt)
+
+      if (Object.keys(leftUpdates).length > 0) {
+        setLastSeenMap((current) => ({ ...current, ...leftUpdates }))
+      }
+
+      previousOnline = nextOnline
+      setOnlineIds(nextOnline)
     }
 
     channel.on('presence', { event: 'sync' }, sync)
     channel.on('presence', { event: 'join' }, sync)
     channel.on('presence', { event: 'leave' }, sync)
+
+    const ping = () => {
+      void touchLastSeen(user.id)
+    }
 
     channel.subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
@@ -57,6 +87,7 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
           user_id: user.id,
           online_at: new Date().toISOString(),
         })
+        ping()
         sync()
       }
     })
@@ -66,10 +97,19 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
         user_id: user.id,
         online_at: new Date().toISOString(),
       })
+      ping()
     }, 30_000)
 
+    const handlePageHide = () => {
+      ping()
+    }
+
+    window.addEventListener('pagehide', handlePageHide)
+
     return () => {
+      window.removeEventListener('pagehide', handlePageHide)
       window.clearInterval(heartbeat)
+      ping()
       void channel.untrack()
       client.removeChannel(channel)
       setOnlineIds(new Set())
@@ -81,8 +121,13 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
     [onlineIds]
   )
 
+  const getLastSeen = useCallback(
+    (userId: string) => lastSeenMap[userId] ?? null,
+    [lastSeenMap]
+  )
+
   return (
-    <PresenceContext.Provider value={{ isOnline }}>
+    <PresenceContext.Provider value={{ isOnline, getLastSeen }}>
       {children}
     </PresenceContext.Provider>
   )
@@ -91,7 +136,10 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
 export function usePresence() {
   const ctx = useContext(PresenceContext)
   if (!ctx) {
-    return { isOnline: () => false }
+    return {
+      isOnline: () => false,
+      getLastSeen: () => null,
+    }
   }
   return ctx
 }

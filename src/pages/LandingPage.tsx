@@ -15,13 +15,26 @@ export default function LandingPage() {
     { title: t('landing.step4Title'), desc: t('landing.step4Desc') },
   ]
 
+  const faq = [
+    { q: t('landing.faq1Q'), a: t('landing.faq1A') },
+    { q: t('landing.faq2Q'), a: t('landing.faq2A') },
+    { q: t('landing.faq3Q'), a: t('landing.faq3A') },
+    { q: t('landing.faq4Q'), a: t('landing.faq4A') },
+  ]
+
   return (
     <div className="animate-fade-in">
-      <section className="relative min-h-[88dvh] overflow-hidden">
+      <section
+        className="relative min-h-[88dvh] overflow-hidden"
+        aria-labelledby="landing-hero-title"
+      >
         <img
           src={coverImage}
-          alt="LoL E-DATE"
+          alt="Lol-edate — matchmaking y citas para jugadores de League of Legends"
           className="absolute inset-0 h-full w-full bg-black object-contain object-center sm:object-cover sm:object-[center_30%]"
+          width={1920}
+          height={1080}
+          fetchPriority="high"
         />
 
         {theme === 'light' && (
@@ -43,6 +56,14 @@ export default function LandingPage() {
             >
               {t('landing.eyebrow')}
             </p>
+            <h1
+              id="landing-hero-title"
+              className={`mb-4 text-2xl font-semibold leading-tight sm:text-3xl ${
+                theme === 'dark' ? 'text-white' : 'text-heading'
+              }`}
+            >
+              Lol-edate
+            </h1>
             <p
               className={`mb-8 text-lg leading-relaxed sm:text-xl ${
                 theme === 'dark' ? 'text-white/90' : 'text-heading/90'
@@ -80,26 +101,57 @@ export default function LandingPage() {
         className={`relative px-4 py-20 ${
           hasCustomBackground ? 'bg-transparent' : theme === 'dark' ? 'bg-black' : ''
         }`}
+        aria-labelledby="how-it-works-title"
       >
         {theme === 'light' && !hasCustomBackground && (
           <div className="pointer-events-none absolute inset-0 bg-page-glow" />
         )}
         <div className="relative mx-auto max-w-5xl">
-          <h2 className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted">
+          <h2
+            id="how-it-works-title"
+            className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted"
+          >
             {t('landing.howItWorks')}
           </h2>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, i) => (
-              <div key={step.title} className="glass-card animate-shimmer">
+              <article key={step.title} className="glass-card animate-shimmer">
                 <p className="mb-3 text-xs font-bold text-lol-gold-dark dark:text-white/40">
                   {String(i + 1).padStart(2, '0')}
                 </p>
                 <h3 className="mb-2 font-semibold text-heading">{step.title}</h3>
                 <p className="text-sm text-body">{step.desc}</p>
-              </div>
+              </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section
+        className={`px-4 py-16 ${
+          hasCustomBackground ? 'bg-transparent' : theme === 'dark' ? 'bg-black' : 'bg-white/40'
+        }`}
+        aria-labelledby="faq-title"
+      >
+        <div className="mx-auto max-w-3xl">
+          <h2
+            id="faq-title"
+            className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted"
+          >
+            {t('landing.faqTitle')}
+          </h2>
+          <dl className="space-y-4">
+            {faq.map((item) => (
+              <div
+                key={item.q}
+                className="rounded-2xl border border-theme bg-theme-card p-5"
+              >
+                <dt className="mb-2 font-semibold text-heading">{item.q}</dt>
+                <dd className="text-sm leading-relaxed text-body">{item.a}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 

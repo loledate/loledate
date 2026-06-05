@@ -66,7 +66,11 @@ function ProfileHeader({
           </h2>
           <p className="truncate text-sm text-body">{profile.city}</p>
           {showOnline && (
-            <OnlineStatusLabel userId={profile.userId} className="mt-0.5" />
+            <OnlineStatusLabel
+              userId={profile.userId}
+              lastSeenAt={profile.lastSeenAt}
+              className="mt-0.5"
+            />
           )}
         </div>
         {profile.distanceKm > 0 && (

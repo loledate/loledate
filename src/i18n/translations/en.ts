@@ -47,6 +47,17 @@ export const en = {
     step3Desc: 'Filter by region, rank, role, and vibe.',
     step4Title: 'Enter the chat',
     step4Desc: 'Connect, queue up, and make it epic.',
+    faqTitle: 'Frequently asked questions',
+    faq1Q: 'What is Lol-edate?',
+    faq1A:
+      'A matchmaking platform for League of Legends players. It matches you by rank, role, mains and interests for duoQ, friendship or dating.',
+    faq2Q: 'Is it free?',
+    faq2A: 'Yes. Signing up, creating a profile, discovering players and chatting is free.',
+    faq3Q: 'How do I find a ranked duo?',
+    faq3A:
+      'Complete your profile with Riot ID, rank and role, use Discover filters and match with compatible players.',
+    faq4Q: 'Is it affiliated with Riot Games?',
+    faq4A: 'No. Lol-edate is not affiliated with, endorsed by or sponsored by Riot Games.',
     footerDisclaimer: 'Not affiliated with Riot Games.',
     joinDiscord: 'Join our Discord',
   },
@@ -280,6 +291,7 @@ export const en = {
   presence: {
     online: 'Online',
     offline: 'Offline',
+    lastSeen: 'Last connected {{time}}',
   },
   avatar: {
     invalidFormat: 'Invalid format. Use JPG, PNG, WebP or GIF.',

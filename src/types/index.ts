@@ -37,6 +37,7 @@ export interface Profile {
   reputationCount?: number
   reputationTier?: string
   reputationLikedByMe?: boolean
+  lastSeenAt?: string | null
 }
 
 export interface Filters {

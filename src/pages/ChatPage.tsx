@@ -245,7 +245,10 @@ export default function ChatPage() {
             <h2 className="truncate text-sm font-medium text-heading">
               {match.profile.name}
             </h2>
-            <OnlineStatusLabel userId={match.profile.userId} />
+            <OnlineStatusLabel
+              userId={match.profile.userId}
+              lastSeenAt={match.profile.lastSeenAt}
+            />
             <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-muted">
               <span className="truncate">{match.profile.city}</span>
               {match.profile.elo && (

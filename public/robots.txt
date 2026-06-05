@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /register
+Disallow: /discover
+Disallow: /profile
+Disallow: /matches
+Disallow: /chat/
+Disallow: /user/
+
+Sitemap: https://loledate.app/sitemap.xml

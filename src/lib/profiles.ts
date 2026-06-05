@@ -50,6 +50,7 @@ function mapRowToProfile(row: ProfileRow): Profile {
     playSchedule: row.play_schedule ?? '',
     discordUsername: row.discord_username ?? '',
     xUsername: row.x_username ?? '',
+    lastSeenAt: row.last_seen_at ?? null,
   }
 }
 

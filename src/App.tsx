@@ -9,6 +9,7 @@ import ThemePicker from './components/ThemePicker'
 import BetaBadge from './components/BetaBadge'
 import BackgroundSettings from './components/BackgroundSettings'
 import FavoriteSongUpdateModal from './components/FavoriteSongUpdateModal'
+import Seo from './components/Seo'
 import ProtectedRoute from './components/ProtectedRoute'
 import GuestRoute from './components/GuestRoute'
 import LandingPage from './pages/LandingPage'
@@ -28,6 +29,7 @@ export default function App() {
           <PresenceProvider>
           <AppProvider>
           <BrowserRouter>
+            <Seo />
             <BetaBadge />
             <BackgroundSettings />
             <ThemePicker />
