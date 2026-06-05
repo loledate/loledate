@@ -6,11 +6,14 @@ import { useTheme } from '../context/ThemeContext'
 export default function Layout() {
   const location = useLocation()
   const isHome = location.pathname === '/'
+  const isChat = location.pathname.startsWith('/chat/')
   const { theme } = useTheme()
 
   return (
     <div
-      className={`flex min-h-dvh flex-col ${
+      className={`flex flex-col ${
+        isChat ? 'h-dvh overflow-hidden' : 'min-h-dvh'
+      } ${
         isHome
           ? theme === 'dark'
             ? 'bg-black'
@@ -22,7 +25,11 @@ export default function Layout() {
     >
       <MessageNotifications />
       <Header transparent={isHome} />
-      <main className="flex min-h-0 flex-1 flex-col">
+      <main
+        className={`flex flex-1 flex-col ${
+          isChat ? 'min-h-0 overflow-hidden' : 'min-h-0'
+        }`}
+      >
         <Outlet />
       </main>
     </div>

@@ -99,7 +99,7 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-8">
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:py-8">
       <div className="mb-6">
         <Link to={backTo} className="text-sm text-muted hover:text-heading">
           {t('common.back')}

@@ -161,7 +161,7 @@ export default function EditProfilePage() {
 
   if (!isEditing) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-8">
+      <div className="mx-auto max-w-2xl px-4 py-6 sm:py-8">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
             {t('profile.myProfile')}

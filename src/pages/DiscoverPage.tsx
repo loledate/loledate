@@ -33,7 +33,7 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-4 sm:py-8">
+    <div className="mx-auto max-w-2xl px-4 py-4 sm:py-8">
       <div className="mb-4 flex items-center justify-between sm:mb-6">
         <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
           {t('discover.title')}

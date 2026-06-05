@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useAuth } from '../context/AuthContext'
@@ -13,7 +13,6 @@ import {
 } from '../lib/messages'
 import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
-import ProfileSocials from '../components/ProfileSocials'
 
 export default function ChatPage() {
   const { matchId } = useParams<{ matchId: string }>()
@@ -146,11 +145,34 @@ export default function ChatPage() {
     inputRef.current?.focus()
   }, [matchLoading, match, matchId])
 
+  const scrollToBottom = useCallback((smooth = false) => {
+    const run = () => {
+      bottomRef.current?.scrollIntoView({
+        behavior: smooth ? 'smooth' : 'instant',
+        block: 'end',
+      })
+    }
+
+    requestAnimationFrame(() => {
+      run()
+      requestAnimationFrame(run)
+    })
+  }, [])
+
+  useLayoutEffect(() => {
+    if (messagesLoading) return
+    scrollToBottom(false)
+  }, [messages, messagesLoading, scrollToBottom])
+
   useEffect(() => {
-    const container = messagesContainerRef.current
-    if (!container) return
-    container.scrollTop = container.scrollHeight
-  }, [messages])
+    if (typeof window === 'undefined' || !window.visualViewport) return
+
+    const viewport = window.visualViewport
+    const handleResize = () => scrollToBottom(false)
+
+    viewport.addEventListener('resize', handleResize)
+    return () => viewport.removeEventListener('resize', handleResize)
+  }, [scrollToBottom])
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || !match || !user || !matchId || sending) return
@@ -166,13 +188,14 @@ export default function ChatPage() {
       })
       setInput('')
       await refreshMatchesSilent()
+      scrollToBottom(true)
     } catch (err) {
       setError(translateError(err, 'messages.sendFailed'))
     } finally {
       setSending(false)
       inputRef.current?.focus()
     }
-  }, [input, match, user, matchId, sending, refreshMatchesSilent, t])
+  }, [input, match, user, matchId, sending, refreshMatchesSilent, scrollToBottom, t])
 
   if (matchLoading) {
     return (
@@ -194,17 +217,20 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl min-h-0 flex-1 flex-col">
-      <div className="flex shrink-0 items-center gap-3 border-b border-theme px-4 py-3">
-        <Link to="/matches" className="text-sm text-muted hover:text-heading">
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-2xl flex-col">
+      <div className="flex shrink-0 items-center gap-2 border-b border-theme px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+        <Link
+          to="/matches"
+          className="shrink-0 text-sm text-muted hover:text-heading"
+        >
           {t('common.back')}
         </Link>
         <Link
           to={`/user/${match.profile.userId}`}
           state={{ from: `/chat/${matchId}` }}
-          className="flex min-w-0 flex-1 items-center gap-3 transition-opacity hover:opacity-80"
+          className="flex min-w-0 flex-1 items-center gap-2.5 transition-opacity hover:opacity-80 sm:gap-3"
         >
-          <div className="h-8 w-8 shrink-0 overflow-hidden rounded bg-rose-100 dark:bg-zinc-900">
+          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-rose-100 dark:bg-zinc-900 sm:h-10 sm:w-10">
             <Avatar
               url={match.profile.photoUrl}
               name={match.profile.name}
@@ -216,16 +242,13 @@ export default function ChatPage() {
             <h2 className="truncate text-sm font-medium text-heading">
               {match.profile.name}
             </h2>
-            <div className="flex items-center gap-2 text-xs text-muted">
-              {match.profile.city}
+            <div className="flex min-w-0 items-center gap-2 text-xs text-muted">
+              <span className="truncate">{match.profile.city}</span>
               {match.profile.elo && (
-                <Badge className="!px-1.5 !py-0 text-[10px]">
+                <Badge className="!px-1.5 !py-0 shrink-0 text-[10px]">
                   {match.profile.elo}
                 </Badge>
               )}
-            </div>
-            <div className="hidden sm:block">
-              <ProfileSocials profile={match.profile} compact />
             </div>
           </div>
         </Link>
@@ -233,7 +256,7 @@ export default function ChatPage() {
 
       <div
         ref={messagesContainerRef}
-        className="flex-1 space-y-3 overflow-y-auto overscroll-y-contain px-4 py-4"
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-y-contain px-3 py-3 sm:px-4 sm:py-4"
       >
         {messagesLoading ? (
           <p className="py-8 text-center text-sm text-muted">
@@ -292,11 +315,11 @@ export default function ChatPage() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="shrink-0 border-t border-theme p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="shrink-0 border-t border-theme px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4 sm:py-4 sm:pb-[max(1rem,env(safe-area-inset-bottom))]">
         {error && (
           <p className="mb-2 text-center text-xs text-body">{error}</p>
         )}
-        <div className="flex items-center gap-3">
+        <div className="flex items-end gap-2 sm:gap-3">
           <input
             ref={inputRef}
             type="text"
@@ -307,13 +330,13 @@ export default function ChatPage() {
               if (e.key === 'Enter') void handleSend()
             }}
             placeholder={t('messages.placeholder')}
-            className="input-field flex-1"
+            className="input-field min-w-0 flex-1"
           />
           <button
             type="button"
             onClick={() => void handleSend()}
             disabled={!input.trim() || sending}
-            className="btn-primary px-4 py-3 disabled:opacity-30"
+            className="btn-primary shrink-0 px-4 py-3 disabled:opacity-30"
           >
             {sending ? '...' : t('messages.send')}
           </button>

@@ -185,6 +185,8 @@ export const es = {
     lookingFor: 'Busca',
     interests: 'Intereses',
     socials: 'Redes',
+    bio: 'Bio',
+    schedule: 'Horario',
   },
   lookingFor: {
     duoQ: 'DuoQ',
