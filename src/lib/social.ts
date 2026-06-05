@@ -1,5 +1,5 @@
 export const SOCIAL_LINKS = {
-  discord: import.meta.env.VITE_DISCORD_URL ?? 'https://discord.gg/loledate',
+  discord: import.meta.env.VITE_DISCORD_URL ?? 'https://discord.gg/sn7v9CDgV',
   x: import.meta.env.VITE_X_URL ?? 'https://x.com/loledate',
 } as const
 

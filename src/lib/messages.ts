@@ -1,5 +1,6 @@
 import type { ChatMessage } from '../types'
 import { requireSupabase } from './supabase'
+import { assertMessageSendCooldown, toAppError } from './rateLimit'
 
 type MessageRow = {
   id: string
@@ -42,6 +43,8 @@ export async function sendMessage(
   const trimmed = content.trim()
   if (!trimmed) throw new Error('messages.emptyMessage')
 
+  assertMessageSendCooldown()
+
   const { data, error } = await requireSupabase()
     .from('messages')
     .insert({
@@ -52,7 +55,7 @@ export async function sendMessage(
     .select('id, sender_id, content, created_at')
     .single()
 
-  if (error) throw error
+  if (error) throw toAppError(error, 'messages.sendFailed')
   return mapMessage(data as MessageRow, senderId)
 }
 

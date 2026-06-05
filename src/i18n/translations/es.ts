@@ -47,6 +47,7 @@ export const es = {
     step4Title: 'Conecta',
     step4Desc: 'Haz match y habla.',
     footerDisclaimer: 'No afiliado a Riot Games.',
+    joinDiscord: 'Únete al Discord',
   },
   auth: {
     loginTitle: 'Iniciar sesión',
@@ -68,7 +69,6 @@ export const es = {
     invalidCredentials: 'Usuario o contraseña incorrectos.',
     userExists: 'Ese usuario ya existe.',
     passwordMin: 'La contraseña debe tener al menos 6 caracteres.',
-    rateLimit: 'Demasiados intentos. Espera un momento e inténtalo de nuevo.',
     emailDisabled:
       'El login por email está desactivado en Supabase. Activa el proveedor Email (Confirm email OFF).',
     dbError:
@@ -80,6 +80,9 @@ export const es = {
     usernameMax: 'Máximo 20 caracteres.',
     usernameChars: 'Solo letras, números y guion bajo.',
     invalidUsername: 'Usuario inválido',
+  },
+  errors: {
+    rateLimit: 'Demasiadas peticiones. Espera un momento e inténtalo de nuevo.',
   },
   config: {
     title: 'Configuración pendiente',

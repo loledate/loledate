@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import SocialLinks from '../components/SocialLinks'
+import { SOCIAL_LINKS } from '../lib/social'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
@@ -100,8 +102,21 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t border-theme bg-white/60 px-4 py-8 backdrop-blur-sm dark:border-white/10 dark:bg-black">
-        <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-medium text-heading">Lol-edate</span>
+        <div className="mx-auto flex max-w-5xl flex-col gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <span className="font-medium text-heading">Lol-edate</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={SOCIAL_LINKS.discord}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-heading transition-colors hover:text-lol-gold-dark dark:hover:text-white"
+              >
+                {t('landing.joinDiscord')}
+              </a>
+              <SocialLinks />
+            </div>
+          </div>
           <p className="text-xs text-muted">{t('landing.footerDisclaimer')}</p>
         </div>
       </footer>

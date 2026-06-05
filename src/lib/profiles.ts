@@ -14,6 +14,7 @@ import {
 } from './reputation'
 import { NEW_MATCH_PLACEHOLDER } from './chatConstants'
 import { fetchUnreadCountsByMatch } from './messages'
+import { toAppError } from './rateLimit'
 
 type ProfileRow = DbProfile & {
   lol_accounts: DbLolAccount[] | DbLolAccount | null
@@ -251,7 +252,7 @@ export async function recordSwipe(
     { onConflict: 'swiper_id,swiped_id' }
   )
 
-  if (error) throw error
+  if (error) throw toAppError(error, 'profile.saveFailed')
 
   if (action === 'pass') return false
 

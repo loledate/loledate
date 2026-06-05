@@ -47,6 +47,7 @@ export const en = {
     step4Title: 'Enter the chat',
     step4Desc: 'Connect, queue up, and make it epic.',
     footerDisclaimer: 'Not affiliated with Riot Games.',
+    joinDiscord: 'Join our Discord',
   },
   auth: {
     loginTitle: 'Log in',
@@ -80,6 +81,9 @@ export const en = {
     usernameMax: 'Maximum 20 characters.',
     usernameChars: 'Letters, numbers, and underscore only.',
     invalidUsername: 'Invalid username',
+  },
+  errors: {
+    rateLimit: 'Too many requests. Wait a moment and try again.',
   },
   config: {
     title: 'Setup pending',

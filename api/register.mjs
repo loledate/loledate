@@ -1,22 +1,23 @@
 import { createClient } from '@supabase/supabase-js'
+import {
+  getClientIp,
+  protectRegisterAttempt,
+} from './lib/rateLimit.mjs'
 
 const AUTH_EMAIL_DOMAIN = 'users.loledate.app'
-const WINDOW_MS = 60_000
-const MAX_SIGNUPS_PER_WINDOW = 30
-const attempts = new Map()
 
 function usernameToAuthEmail(username) {
   const normalized = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
-  if (!normalized) throw new Error('Usuario inválido')
+  if (!normalized) throw new Error('validation.invalidUsername')
   return `${normalized}@${AUTH_EMAIL_DOMAIN}`
 }
 
 function validateUsername(username) {
   const trimmed = username.trim()
-  if (trimmed.length < 3) return 'Mínimo 3 caracteres.'
-  if (trimmed.length > 20) return 'Máximo 20 caracteres.'
+  if (trimmed.length < 3) return 'validation.usernameMin'
+  if (trimmed.length > 20) return 'validation.usernameMax'
   if (!/^[a-zA-Z0-9_]+$/.test(trimmed)) {
-    return 'Solo letras, números y guion bajo.'
+    return 'validation.usernameChars'
   }
   return null
 }
@@ -24,31 +25,15 @@ function validateUsername(username) {
 function mapAuthError(message) {
   const lower = message.toLowerCase()
   if (lower.includes('already registered') || lower.includes('already been registered')) {
-    return 'Ese usuario ya existe.'
+    return 'auth.userExists'
   }
   if (lower.includes('password')) {
-    return 'La contraseña debe tener al menos 6 caracteres.'
+    return 'auth.passwordMin'
+  }
+  if (lower.includes('rate limit') || lower.includes('too many')) {
+    return 'errors.rateLimit'
   }
   return message
-}
-
-function getClientIp(req) {
-  const forwarded = req.headers['x-forwarded-for']
-  if (typeof forwarded === 'string' && forwarded.length > 0) {
-    return forwarded.split(',')[0].trim()
-  }
-  return req.socket?.remoteAddress ?? 'unknown'
-}
-
-function isRateLimited(ip) {
-  const now = Date.now()
-  let entry = attempts.get(ip)
-  if (!entry || now - entry.start > WINDOW_MS) {
-    entry = { start: now, count: 0 }
-  }
-  entry.count += 1
-  attempts.set(ip, entry)
-  return entry.count > MAX_SIGNUPS_PER_WINDOW
 }
 
 export default async function handler(req, res) {
@@ -57,9 +42,22 @@ export default async function handler(req, res) {
   }
 
   const ip = getClientIp(req)
-  if (isRateLimited(ip)) {
+
+  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  const supabase =
+    url && serviceKey
+      ? createClient(url, serviceKey, {
+          auth: { autoRefreshToken: false, persistSession: false },
+        })
+      : null
+
+  const rateCheck = await protectRegisterAttempt(supabase, ip)
+  if (!rateCheck.allowed) {
     return res.status(429).json({
-      error: 'Demasiados registros a la vez. Espera un minuto.',
+      error: 'errors.rateLimit',
+      retryAfter: 900,
     })
   }
 
@@ -69,27 +67,20 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: usernameError })
   }
   if (!password || String(password).length < 6) {
-    return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' })
+    return res.status(400).json({ error: 'auth.passwordMin' })
   }
 
-  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-  if (!url || !serviceKey) {
+  if (!supabase) {
     return res.status(500).json({
-      error: 'Registro no configurado en el servidor. Añade SUPABASE_SERVICE_ROLE_KEY en Vercel.',
+      error: 'auth.supabaseEnv',
     })
   }
-
-  const supabase = createClient(url, serviceKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  })
 
   let email
   try {
     email = usernameToAuthEmail(username)
   } catch {
-    return res.status(400).json({ error: 'Usuario inválido' })
+    return res.status(400).json({ error: 'validation.invalidUsername' })
   }
 
   const { error } = await supabase.auth.admin.createUser({
@@ -100,7 +91,9 @@ export default async function handler(req, res) {
   })
 
   if (error) {
-    return res.status(400).json({ error: mapAuthError(error.message) })
+    const mapped = mapAuthError(error.message)
+    const status = mapped === 'errors.rateLimit' ? 429 : 400
+    return res.status(status).json({ error: mapped })
   }
 
   return res.status(200).json({ ok: true })

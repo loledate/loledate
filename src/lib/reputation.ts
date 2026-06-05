@@ -1,5 +1,6 @@
 import type { Profile } from '../types'
 import { requireSupabase } from './supabase'
+import { toAppError } from './rateLimit'
 
 export type ReputationTierKey =
   | 'unrated'
@@ -111,14 +112,14 @@ export async function toggleProfileLike(
       .eq('liker_id', currentUserId)
       .eq('liked_user_id', targetUserId)
 
-    if (error) throw error
+    if (error) throw toAppError(error, 'reputation.toggleFailed')
   } else {
     const { error } = await client.from('profile_likes').insert({
       liker_id: currentUserId,
       liked_user_id: targetUserId,
     })
 
-    if (error) throw error
+    if (error) throw toAppError(error, 'reputation.toggleFailed')
   }
 
   return fetchProfileReputation(targetUserId, currentUserId)
