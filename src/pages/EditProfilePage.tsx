@@ -4,7 +4,7 @@ import { useApp } from '../context/AppContext'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import { fetchProfileReputation } from '../lib/reputation'
-import { CITIES, INTEREST_OPTIONS, isProfileComplete } from '../data/constants'
+import { CITIES, INTEREST_OPTIONS, isProfileComplete, MIN_AGE, MAX_AGE } from '../data/constants'
 import { CHAMPIONS, isValidChampion } from '../data/champions'
 import type { Role, LookingFor, Profile } from '../types'
 import Badge from '../components/Badge'
@@ -257,8 +257,8 @@ export default function EditProfilePage() {
             <label className="mb-1.5 block text-xs text-muted">{t('profile.age')}</label>
             <input
               type="number"
-              min={18}
-              max={99}
+              min={MIN_AGE}
+              max={MAX_AGE}
               value={form.age}
               onChange={(e) => update('age', Number(e.target.value))}
               className="input-field"

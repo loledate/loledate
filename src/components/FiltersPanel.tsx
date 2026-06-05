@@ -1,6 +1,6 @@
 import { useApp } from '../context/AppContext'
 import { useLanguage } from '../context/LanguageContext'
-import { CITIES, ELO_OPTIONS, INTEREST_OPTIONS } from '../data/constants'
+import { CITIES, ELO_OPTIONS, INTEREST_OPTIONS, MIN_AGE } from '../data/constants'
 import type { Role, LookingFor } from '../types'
 
 const ROLES: Role[] = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
@@ -78,7 +78,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
             <div className="flex items-center gap-4">
               <input
                 type="range"
-                min={18}
+                min={MIN_AGE}
                 max={40}
                 value={filters.ageMin}
                 onChange={(e) =>
@@ -88,7 +88,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
               />
               <input
                 type="range"
-                min={18}
+                min={MIN_AGE}
                 max={40}
                 value={filters.ageMax}
                 onChange={(e) =>

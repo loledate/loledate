@@ -114,7 +114,7 @@ export const es = {
     notFound: 'Perfil no encontrado',
     title: 'Perfil',
     name: 'Nombre',
-    age: 'Edad',
+    age: 'Edad (16+)',
     region: 'Provincia',
     rank: 'Elo',
     rankPlaceholder: 'Oro II',

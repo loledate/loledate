@@ -68,7 +68,7 @@ export interface ChatMessage {
 
 export const DEFAULT_FILTERS: Filters = {
   city: '',
-  ageMin: 18,
+  ageMin: 16,
   ageMax: 35,
   elo: '',
   role: '',

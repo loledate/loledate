@@ -3,6 +3,9 @@ import { DEFAULT_CITY } from './locations'
 
 export { CITIES, DEFAULT_CITY } from './locations'
 
+export const MIN_AGE = 16
+export const MAX_AGE = 99
+
 
 
 export const ELO_OPTIONS = [
@@ -119,7 +122,7 @@ export function isProfileComplete(profile: Profile): boolean {
 
     profile.name.trim() &&
 
-      profile.age >= 18 &&
+      profile.age >= MIN_AGE &&
 
       profile.city &&
 

@@ -115,7 +115,7 @@ export const en = {
     notFound: 'Profile not found',
     title: 'Profile',
     name: 'Name',
-    age: 'Age',
+    age: 'Age (16+)',
     region: 'Region',
     rank: 'Rank',
     rankPlaceholder: 'Gold II',

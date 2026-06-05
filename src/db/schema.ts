@@ -17,7 +17,7 @@ CREATE TABLE profiles (
 
   name TEXT NOT NULL,
 
-  age INTEGER NOT NULL CHECK (age >= 18),
+  age INTEGER NOT NULL CHECK (age >= 16),
 
   city TEXT NOT NULL,
 

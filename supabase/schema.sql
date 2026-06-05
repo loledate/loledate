@@ -9,7 +9,7 @@ CREATE TABLE profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE NOT NULL,
   name TEXT NOT NULL,
-  age INTEGER NOT NULL CHECK (age >= 18),
+  age INTEGER NOT NULL CHECK (age >= 16),
   city TEXT NOT NULL,
   avatar_url TEXT,
   bio TEXT,
