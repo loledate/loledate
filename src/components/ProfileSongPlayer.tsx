@@ -14,7 +14,7 @@ export default function ProfileSongPlayer({
   autoPlay = true,
 }: ProfileSongPlayerProps) {
   const { t } = useLanguage()
-  const mediaRef = useRef<HTMLVideoElement>(null)
+  const mediaRef = useRef<HTMLAudioElement>(null)
   const [playing, setPlaying] = useState(false)
   const [needsInteraction, setNeedsInteraction] = useState(false)
   const [muted, setMuted] = useState(false)
@@ -78,11 +78,10 @@ export default function ProfileSongPlayer({
 
   return (
     <div className="mb-4 overflow-hidden rounded-2xl border border-theme bg-white/80 p-4 shadow-card backdrop-blur-sm dark:bg-zinc-950/90">
-      <video
+      <audio
         ref={mediaRef}
         src={songUrl}
         loop
-        playsInline
         preload="metadata"
         className="hidden"
         onPlay={() => setPlaying(true)}

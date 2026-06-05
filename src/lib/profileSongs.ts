@@ -2,20 +2,36 @@ import { requireSupabase } from './supabase'
 
 const BUCKET = 'profile-songs'
 const MAX_BYTES = 10 * 1024 * 1024
-const ALLOWED_TYPES = new Set(['video/mp4', 'audio/mp4'])
+
+const MP3_TYPES = new Set(['audio/mpeg', 'audio/mp3'])
+const MP4_TYPES = new Set(['video/mp4', 'audio/mp4'])
+
+export type ProfileSongFormat = 'mp3' | 'mp4'
+
+export function getProfileSongFormat(file: File): ProfileSongFormat | null {
+  const name = file.name.toLowerCase()
+
+  if (MP3_TYPES.has(file.type) || name.endsWith('.mp3')) {
+    return 'mp3'
+  }
+  if (MP4_TYPES.has(file.type) || name.endsWith('.mp4')) {
+    return 'mp4'
+  }
+  return null
+}
 
 export function validateProfileSongFile(file: File): string | null {
-  const isMp4 =
-    ALLOWED_TYPES.has(file.type) ||
-    file.name.toLowerCase().endsWith('.mp4')
-
-  if (!isMp4) {
+  if (!getProfileSongFormat(file)) {
     return 'song.invalidFormat'
   }
   if (file.size > MAX_BYTES) {
     return 'song.tooLarge'
   }
   return null
+}
+
+function contentTypeForFormat(format: ProfileSongFormat): string {
+  return format === 'mp3' ? 'audio/mpeg' : 'video/mp4'
 }
 
 export async function uploadProfileSong(
@@ -25,14 +41,19 @@ export async function uploadProfileSong(
   const validationError = validateProfileSongFile(file)
   if (validationError) throw new Error(validationError)
 
+  const format = getProfileSongFormat(file)
+  if (!format) throw new Error('song.invalidFormat')
+
   const client = requireSupabase()
-  const path = `${userId}/song.mp4`
+  await deleteProfileSong(userId)
+
+  const path = `${userId}/song.${format}`
 
   const { error: uploadError } = await client.storage
     .from(BUCKET)
     .upload(path, file, {
       upsert: true,
-      contentType: 'video/mp4',
+      contentType: contentTypeForFormat(format),
       cacheControl: '3600',
     })
 

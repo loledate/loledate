@@ -72,7 +72,7 @@ export default function ProfileSongEditor({
         <input
           ref={inputRef}
           type="file"
-          accept="video/mp4,audio/mp4,.mp4"
+          accept="audio/mpeg,audio/mp3,video/mp4,audio/mp4,.mp3,.mp4"
           className="hidden"
           disabled={uploading}
           onChange={(e) => {

@@ -142,12 +142,12 @@ export const en = {
     photoUploadFailed: 'Could not upload photo.',
     photoRemoveFailed: 'Could not remove photo.',
     songTitle: 'Profile song',
-    songDescription: 'Upload an MP4 and it plays when someone opens your profile.',
+    songDescription: 'Upload an MP3 or MP4 and it plays when someone opens your profile.',
     uploadSong: 'Upload song',
     changeSong: 'Change song',
     removeSong: 'Remove song',
     uploadingSong: 'Uploading...',
-    songHint: 'MP4 only. Max 10 MB.',
+    songHint: 'MP3 or MP4. Max 10 MB.',
     songUploadFailed: 'Could not upload song.',
     songRemoveFailed: 'Could not remove song.',
     songPlaying: "{{name}}'s theme",
@@ -205,6 +205,7 @@ export const en = {
     socials: 'Socials',
     bio: 'Bio',
     schedule: 'Schedule',
+    hasSong: 'Song',
   },
   lookingFor: {
     duoQ: 'DuoQ',
@@ -250,7 +251,7 @@ export const en = {
     tooLarge: 'Image must be under 5 MB.',
   },
   song: {
-    invalidFormat: 'Invalid format. Use an MP4 file.',
+    invalidFormat: 'Invalid format. Use MP3 or MP4.',
     tooLarge: 'File must be under 10 MB.',
   },
   interests: {

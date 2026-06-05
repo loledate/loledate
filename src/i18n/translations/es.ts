@@ -141,12 +141,12 @@ export const es = {
     photoUploadFailed: 'No se pudo subir la foto.',
     photoRemoveFailed: 'No se pudo quitar la foto.',
     songTitle: 'Canción de perfil',
-    songDescription: 'Sube un MP4 y sonará al entrar en tu perfil.',
+    songDescription: 'Sube un MP3 o MP4 y sonará al entrar en tu perfil.',
     uploadSong: 'Subir canción',
     changeSong: 'Cambiar canción',
     removeSong: 'Quitar canción',
     uploadingSong: 'Subiendo...',
-    songHint: 'Solo MP4. Máximo 10 MB.',
+    songHint: 'MP3 o MP4. Máximo 10 MB.',
     songUploadFailed: 'No se pudo subir la canción.',
     songRemoveFailed: 'No se pudo quitar la canción.',
     songPlaying: 'Tema de {{name}}',
@@ -204,6 +204,7 @@ export const es = {
     socials: 'Redes',
     bio: 'Bio',
     schedule: 'Horario',
+    hasSong: 'Canción',
   },
   lookingFor: {
     duoQ: 'DuoQ',
@@ -249,7 +250,7 @@ export const es = {
     tooLarge: 'La imagen no puede superar 5 MB.',
   },
   song: {
-    invalidFormat: 'Formato no válido. Usa un archivo MP4.',
+    invalidFormat: 'Formato no válido. Usa MP3 o MP4.',
     tooLarge: 'El archivo no puede superar 10 MB.',
   },
   interests: {

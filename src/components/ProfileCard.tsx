@@ -75,7 +75,7 @@ function ProfileHeader({
         {profile.songUrl && (
           <span className="inline-flex items-center gap-1 rounded-full border border-theme px-2 py-1 text-xs text-muted">
             <Music2 className="h-3 w-3" aria-hidden />
-            MP4
+            {t('card.hasSong')}
           </span>
         )}
       </div>

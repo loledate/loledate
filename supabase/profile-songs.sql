@@ -1,4 +1,4 @@
--- Canción de perfil (MP4) + bucket de storage
+-- Canción de perfil (MP3 / MP4) + bucket de storage
 -- Ejecutar en Supabase SQL Editor
 
 ALTER TABLE profiles
@@ -10,7 +10,7 @@ VALUES (
   'profile-songs',
   true,
   10485760,
-  ARRAY['video/mp4', 'audio/mp4']::text[]
+  ARRAY['video/mp4', 'audio/mp4', 'audio/mpeg', 'audio/mp3']::text[]
 )
 ON CONFLICT (id) DO UPDATE SET
   public = EXCLUDED.public,
