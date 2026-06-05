@@ -89,13 +89,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
         if (!profile) {
           const username = getDisplayUsername(user!)
-          profile = await createProfile(user!.id, username)
+          try {
+            profile = await createProfile(user!.id, username)
+          } catch {
+            profile = await fetchProfile(user!.id)
+          }
+        }
+
+        if (!profile) {
+          profile = createEmptyProfile(user!.id, getDisplayUsername(user!))
         }
 
         if (!cancelled) setUserProfile(profile)
       } catch {
         if (!cancelled) {
-          setUserProfile(createEmptyProfile(user!.id, getDisplayUsername(user!)))
+          const fallback = await fetchProfile(user!.id).catch(() => null)
+          setUserProfile(
+            fallback ?? createEmptyProfile(user!.id, getDisplayUsername(user!))
+          )
         }
       } finally {
         if (!cancelled) setProfileLoading(false)
@@ -170,8 +181,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (!user) return { error: 'No hay sesión activa.' }
 
       try {
-        await saveProfile(user.id, profile)
-        setUserProfile(profile)
+        const saved = await saveProfile(user.id, profile)
+        setUserProfile(saved)
         await refreshDiscover()
         return { error: null }
       } catch (err) {

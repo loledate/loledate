@@ -2,6 +2,7 @@ import type { Profile } from '../types'
 import { requireSupabase } from './supabase'
 import type { DbLolAccount, DbProfile } from '../db/schema'
 import { createEmptyProfile } from '../data/constants'
+import { isValidChampion } from '../data/champions'
 import {
   normalizeDiscordUsername,
   normalizeXUsername,
@@ -30,7 +31,7 @@ function mapRowToProfile(row: ProfileRow): Profile {
     opggUrl: lol?.opgg_url ?? '',
     elo: lol?.elo ?? '',
     role: (lol?.main_role as Profile['role']) ?? 'Mid',
-    favoriteChampions: lol?.favorite_champions ?? [],
+    favoriteChampions: (lol?.favorite_champions ?? []).filter(isValidChampion),
     lookingFor:
       row.profile_looking_for?.map(
         (x) => x.looking_for as Profile['lookingFor'][number]
@@ -113,7 +114,7 @@ export async function createProfile(
 export async function saveProfile(
   userId: string,
   profile: Profile
-): Promise<void> {
+): Promise<Profile> {
   const client = requireSupabase()
 
   const { data: existing, error: fetchError } = await client
@@ -176,7 +177,7 @@ export async function saveProfile(
     opgg_url: profile.opggUrl || null,
     elo: profile.elo || null,
     main_role: profile.role,
-    favorite_champions: profile.favoriteChampions,
+    favorite_champions: profile.favoriteChampions.filter(isValidChampion),
     updated_at: new Date().toISOString(),
   }
 
@@ -212,6 +213,12 @@ export async function saveProfile(
     )
     if (error) throw error
   }
+
+  const saved = await fetchProfile(userId)
+  if (!saved) {
+    throw new Error('No se pudo cargar el perfil guardado.')
+  }
+  return saved
 }
 
 export async function recordSwipe(

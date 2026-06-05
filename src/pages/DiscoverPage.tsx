@@ -98,9 +98,15 @@ export default function DiscoverPage() {
 
           <p className="mb-6 max-w-xs text-sm text-muted">
 
-            Los perfiles se cargan desde Supabase cuando haya usuarios
+            Aquí solo ves a otros jugadores. Tu perfil está en{' '}
 
-            registrados. Completa tu perfil mientras tanto.
+            <Link to="/profile" className="underline underline-offset-2">
+
+              Perfil
+
+            </Link>
+
+            . Cuando haya más usuarios registrados, aparecerán aquí.
 
           </p>
 

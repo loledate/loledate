@@ -6,6 +6,8 @@ import { useApp } from '../context/AppContext'
 
 import { CITIES, INTEREST_OPTIONS, isProfileComplete } from '../data/constants'
 
+import { CHAMPIONS, isValidChampion } from '../data/champions'
+
 import type { Role, LookingFor } from '../types'
 
 import { LOOKING_FOR_LABELS } from '../types'
@@ -13,6 +15,8 @@ import { LOOKING_FOR_LABELS } from '../types'
 import Badge from '../components/Badge'
 
 import Avatar from '../components/Avatar'
+
+import ProfileCard from '../components/ProfileCard'
 
 
 
@@ -119,15 +123,12 @@ export default function EditProfilePage() {
 
 
   const addChampion = () => {
+    const name = champInput.trim()
+    if (!name || !isValidChampion(name)) return
+    if (form.favoriteChampions.includes(name)) return
 
-    if (champInput.trim() && !form.favoriteChampions.includes(champInput.trim())) {
-
-      update('favoriteChampions', [...form.favoriteChampions, champInput.trim()])
-
-      setChampInput('')
-
-    }
-
+    update('favoriteChampions', [...form.favoriteChampions, name])
+    setChampInput('')
   }
 
 
@@ -156,22 +157,13 @@ export default function EditProfilePage() {
 
     setSaving(false)
 
-
-
     if (saveError) {
-
       setError(saveError)
-
       return
-
     }
 
-
-
     setSaved(true)
-
     setTimeout(() => setSaved(false), 3000)
-
   }
 
 
@@ -187,6 +179,10 @@ export default function EditProfilePage() {
 
 
   const profileComplete = isProfileComplete(form)
+
+  const availableChampions = CHAMPIONS.filter(
+    (c) => !form.favoriteChampions.includes(c)
+  )
 
 
 
@@ -227,6 +223,18 @@ export default function EditProfilePage() {
         </p>
 
       )}
+
+      <div className="mb-10">
+
+        <h2 className="mb-4 text-xs font-medium uppercase tracking-widest text-muted">
+
+          Vista previa de tu perfil
+
+        </h2>
+
+        <ProfileCard profile={form} />
+
+      </div>
 
 
 
@@ -472,23 +480,39 @@ export default function EditProfilePage() {
 
             <div className="flex gap-2">
 
-              <input
-
-                type="text"
+              <select
 
                 value={champInput}
 
                 onChange={(e) => setChampInput(e.target.value)}
 
-                onKeyDown={(e) => e.key === 'Enter' && addChampion()}
-
-                placeholder="Campeon"
-
                 className="input-field flex-1"
 
-              />
+              >
 
-              <button onClick={addChampion} className="btn-secondary px-4">
+                <option value="">Elige un campeón...</option>
+
+                {availableChampions.map((champ) => (
+
+                  <option key={champ} value={champ}>
+
+                    {champ}
+
+                  </option>
+
+                ))}
+
+              </select>
+
+              <button
+
+                onClick={addChampion}
+
+                disabled={!champInput}
+
+                className="btn-secondary px-4 disabled:opacity-40"
+
+              >
 
                 Añadir
 
