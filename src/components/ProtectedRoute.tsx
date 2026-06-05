@@ -12,7 +12,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
-        <p className="text-sm text-rose-400">Cargando...</p>
+        <p className="text-sm text-muted">Cargando...</p>
       </div>
     )
   }
@@ -20,14 +20,14 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (!isConfigured) {
     return (
       <div className="mx-auto max-w-lg px-4 py-20">
-        <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-rose-400">
+        <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
           Configuración pendiente
         </h1>
-        <p className="text-sm leading-relaxed text-rose-500">
-          Crea un archivo <code className="text-rose-700">.env</code> en la raíz
-          del proyecto con <code className="text-rose-700">VITE_SUPABASE_URL</code>{' '}
-          y <code className="text-rose-700">VITE_SUPABASE_ANON_KEY</code>, y
-          ejecuta el SQL de <code className="text-rose-700">src/db/schema.ts</code>{' '}
+        <p className="text-sm leading-relaxed text-body">
+          Crea un archivo <code className="text-body">.env</code> en la raíz
+          del proyecto con <code className="text-body">VITE_SUPABASE_URL</code>{' '}
+          y <code className="text-body">VITE_SUPABASE_ANON_KEY</code>, y
+          ejecuta el SQL de <code className="text-body">src/db/schema.ts</code>{' '}
           en Supabase.
         </p>
       </div>

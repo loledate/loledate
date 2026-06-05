@@ -4,11 +4,11 @@
 
 @layer base {
   * {
-    @apply border-rose-200/60;
+    @apply border-rose-200/60 dark:border-white/10;
   }
 
   body {
-    @apply bg-lol-cream font-body text-rose-950 antialiased;
+    @apply bg-lol-cream font-body text-rose-950 antialiased dark:bg-black dark:text-white;
   }
 
   ::-webkit-scrollbar {
@@ -16,40 +16,60 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-rose-50;
+    @apply bg-rose-50 dark:bg-zinc-950;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-rose-300;
+    @apply rounded-full bg-rose-300 dark:bg-zinc-700;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-rose-400;
+    @apply bg-rose-400 dark:bg-zinc-600;
   }
 }
 
 @layer components {
   .input-field {
-    @apply w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm text-rose-950 placeholder-rose-300 outline-none transition-all focus:border-rose-400 focus:shadow-glow;
+    @apply w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm text-rose-950 placeholder-rose-300 outline-none transition-all focus:border-rose-400 focus:shadow-glow dark:border-white/15 dark:bg-zinc-950 dark:text-white dark:placeholder-white/30 dark:focus:border-rose-500/50 dark:focus:shadow-glow-dark;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-lol-gold to-amber-400 px-6 py-3 text-sm font-semibold text-rose-950 shadow-glow-gold transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-lol-gold to-amber-400 px-6 py-3 text-sm font-semibold text-rose-950 shadow-glow-gold transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] dark:from-rose-600 dark:to-pink-600 dark:text-white dark:shadow-glow-dark;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-white/80 px-6 py-3 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all hover:border-rose-400 hover:bg-white hover:shadow-glow;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-white/80 px-6 py-3 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all hover:border-rose-400 hover:bg-white hover:shadow-glow dark:border-white/20 dark:bg-white/5 dark:text-white/80 dark:hover:border-white/40 dark:hover:bg-white/10;
   }
 
   .glass-card {
-    @apply rounded-2xl border border-white/60 bg-white/70 p-6 shadow-card backdrop-blur-md;
+    @apply rounded-2xl border border-white/60 bg-white/70 p-6 shadow-card backdrop-blur-md dark:border-white/10 dark:bg-zinc-950/80 dark:shadow-card-dark;
   }
 
   .range-slider {
-    @apply h-1.5 w-full cursor-pointer appearance-none rounded-full bg-rose-200 accent-rose-500;
+    @apply h-1.5 w-full cursor-pointer appearance-none rounded-full bg-rose-200 accent-rose-500 dark:bg-white/15 dark:accent-rose-400;
   }
 
   .range-slider::-webkit-slider-thumb {
-    @apply h-4 w-4 cursor-pointer appearance-none rounded-full bg-rose-500 shadow-glow;
+    @apply h-4 w-4 cursor-pointer appearance-none rounded-full bg-rose-500 shadow-glow dark:bg-rose-400;
+  }
+
+  .text-muted {
+    @apply text-rose-400 dark:text-white/40;
+  }
+
+  .text-body {
+    @apply text-rose-700 dark:text-white/70;
+  }
+
+  .text-heading {
+    @apply text-rose-900 dark:text-white;
+  }
+
+  .border-theme {
+    @apply border-rose-200 dark:border-white/10;
+  }
+
+  .bg-theme-card {
+    @apply bg-white dark:bg-zinc-950;
   }
 }

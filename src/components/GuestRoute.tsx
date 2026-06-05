@@ -11,7 +11,7 @@ export default function GuestRoute({ children }: GuestRouteProps) {
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
-        <p className="text-sm text-rose-400">Cargando...</p>
+        <p className="text-sm text-muted">Cargando...</p>
       </div>
     )
   }

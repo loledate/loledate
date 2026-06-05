@@ -21,15 +21,15 @@ export default function MatchesPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-rose-400">
+      <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
         Matches
       </h1>
-      <p className="mb-8 text-sm text-rose-400">Conversaciones activas.</p>
+      <p className="mb-8 text-sm text-muted">Conversaciones activas.</p>
 
       {matches.length === 0 ? (
-        <div className="flex flex-col items-center rounded border border-rose-200 py-20 text-center">
-          <h2 className="mb-2 text-sm font-medium text-rose-900">Sin matches</h2>
-          <p className="max-w-xs text-sm text-rose-400">
+        <div className="flex flex-col items-center rounded border border-theme py-20 text-center">
+          <h2 className="mb-2 text-sm font-medium text-heading">Sin matches</h2>
+          <p className="max-w-xs text-sm text-muted">
             Cuando haya usuarios y hagas match, aparecerán aquí.
           </p>
           <Link to="/discover" className="btn-primary mt-6">
@@ -37,7 +37,7 @@ export default function MatchesPage() {
           </Link>
         </div>
       ) : (
-        <div className="divide-y divide-rose-100 border border-rose-200">
+        <div className="divide-y divide-rose-100 border border-theme">
           {matches.map((match) => (
             <Link
               key={match.id}
@@ -57,14 +57,14 @@ export default function MatchesPage() {
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-rose-900">
+                  <h3 className="text-sm font-medium text-heading">
                     {match.profile.name}
                   </h3>
-                  <span className="text-xs text-rose-900/30">
+                  <span className="text-xs text-heading/30">
                     {formatTime(match.lastMessageAt)}
                   </span>
                 </div>
-                <div className="mt-0.5 flex items-center gap-2 text-xs text-rose-400">
+                <div className="mt-0.5 flex items-center gap-2 text-xs text-muted">
                   {match.profile.city}
                   {match.profile.elo && (
                     <Badge className="!px-1.5 !py-0 text-[10px]">
@@ -74,7 +74,7 @@ export default function MatchesPage() {
                 </div>
                 <p
                   className={`mt-1 truncate text-sm ${
-                    match.unread ? 'text-rose-800' : 'text-rose-400'
+                    match.unread ? 'text-heading' : 'text-muted'
                   }`}
                 >
                   {match.lastMessage}

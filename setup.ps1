@@ -2,7 +2,6 @@
 # Ejecutar en PowerShell: .\setup.ps1
 
 Write-Host "=== Lol-edate Setup ===" -ForegroundColor Magenta
-Write-Host "Cuenta: loledate@gmail.com" -ForegroundColor Cyan
 
 if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
     Write-Host ""

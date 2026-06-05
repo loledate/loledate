@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -13,6 +14,7 @@ export default {
           gold: '#fbbf24',
           'gold-dark': '#d97706',
           card: '#ffffff',
+          'card-dark': '#0a0a0a',
           border: '#fbcfe8',
         },
       },
@@ -23,7 +25,9 @@ export default {
       boxShadow: {
         glow: '0 0 24px rgba(236, 72, 153, 0.35)',
         'glow-gold': '0 0 20px rgba(251, 191, 36, 0.45)',
+        'glow-dark': '0 0 24px rgba(236, 72, 153, 0.2)',
         card: '0 8px 32px rgba(219, 39, 119, 0.12)',
+        'card-dark': '0 8px 32px rgba(0, 0, 0, 0.5)',
       },
       animation: {
         'slide-up': 'slide-up 0.3s ease-out',
@@ -47,6 +51,8 @@ export default {
       backgroundImage: {
         'page-glow':
           'radial-gradient(ellipse at top, rgba(251, 191, 36, 0.18) 0%, transparent 55%), radial-gradient(ellipse at bottom right, rgba(244, 114, 182, 0.22) 0%, transparent 50%)',
+        'page-glow-dark':
+          'radial-gradient(ellipse at top, rgba(124, 58, 237, 0.12) 0%, transparent 55%), radial-gradient(ellipse at bottom right, rgba(236, 72, 153, 0.08) 0%, transparent 50%)',
       },
     },
   },

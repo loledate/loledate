@@ -9,6 +9,7 @@ import {
 import type { Profile, Filters, Match } from '../types'
 import { DEFAULT_FILTERS } from '../types'
 import { useAuth } from './AuthContext'
+import { getDisplayUsername } from '../lib/auth'
 import { createEmptyProfile } from '../data/constants'
 import {
   fetchProfile,
@@ -87,21 +88,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
         let profile = await fetchProfile(user!.id)
 
         if (!profile) {
-          const username =
-            (user!.user_metadata?.username as string) ||
-            user!.email?.split('@')[0] ||
-            'Usuario'
+          const username = getDisplayUsername(user!)
           profile = await createProfile(user!.id, username)
         }
 
         if (!cancelled) setUserProfile(profile)
       } catch {
         if (!cancelled) {
-          const username =
-            (user!.user_metadata?.username as string) ||
-            user!.email?.split('@')[0] ||
-            'Usuario'
-          setUserProfile(createEmptyProfile(user!.id, username))
+          setUserProfile(createEmptyProfile(user!.id, getDisplayUsername(user!)))
         }
       } finally {
         if (!cancelled) setProfileLoading(false)

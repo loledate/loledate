@@ -31,7 +31,7 @@ export default function EditProfilePage() {
   if (profileLoading || !form) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
-        <p className="text-sm text-rose-400">Cargando perfil...</p>
+        <p className="text-sm text-muted">Cargando perfil...</p>
       </div>
     )
   }
@@ -89,23 +89,23 @@ export default function EditProfilePage() {
 
   const toggleClass = (active: boolean) =>
     active
-      ? 'border-white text-rose-900'
-      : 'border-rose-200 text-rose-400 hover:border-white/30'
+      ? 'border-white text-heading'
+      : 'border-theme text-muted hover:border-white/30'
 
   const profileComplete = isProfileComplete(form)
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-rose-400">
+      <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
         Perfil
       </h1>
-      <p className="mb-8 text-sm text-rose-400">
+      <p className="mb-8 text-sm text-muted">
         Completa tus datos. Las fotos se subirán desde Supabase Storage cuando
         esté configurado.
       </p>
 
       {!profileComplete && (
-        <p className="mb-6 border border-rose-200 p-4 text-sm text-rose-500">
+        <p className="mb-6 border border-theme p-4 text-sm text-body">
           Completa nombre, edad, ciudad y Riot ID para poder descubrir otros
           jugadores.{' '}
           <Link to="/discover" className="underline underline-offset-2">
@@ -121,7 +121,7 @@ export default function EditProfilePage() {
             name={form.name}
             className="h-20 w-20 rounded"
           />
-          <p className="text-xs text-rose-900/30">
+          <p className="text-xs text-heading/30">
             Sin foto de perfil todavía. La subida de imagen llegará en la
             siguiente fase.
           </p>
@@ -129,7 +129,7 @@ export default function EditProfilePage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-xs text-rose-400">Nombre</label>
+            <label className="mb-1.5 block text-xs text-muted">Nombre</label>
             <input
               type="text"
               value={form.name}
@@ -138,7 +138,7 @@ export default function EditProfilePage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-rose-400">Edad</label>
+            <label className="mb-1.5 block text-xs text-muted">Edad</label>
             <input
               type="number"
               min={18}
@@ -149,7 +149,7 @@ export default function EditProfilePage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-rose-400">Ciudad</label>
+            <label className="mb-1.5 block text-xs text-muted">Ciudad</label>
             <select
               value={form.city}
               onChange={(e) => update('city', e.target.value)}
@@ -163,7 +163,7 @@ export default function EditProfilePage() {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-rose-400">Elo</label>
+            <label className="mb-1.5 block text-xs text-muted">Elo</label>
             <input
               type="text"
               value={form.elo}
@@ -174,13 +174,13 @@ export default function EditProfilePage() {
           </div>
         </div>
 
-        <div className="border border-rose-200 p-5">
-          <h3 className="mb-4 text-xs font-medium uppercase tracking-widest text-rose-400">
+        <div className="border border-theme p-5">
+          <h3 className="mb-4 text-xs font-medium uppercase tracking-widest text-muted">
             Cuenta LoL
           </h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-xs text-rose-400">Riot ID</label>
+              <label className="mb-1.5 block text-xs text-muted">Riot ID</label>
               <input
                 type="text"
                 value={form.riotId}
@@ -190,7 +190,7 @@ export default function EditProfilePage() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs text-rose-400">OP.GG</label>
+              <label className="mb-1.5 block text-xs text-muted">OP.GG</label>
               <input
                 type="url"
                 value={form.opggUrl}
@@ -202,7 +202,7 @@ export default function EditProfilePage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-2 block text-xs text-rose-400">Rol</label>
+            <label className="mb-2 block text-xs text-muted">Rol</label>
             <div className="flex flex-wrap gap-2">
               {ROLES.map((role) => (
                 <button
@@ -217,7 +217,7 @@ export default function EditProfilePage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-2 block text-xs text-rose-400">Campeones</label>
+            <label className="mb-2 block text-xs text-muted">Campeones</label>
             <div className="mb-2 flex flex-wrap gap-2">
               {form.favoriteChampions.map((champ) => (
                 <button
@@ -227,7 +227,7 @@ export default function EditProfilePage() {
                 >
                   <Badge>
                     {champ}
-                    <span className="ml-1 text-rose-300 group-hover:text-rose-600">
+                    <span className="ml-1 text-muted group-hover:text-body">
                       x
                     </span>
                   </Badge>
@@ -251,7 +251,7 @@ export default function EditProfilePage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs text-rose-400">Bio</label>
+          <label className="mb-1.5 block text-xs text-muted">Bio</label>
           <textarea
             value={form.bio}
             onChange={(e) => update('bio', e.target.value)}
@@ -261,7 +261,7 @@ export default function EditProfilePage() {
         </div>
 
         <div>
-          <label className="mb-2 block text-xs text-rose-400">Busco</label>
+          <label className="mb-2 block text-xs text-muted">Busco</label>
           <div className="flex flex-wrap gap-2">
             {LOOKING_FOR_OPTIONS.map((lf) => (
               <button
@@ -276,7 +276,7 @@ export default function EditProfilePage() {
         </div>
 
         <div>
-          <label className="mb-2 block text-xs text-rose-400">Intereses</label>
+          <label className="mb-2 block text-xs text-muted">Intereses</label>
           <div className="flex flex-wrap gap-2">
             {INTEREST_OPTIONS.map((interest) => (
               <button
@@ -291,7 +291,7 @@ export default function EditProfilePage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs text-rose-400">Horario</label>
+          <label className="mb-1.5 block text-xs text-muted">Horario</label>
           <input
             type="text"
             value={form.playSchedule}
@@ -301,7 +301,7 @@ export default function EditProfilePage() {
           />
         </div>
 
-        {error && <p className="text-sm text-rose-600">{error}</p>}
+        {error && <p className="text-sm text-body">{error}</p>}
 
         <button
           onClick={handleSave}

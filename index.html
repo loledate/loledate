@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Lol-edate — Encuentra duoQ, amigos o algo más según tu elo, rol, main y ciudad." />
     <meta name="theme-color" content="#fff7fb" />
+    <script>
+      (function () {
+        var t = localStorage.getItem('lol-edate-theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
     <title>Lol-edate — Matchmaking para jugadores de LoL</title>
   </head>
   <body>

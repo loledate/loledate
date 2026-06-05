@@ -60,7 +60,7 @@ export default function DiscoverPage() {
 
       <div className="mb-6 flex items-center justify-between">
 
-        <h1 className="text-sm font-medium uppercase tracking-widest text-rose-400">
+        <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
 
           Descubrir
 
@@ -70,7 +70,7 @@ export default function DiscoverPage() {
 
           onClick={() => setFiltersOpen(true)}
 
-          className="text-sm text-rose-500 hover:text-rose-800"
+          className="text-sm text-body hover:text-heading"
 
         >
 
@@ -83,20 +83,20 @@ export default function DiscoverPage() {
 
 
       {discoverLoading ? (
-        <div className="flex flex-col items-center rounded border border-rose-200 py-20 text-center">
-          <p className="text-sm text-rose-400">Cargando perfiles...</p>
+        <div className="flex flex-col items-center rounded border border-theme py-20 text-center">
+          <p className="text-sm text-muted">Cargando perfiles...</p>
         </div>
       ) : noMoreProfiles ? (
 
-        <div className="flex flex-col items-center rounded border border-rose-200 py-20 text-center">
+        <div className="flex flex-col items-center rounded border border-theme py-20 text-center">
 
-          <h2 className="mb-2 text-sm font-medium text-rose-900">
+          <h2 className="mb-2 text-sm font-medium text-heading">
 
             Sin perfiles todavía
 
           </h2>
 
-          <p className="mb-6 max-w-xs text-sm text-rose-400">
+          <p className="mb-6 max-w-xs text-sm text-muted">
 
             Los perfiles se cargan desde Supabase cuando haya usuarios
 
@@ -138,7 +138,7 @@ export default function DiscoverPage() {
 
 
 
-          <p className="mt-4 text-center text-xs text-rose-300">
+          <p className="mt-4 text-center text-xs text-muted">
 
             {currentIndex + 1} / {discoverProfiles.length}
 

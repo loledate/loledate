@@ -29,7 +29,9 @@ npm run dev
 ## Supabase
 
 - Proyecto: `gwcuavpqvbrxpcclrovt`
-- Cuenta: loledate@gmail.com
+- Auth: **solo usuario + contraseña** (sin correo)
+- Ejecuta también `supabase/username-only-auth.sql`
+- En Dashboard → Authentication → Email → **desactiva Confirm email**
 
 ## Flujo
 

@@ -11,7 +11,7 @@ interface ProfileCardProps {
 export default function ProfileCard({ profile, compact = false }: ProfileCardProps) {
   if (compact) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card">
+      <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-zinc-950 dark:shadow-card-dark">
         <div className="relative aspect-[3/4] overflow-hidden">
           <Avatar
             url={profile.photoUrl}
@@ -35,7 +35,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
   }
 
   return (
-    <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card">
+    <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-zinc-950 dark:shadow-card-dark">
       <div className="relative aspect-[3/4] overflow-hidden">
         <Avatar
           url={profile.photoUrl}
@@ -45,7 +45,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         <div className="absolute inset-0 bg-gradient-to-t from-rose-900/40 via-transparent to-transparent" />
 
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
-          <span className="rounded-full bg-white/80 px-2 py-1 text-xs font-medium text-rose-700 backdrop-blur-sm">
+          <span className="rounded-full bg-white/80 px-2 py-1 text-xs font-medium text-rose-700 backdrop-blur-sm dark:bg-black/60 dark:text-white/80">
             {profile.distanceKm} km
           </span>
           {profile.elo && <Badge className="text-xs">{profile.elo}</Badge>}
@@ -64,17 +64,17 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
       <div className="space-y-4 p-5">
         {profile.riotId && (
-          <div className="flex items-center justify-between rounded-xl bg-rose-50 p-3">
+          <div className="flex items-center justify-between rounded-xl bg-rose-50 p-3 dark:bg-white/5">
             <div>
-              <p className="text-xs text-rose-400">Riot ID</p>
-              <p className="text-sm font-medium text-rose-900">{profile.riotId}</p>
+              <p className="text-xs text-muted">Riot ID</p>
+              <p className="text-sm font-medium text-heading">{profile.riotId}</p>
             </div>
             {profile.opggUrl && (
               <a
                 href={profile.opggUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-medium text-rose-500 underline underline-offset-2 hover:text-rose-700"
+                className="text-xs font-medium text-body underline underline-offset-2 hover:text-heading"
               >
                 OP.GG
               </a>
@@ -83,13 +83,13 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         )}
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-rose-400">Rol</span>
+          <span className="text-xs text-muted">Rol</span>
           <Badge>{profile.role}</Badge>
         </div>
 
         {profile.favoriteChampions.length > 0 && (
           <div>
-            <p className="mb-2 text-xs text-rose-400">Mains</p>
+            <p className="mb-2 text-xs text-muted">Mains</p>
             <div className="flex flex-wrap gap-2">
               {profile.favoriteChampions.map((champ) => (
                 <Badge key={champ}>{champ}</Badge>
@@ -100,7 +100,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
         {profile.lookingFor.length > 0 && (
           <div>
-            <p className="mb-2 text-xs text-rose-400">Busca</p>
+            <p className="mb-2 text-xs text-muted">Busca</p>
             <div className="flex flex-wrap gap-2">
               {profile.lookingFor.map((lf) => (
                 <Badge key={lf}>{LOOKING_FOR_LABELS[lf]}</Badge>
@@ -110,12 +110,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         )}
 
         {profile.bio && (
-          <p className="text-sm leading-relaxed text-rose-700">{profile.bio}</p>
+          <p className="text-sm leading-relaxed text-body">{profile.bio}</p>
         )}
 
         {profile.interests.length > 0 && (
           <div>
-            <p className="mb-2 text-xs text-rose-400">Intereses</p>
+            <p className="mb-2 text-xs text-muted">Intereses</p>
             <div className="flex flex-wrap gap-2">
               {profile.interests.map((interest) => (
                 <Badge key={interest}>{interest}</Badge>
@@ -125,7 +125,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         )}
 
         {profile.playSchedule && (
-          <p className="text-xs text-rose-500">{profile.playSchedule}</p>
+          <p className="text-xs text-muted">{profile.playSchedule}</p>
         )}
       </div>
     </div>

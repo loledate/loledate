@@ -54,9 +54,9 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
     active
 
-      ? 'border-white text-rose-900'
+      ? 'border-white text-heading'
 
-      : 'border-rose-200 text-rose-400 hover:border-white/30'
+      : 'border-theme text-muted hover:border-white/30'
 
 
 
@@ -76,11 +76,11 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
       />
 
-      <div className="animate-slide-up relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto border border-rose-200 bg-white p-6 shadow-card sm:rounded">
+      <div className="animate-slide-up relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto border border-theme bg-white p-6 shadow-card sm:rounded">
 
         <div className="mb-6 flex items-center justify-between">
 
-          <h2 className="text-sm font-medium uppercase tracking-widest text-rose-400">
+          <h2 className="text-sm font-medium uppercase tracking-widest text-muted">
 
             Filtros
 
@@ -90,7 +90,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
             onClick={onClose}
 
-            className="text-sm text-rose-400 hover:text-rose-800"
+            className="text-sm text-muted hover:text-heading"
 
           >
 
@@ -106,7 +106,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">Ciudad</label>
+            <label className="mb-1.5 block text-xs text-muted">Ciudad</label>
 
             <select
 
@@ -142,7 +142,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">
+            <label className="mb-1.5 block text-xs text-muted">
 
               Edad: {filters.ageMin} - {filters.ageMax}
 
@@ -198,7 +198,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">Elo</label>
+            <label className="mb-1.5 block text-xs text-muted">Elo</label>
 
             <select
 
@@ -234,7 +234,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">Rol</label>
+            <label className="mb-1.5 block text-xs text-muted">Rol</label>
 
             <div className="flex flex-wrap gap-2">
 
@@ -274,7 +274,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">Busca</label>
+            <label className="mb-1.5 block text-xs text-muted">Busca</label>
 
             <div className="flex flex-wrap gap-2">
 
@@ -314,7 +314,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">
+            <label className="mb-1.5 block text-xs text-muted">
 
               Distancia: {filters.maxDistance} km
 
@@ -354,7 +354,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
           <div>
 
-            <label className="mb-1.5 block text-xs text-rose-400">Intereses</label>
+            <label className="mb-1.5 block text-xs text-muted">Intereses</label>
 
             <input
 
@@ -388,7 +388,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
 
                   }
 
-                  className="rounded border border-rose-200 px-2 py-1 text-xs text-rose-400 hover:border-rose-200 hover:text-rose-600"
+                  className="rounded border border-theme px-2 py-1 text-xs text-muted hover:border-theme hover:text-body"
 
                 >
 

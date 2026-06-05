@@ -90,7 +90,7 @@ export default function ChatPage() {
 
       <div className="flex flex-col items-center justify-center px-4 py-20">
 
-        <p className="text-sm text-rose-400">Match no encontrado</p>
+        <p className="text-sm text-muted">Match no encontrado</p>
 
         <Link to="/matches" className="btn-primary mt-4">
 
@@ -110,9 +110,9 @@ export default function ChatPage() {
 
     <div className="mx-auto flex h-[calc(100vh-3.5rem)] max-w-2xl flex-col">
 
-      <div className="flex items-center gap-3 border-b border-rose-200 px-4 py-3">
+      <div className="flex items-center gap-3 border-b border-theme px-4 py-3">
 
-        <Link to="/matches" className="text-sm text-rose-400 hover:text-rose-800">
+        <Link to="/matches" className="text-sm text-muted hover:text-heading">
 
           Volver
 
@@ -130,13 +130,13 @@ export default function ChatPage() {
 
         <div className="min-w-0 flex-1">
 
-          <h2 className="truncate text-sm font-medium text-rose-900">
+          <h2 className="truncate text-sm font-medium text-heading">
 
             {match.profile.name}
 
           </h2>
 
-          <div className="flex items-center gap-2 text-xs text-rose-400">
+          <div className="flex items-center gap-2 text-xs text-muted">
 
             {match.profile.city}
 
@@ -162,7 +162,7 @@ export default function ChatPage() {
 
         {messages.length === 0 && (
 
-          <p className="py-8 text-center text-sm text-rose-900/30">
+          <p className="py-8 text-center text-sm text-heading/30">
 
             Sin mensajes. Escribe el primero.
 
@@ -186,7 +186,7 @@ export default function ChatPage() {
 
                 msg.isOwn
                   ? 'rounded-2xl rounded-br-md bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-glow'
-                  : 'rounded-2xl rounded-bl-md border border-rose-200 bg-white text-rose-800'
+                  : 'rounded-2xl rounded-bl-md border border-theme bg-white text-heading'
 
               }`}
 
@@ -198,7 +198,7 @@ export default function ChatPage() {
 
                 className={`mt-1 text-[10px] ${
 
-                  msg.isOwn ? 'text-white/70' : 'text-rose-400'
+                  msg.isOwn ? 'text-white/70' : 'text-muted'
 
                 }`}
 
@@ -220,7 +220,7 @@ export default function ChatPage() {
 
 
 
-      <div className="border-t border-rose-200 p-4">
+      <div className="border-t border-theme p-4">
 
         <div className="flex items-center gap-3">
 

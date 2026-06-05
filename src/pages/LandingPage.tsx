@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 
 const steps = [
-  { title: 'Regístrate', desc: 'Crea tu cuenta con email.' },
+  { title: 'Regístrate', desc: 'Elige usuario y contraseña.' },
   { title: 'Completa tu perfil', desc: 'Riot ID, elo, rol e intereses.' },
   { title: 'Filtra', desc: 'Ciudad, elo, rol e intereses.' },
   { title: 'Match', desc: 'Conecta y habla.' },
@@ -10,25 +11,43 @@ const steps = [
 
 export default function LandingPage() {
   const { user } = useAuth()
+  const { coverImage, theme } = useTheme()
 
   return (
     <div className="animate-fade-in">
       <section className="relative min-h-[88vh] overflow-hidden">
         <img
-          src="/fotoportada.png"
+          src={coverImage}
           alt="LoL E-DATE"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-rose-100/20 via-transparent to-pink-900/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-lol-cream via-rose-50/30 to-transparent" />
+        {theme === 'light' ? (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-r from-rose-100/20 via-transparent to-pink-900/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-lol-cream via-rose-50/30 to-transparent" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+          </>
+        )}
 
         <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-4 pb-10 pt-24 sm:pb-14">
           <div className="max-w-xl">
-            <p className="mb-2 text-sm font-medium uppercase tracking-[0.2em] text-rose-700/80">
+            <p
+              className={`mb-2 text-sm font-medium uppercase tracking-[0.2em] ${
+                theme === 'dark' ? 'text-muted/80' : 'text-body/80'
+              }`}
+            >
               Matchmaking LoL
             </p>
-            <p className="mb-8 text-lg leading-relaxed text-rose-900/90 sm:text-xl">
+            <p
+              className={`mb-8 text-lg leading-relaxed sm:text-xl ${
+                theme === 'dark' ? 'text-white/90' : 'text-heading/90'
+              }`}
+            >
               Encuentra duoQ, amigos o algo más según tu elo, rol, main y
               ciudad.
             </p>
@@ -59,20 +78,24 @@ export default function LandingPage() {
       </section>
 
       <section className="relative px-4 py-20">
-        <div className="pointer-events-none absolute inset-0 bg-page-glow" />
+        <div
+          className={`pointer-events-none absolute inset-0 ${
+            theme === 'dark' ? 'bg-page-glow-dark' : 'bg-page-glow'
+          }`}
+        />
         <div className="relative mx-auto max-w-5xl">
-          <h2 className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-rose-400">
+          <h2 className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted">
             Cómo funciona
           </h2>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, i) => (
               <div key={step.title} className="glass-card animate-shimmer">
-                <p className="mb-3 text-xs font-bold text-lol-gold-dark">
+                <p className="mb-3 text-xs font-bold text-lol-gold-dark dark:text-lol-gold">
                   {String(i + 1).padStart(2, '0')}
                 </p>
-                <h3 className="mb-2 font-semibold text-rose-900">{step.title}</h3>
-                <p className="text-sm text-rose-600/80">{step.desc}</p>
+                <h3 className="mb-2 font-semibold text-heading">{step.title}</h3>
+                <p className="text-sm text-body">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -80,11 +103,17 @@ export default function LandingPage() {
       </section>
 
       <section className="px-4 pb-20">
-        <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-rose-200/80 bg-gradient-to-br from-white via-rose-50 to-amber-50 p-10 text-center shadow-glow">
-          <h2 className="mb-3 text-2xl font-semibold text-rose-900">
+        <div
+          className={`mx-auto max-w-3xl overflow-hidden rounded-3xl border p-10 text-center shadow-glow dark:shadow-glow-dark ${
+            theme === 'dark'
+              ? 'border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900'
+              : 'border-theme/80 bg-gradient-to-br from-white via-rose-50 to-amber-50'
+          }`}
+        >
+          <h2 className="mb-3 text-2xl font-semibold text-heading">
             Tu duo te espera
           </h2>
-          <p className="mb-8 text-rose-600/90">
+          <p className="mb-8 text-body">
             Perfiles reales de jugadores. Sin fotos de ejemplo.
           </p>
           <Link
@@ -96,11 +125,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-rose-200/80 bg-white/60 px-4 py-8 backdrop-blur-sm">
+      <footer className="border-t border-theme bg-white/60 px-4 py-8 backdrop-blur-sm dark:bg-black/60">
         <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-medium text-rose-800">Lol-edate</span>
-          <p className="text-sm text-rose-500">loledate@gmail.com</p>
-          <p className="text-xs text-rose-400">No afiliado a Riot Games.</p>
+          <span className="font-medium text-heading">Lol-edate</span>
+          <p className="text-xs text-muted">No afiliado a Riot Games.</p>
         </div>
       </footer>
     </div>
