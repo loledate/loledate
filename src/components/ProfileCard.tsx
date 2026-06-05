@@ -1,10 +1,10 @@
 import type { Profile } from '../types'
-import { LOOKING_FOR_LABELS } from '../types'
+import { useLanguage } from '../context/LanguageContext'
 import Badge from './Badge'
 import Avatar from './Avatar'
 import ProfileSocials from './ProfileSocials'
 import ReputationBadge from './ReputationBadge'
-import type { ReputationTier } from '../lib/reputation'
+import type { ReputationTierKey } from '../lib/reputation'
 import { getReputationTier } from '../lib/reputation'
 
 interface ProfileCardProps {
@@ -13,9 +13,10 @@ interface ProfileCardProps {
 }
 
 export default function ProfileCard({ profile, compact = false }: ProfileCardProps) {
+  const { t, lookingForLabel, interestLabel } = useLanguage()
   const reputationCount = profile.reputationCount ?? 0
-  const reputationTier: ReputationTier =
-    (profile.reputationTier as ReputationTier | undefined) ??
+  const reputationTierKey: ReputationTierKey =
+    (profile.reputationTier as ReputationTierKey | undefined) ??
     getReputationTier(reputationCount)
 
   if (compact) {
@@ -55,12 +56,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-2">
           <span className="rounded-full bg-white/80 px-2 py-1 text-xs font-medium text-rose-700 backdrop-blur-sm dark:bg-black/60 dark:text-white/80">
-            {profile.distanceKm} km
+            {t('common.km', { n: profile.distanceKm })}
           </span>
           <div className="flex flex-col items-end gap-1">
             <ReputationBadge
               count={reputationCount}
-              tier={reputationTier}
+              tierKey={reputationTierKey}
               compact
             />
             {profile.elo && <Badge className="text-xs">{profile.elo}</Badge>}
@@ -80,13 +81,13 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
       <div className="space-y-4 p-5">
         <div className="flex justify-center">
-          <ReputationBadge count={reputationCount} tier={reputationTier} />
+          <ReputationBadge count={reputationCount} tierKey={reputationTierKey} />
         </div>
 
         {profile.riotId && (
           <div className="flex items-center justify-between rounded-xl bg-rose-50 p-3 dark:bg-white/5">
             <div>
-              <p className="text-xs text-muted">Riot ID</p>
+              <p className="text-xs text-muted">{t('card.riotId')}</p>
               <p className="text-sm font-medium text-heading">{profile.riotId}</p>
             </div>
             {profile.opggUrl && (
@@ -96,7 +97,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
                 rel="noopener noreferrer"
                 className="text-xs font-medium text-body underline underline-offset-2 hover:text-heading"
               >
-                OP.GG
+                {t('profile.opgg')}
               </a>
             )}
           </div>
@@ -105,13 +106,13 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         <ProfileSocials profile={profile} />
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted">Rol</span>
+          <span className="text-xs text-muted">{t('card.role')}</span>
           <Badge>{profile.role}</Badge>
         </div>
 
         {profile.favoriteChampions.length > 0 && (
           <div>
-            <p className="mb-2 text-xs text-muted">Mains</p>
+            <p className="mb-2 text-xs text-muted">{t('card.mains')}</p>
             <div className="flex flex-wrap gap-2">
               {profile.favoriteChampions.map((champ) => (
                 <Badge key={champ}>{champ}</Badge>
@@ -122,10 +123,10 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
         {profile.lookingFor.length > 0 && (
           <div>
-            <p className="mb-2 text-xs text-muted">Busca</p>
+            <p className="mb-2 text-xs text-muted">{t('card.lookingFor')}</p>
             <div className="flex flex-wrap gap-2">
               {profile.lookingFor.map((lf) => (
-                <Badge key={lf}>{LOOKING_FOR_LABELS[lf]}</Badge>
+                <Badge key={lf}>{lookingForLabel(lf)}</Badge>
               ))}
             </div>
           </div>
@@ -137,10 +138,10 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
         {profile.interests.length > 0 && (
           <div>
-            <p className="mb-2 text-xs text-muted">Intereses</p>
+            <p className="mb-2 text-xs text-muted">{t('card.interests')}</p>
             <div className="flex flex-wrap gap-2">
               {profile.interests.map((interest) => (
-                <Badge key={interest}>{interest}</Badge>
+                <Badge key={interest}>{interestLabel(interest)}</Badge>
               ))}
             </div>
           </div>

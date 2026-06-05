@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import type { Match } from '../types'
 import { fetchMatchById } from '../lib/profiles'
 import {
@@ -14,17 +15,12 @@ import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
 import ProfileSocials from '../components/ProfileSocials'
 
-function formatMessageTime(iso: string) {
-  return new Date(iso).toLocaleTimeString('es-ES', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
 export default function ChatPage() {
   const { matchId } = useParams<{ matchId: string }>()
   const { user } = useAuth()
-  const { matches, matchesLoading, refreshMatchesSilent } = useApp()
+  const { t, locale } = useLanguage()
+  const { matches, matchesLoading, refreshMatchesSilent, clearMatchUnread } =
+    useApp()
   const [match, setMatch] = useState<Match | null>(null)
   const [matchLoading, setMatchLoading] = useState(true)
   const [messages, setMessages] = useState<
@@ -38,6 +34,20 @@ export default function ChatPage() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
+
+  const timeLocale = locale === 'en' ? 'en-US' : 'es-ES'
+
+  function formatMessageTime(iso: string) {
+    return new Date(iso).toLocaleTimeString(timeLocale, {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+  }
+
+  function translateError(err: unknown, fallbackKey: string) {
+    const message = err instanceof Error ? err.message : fallbackKey
+    return t(message)
+  }
 
   useEffect(() => {
     if (!matchId || !user) {
@@ -84,6 +94,8 @@ export default function ChatPage() {
   useEffect(() => {
     if (!matchId || !user) return
 
+    clearMatchUnread(matchId)
+
     let cancelled = false
     setMessagesLoading(true)
     setLoadError('')
@@ -95,11 +107,7 @@ export default function ChatPage() {
       .catch((err) => {
         if (!cancelled) {
           setMessages([])
-          setLoadError(
-            err instanceof Error
-              ? err.message
-              : 'No se pudieron cargar los mensajes.'
-          )
+          setLoadError(translateError(err, 'messages.loadFailed'))
         }
       })
       .finally(() => {
@@ -112,8 +120,9 @@ export default function ChatPage() {
 
     return () => {
       cancelled = true
+      void markMessagesAsRead(matchId, user.id).then(() => refreshMatchesSilent())
     }
-  }, [matchId, user, refreshMatchesSilent])
+  }, [matchId, user, refreshMatchesSilent, clearMatchUnread])
 
   useEffect(() => {
     if (!matchId || !user) return
@@ -124,12 +133,13 @@ export default function ChatPage() {
         return [...prev, message]
       })
       if (!message.isOwn) {
+        clearMatchUnread(matchId)
         markMessagesAsRead(matchId, user.id)
           .then(() => refreshMatchesSilent())
           .catch(() => {})
       }
     })
-  }, [matchId, user, refreshMatchesSilent])
+  }, [matchId, user, refreshMatchesSilent, clearMatchUnread])
 
   useEffect(() => {
     if (matchLoading || !match) return
@@ -157,19 +167,17 @@ export default function ChatPage() {
       setInput('')
       await refreshMatchesSilent()
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'No se pudo enviar el mensaje.'
-      )
+      setError(translateError(err, 'messages.sendFailed'))
     } finally {
       setSending(false)
       inputRef.current?.focus()
     }
-  }, [input, match, user, matchId, sending, refreshMatchesSilent])
+  }, [input, match, user, matchId, sending, refreshMatchesSilent, t])
 
   if (matchLoading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
-        <p className="text-sm text-muted">Cargando chat...</p>
+        <p className="text-sm text-muted">{t('messages.loadingChat')}</p>
       </div>
     )
   }
@@ -177,9 +185,9 @@ export default function ChatPage() {
   if (!match) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-20">
-        <p className="text-sm text-muted">Match no encontrado</p>
+        <p className="text-sm text-muted">{t('messages.matchNotFound')}</p>
         <Link to="/matches" className="btn-primary mt-4">
-          Volver
+          {t('common.back')}
         </Link>
       </div>
     )
@@ -189,7 +197,7 @@ export default function ChatPage() {
     <div className="mx-auto flex h-[calc(100vh-3.5rem)] max-w-2xl flex-col">
       <div className="flex items-center gap-3 border-b border-theme px-4 py-3">
         <Link to="/matches" className="text-sm text-muted hover:text-heading">
-          Volver
+          {t('common.back')}
         </Link>
         <Link
           to={`/user/${match.profile.userId}`}
@@ -224,7 +232,7 @@ export default function ChatPage() {
       >
         {messagesLoading ? (
           <p className="py-8 text-center text-sm text-muted">
-            Cargando mensajes...
+            {t('messages.loadingMessages')}
           </p>
         ) : loadError ? (
           <div className="py-8 text-center">
@@ -238,22 +246,18 @@ export default function ChatPage() {
                 fetchMessages(matchId, user.id)
                   .then(setMessages)
                   .catch((err) =>
-                    setLoadError(
-                      err instanceof Error
-                        ? err.message
-                        : 'No se pudieron cargar los mensajes.'
-                    )
+                    setLoadError(translateError(err, 'messages.loadFailed'))
                   )
                   .finally(() => setMessagesLoading(false))
               }}
               className="btn-primary mt-4"
             >
-              Reintentar
+              {t('common.retry')}
             </button>
           </div>
         ) : messages.length === 0 ? (
           <p className="py-8 text-center text-sm text-muted">
-            Sin mensajes. Escribe el primero.
+            {t('messages.emptyChat')}
           </p>
         ) : (
           messages.map((msg) => (
@@ -297,7 +301,7 @@ export default function ChatPage() {
             onKeyDown={(e) => {
               if (e.key === 'Enter') void handleSend()
             }}
-            placeholder="Escribe un mensaje..."
+            placeholder={t('messages.placeholder')}
             className="input-field flex-1"
           />
           <button
@@ -306,7 +310,7 @@ export default function ChatPage() {
             disabled={!input.trim() || sending}
             className="btn-primary px-4 py-3 disabled:opacity-30"
           >
-            {sending ? '...' : 'Enviar'}
+            {sending ? '...' : t('messages.send')}
           </button>
         </div>
       </div>

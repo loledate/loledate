@@ -3,17 +3,17 @@ const AUTH_EMAIL_DOMAIN = 'users.loledate.app'
 export function usernameToAuthEmail(username: string): string {
   const normalized = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
   if (!normalized) {
-    throw new Error('Usuario inválido')
+    throw new Error('validation.invalidUsername')
   }
   return `${normalized}@${AUTH_EMAIL_DOMAIN}`
 }
 
 export function validateUsername(username: string): string | null {
   const trimmed = username.trim()
-  if (trimmed.length < 3) return 'Mínimo 3 caracteres.'
-  if (trimmed.length > 20) return 'Máximo 20 caracteres.'
+  if (trimmed.length < 3) return 'validation.usernameMin'
+  if (trimmed.length > 20) return 'validation.usernameMax'
   if (!/^[a-zA-Z0-9_]+$/.test(trimmed)) {
-    return 'Solo letras, números y guion bajo.'
+    return 'validation.usernameChars'
   }
   return null
 }
@@ -28,5 +28,5 @@ export function getDisplayUsername(user: {
   if (email.endsWith(`@${AUTH_EMAIL_DOMAIN}`)) {
     return email.replace(`@${AUTH_EMAIL_DOMAIN}`, '')
   }
-  return email.split('@')[0] || 'Usuario'
+  return email.split('@')[0] || ''
 }

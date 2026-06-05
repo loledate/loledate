@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 import Avatar from './Avatar'
 import { deleteAvatar, uploadAvatar, validateAvatarFile } from '../lib/avatars'
 
@@ -15,6 +16,7 @@ export default function ProfilePhotoEditor({
   photoUrl,
   onPhotoChange,
 }: ProfilePhotoEditorProps) {
+  const { t } = useLanguage()
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
@@ -22,7 +24,7 @@ export default function ProfilePhotoEditor({
   const handleFile = async (file: File) => {
     const validationError = validateAvatarFile(file)
     if (validationError) {
-      setError(validationError)
+      setError(t(validationError))
       return
     }
 
@@ -32,11 +34,11 @@ export default function ProfilePhotoEditor({
     try {
       const url = await uploadAvatar(userId, file)
       const result = await onPhotoChange(url)
-      if (result.error) setError(result.error)
+      if (result.error) setError(t(result.error))
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'No se pudo subir la foto.'
-      )
+      const message =
+        err instanceof Error ? err.message : 'profile.photoUploadFailed'
+      setError(t(message))
     } finally {
       setUploading(false)
     }
@@ -49,11 +51,11 @@ export default function ProfilePhotoEditor({
     try {
       await deleteAvatar(userId).catch(() => {})
       const result = await onPhotoChange(null)
-      if (result.error) setError(result.error)
+      if (result.error) setError(t(result.error))
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'No se pudo quitar la foto.'
-      )
+      const message =
+        err instanceof Error ? err.message : 'profile.photoRemoveFailed'
+      setError(t(message))
     } finally {
       setUploading(false)
     }
@@ -62,7 +64,7 @@ export default function ProfilePhotoEditor({
   return (
     <div className="border border-theme p-5">
       <h3 className="mb-4 text-xs font-medium uppercase tracking-widest text-muted">
-        Foto de perfil
+        {t('profile.photoTitle')}
       </h3>
       <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
         <Avatar
@@ -89,7 +91,11 @@ export default function ProfilePhotoEditor({
             disabled={uploading}
             className="btn-primary px-4 py-2 text-sm disabled:opacity-40"
           >
-            {uploading ? 'Subiendo...' : photoUrl ? 'Cambiar foto' : 'Subir foto'}
+            {uploading
+              ? t('profile.uploadingPhoto')
+              : photoUrl
+                ? t('profile.changePhoto')
+                : t('profile.uploadPhoto')}
           </button>
           {photoUrl && (
             <button
@@ -98,10 +104,10 @@ export default function ProfilePhotoEditor({
               disabled={uploading}
               className="btn-secondary px-4 py-2 text-sm disabled:opacity-40"
             >
-              Quitar foto
+              {t('profile.removePhoto')}
             </button>
           )}
-          <p className="text-xs text-muted">JPG, PNG, WebP o GIF. Máximo 5 MB.</p>
+          <p className="text-xs text-muted">{t('profile.photoHint')}</p>
           {error && <p className="text-xs text-body">{error}</p>}
         </div>
       </div>

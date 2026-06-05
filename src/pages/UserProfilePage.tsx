@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import { fetchProfile } from '../lib/profiles'
 import { fetchProfileReputation, type ProfileReputation } from '../lib/reputation'
 import type { Profile } from '../types'
@@ -10,6 +11,7 @@ import ProfileLikeButton from '../components/ProfileLikeButton'
 export default function UserProfilePage() {
   const { userId } = useParams<{ userId: string }>()
   const { user } = useAuth()
+  const { t } = useLanguage()
   const location = useLocation()
   const backTo =
     (location.state as { from?: string } | null)?.from ?? '/matches'
@@ -80,7 +82,7 @@ export default function UserProfilePage() {
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
-        <p className="text-sm text-muted">Cargando perfil...</p>
+        <p className="text-sm text-muted">{t('profile.loading')}</p>
       </div>
     )
   }
@@ -88,9 +90,9 @@ export default function UserProfilePage() {
   if (notFound || !profile) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-20">
-        <p className="text-sm text-muted">Perfil no encontrado</p>
+        <p className="text-sm text-muted">{t('profile.notFound')}</p>
         <Link to={backTo} className="btn-primary mt-4">
-          Volver
+          {t('common.back')}
         </Link>
       </div>
     )
@@ -100,10 +102,10 @@ export default function UserProfilePage() {
     <div className="mx-auto max-w-lg px-4 py-8">
       <div className="mb-6">
         <Link to={backTo} className="text-sm text-muted hover:text-heading">
-          Volver
+          {t('common.back')}
         </Link>
         <h1 className="mt-2 text-sm font-medium uppercase tracking-widest text-muted">
-          Perfil
+          {t('profile.title')}
         </h1>
       </div>
 

@@ -40,7 +40,7 @@ export async function sendMessage(
   content: string
 ): Promise<ChatMessage> {
   const trimmed = content.trim()
-  if (!trimmed) throw new Error('El mensaje está vacío.')
+  if (!trimmed) throw new Error('messages.emptyMessage')
 
   const { data, error } = await requireSupabase()
     .from('messages')
@@ -59,15 +59,53 @@ export async function sendMessage(
 export async function markMessagesAsRead(
   matchId: string,
   currentUserId: string
-): Promise<void> {
-  const { error } = await requireSupabase()
+): Promise<number> {
+  const client = requireSupabase()
+
+  const { data: rpcCount, error: rpcError } = await client.rpc(
+    'mark_match_messages_read',
+    { p_match_id: matchId }
+  )
+
+  if (!rpcError && typeof rpcCount === 'number') {
+    return rpcCount
+  }
+
+  const { data, error } = await client
     .from('messages')
     .update({ read_at: new Date().toISOString() })
     .eq('match_id', matchId)
     .neq('sender_id', currentUserId)
     .is('read_at', null)
+    .select('id')
 
   if (error) throw error
+  return data?.length ?? 0
+}
+
+export async function fetchUnreadCountsByMatch(
+  matchIds: string[],
+  currentUserId: string
+): Promise<Map<string, number>> {
+  const counts = new Map<string, number>()
+  if (!matchIds.length) return counts
+
+  const client = requireSupabase()
+
+  const { data, error } = await client
+    .from('messages')
+    .select('match_id')
+    .in('match_id', matchIds)
+    .neq('sender_id', currentUserId)
+    .is('read_at', null)
+
+  if (error) throw error
+
+  for (const row of data ?? []) {
+    counts.set(row.match_id, (counts.get(row.match_id) ?? 0) + 1)
+  }
+
+  return counts
 }
 
 export function subscribeToMessages(

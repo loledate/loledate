@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import { validateUsername } from '../lib/auth'
 
 export default function RegisterPage() {
   const { signUp, isConfigured } = useAuth()
+  const { t } = useLanguage()
   const navigate = useNavigate()
 
   const [username, setUsername] = useState('')
@@ -40,22 +42,19 @@ export default function RegisterPage() {
   return (
     <div className="mx-auto max-w-sm px-4 py-16">
       <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
-        Registro
+        {t('auth.registerTitle')}
       </h1>
-      <p className="mb-8 text-sm text-muted">
-        Elige un usuario y contraseña. Sin correo.
-      </p>
+      <p className="mb-8 text-sm text-muted">{t('auth.registerSubtitle')}</p>
 
       {!isConfigured && (
         <p className="mb-6 border border-theme p-4 text-sm text-body">
-          Supabase no está configurado. Añade las variables de entorno antes de
-          continuar.
+          {t('auth.supabaseMissing')}
         </p>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-1.5 block text-xs text-muted">Usuario</label>
+          <label className="mb-1.5 block text-xs text-muted">{t('auth.username')}</label>
           <input
             type="text"
             value={username}
@@ -65,13 +64,11 @@ export default function RegisterPage() {
             placeholder="tu_usuario"
             className="input-field"
           />
-          <p className="mt-1 text-xs text-muted">
-            3-20 caracteres. Letras, números y _
-          </p>
+          <p className="mt-1 text-xs text-muted">{t('auth.usernameHint')}</p>
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs text-muted">Contraseña</label>
+          <label className="mb-1.5 block text-xs text-muted">{t('auth.password')}</label>
           <input
             type="password"
             value={password}
@@ -83,21 +80,21 @@ export default function RegisterPage() {
           />
         </div>
 
-        {error && <p className="text-sm text-body">{error}</p>}
+        {error && <p className="text-sm text-body">{t(error)}</p>}
 
         <button
           type="submit"
           disabled={loading || !isConfigured}
           className="btn-primary w-full disabled:opacity-40"
         >
-          {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+          {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
-        ¿Ya tienes cuenta?{' '}
+        {t('auth.hasAccount')}{' '}
         <Link to="/login" className="text-body underline underline-offset-2">
-          Iniciar sesión
+          {t('auth.loginTitle')}
         </Link>
       </p>
     </div>

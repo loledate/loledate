@@ -1,16 +1,19 @@
-import type { ReputationTier } from '../lib/reputation'
+import { useLanguage } from '../context/LanguageContext'
+import type { ReputationTierKey } from '../lib/reputation'
 
 interface ReputationBadgeProps {
   count: number
-  tier: ReputationTier
+  tierKey: ReputationTierKey
   compact?: boolean
 }
 
 export default function ReputationBadge({
   count,
-  tier,
+  tierKey,
   compact = false,
 }: ReputationBadgeProps) {
+  const { t } = useLanguage()
+
   return (
     <div
       className={`inline-flex items-center gap-2 rounded-full border border-theme ${
@@ -19,7 +22,9 @@ export default function ReputationBadge({
     >
       <span className="font-medium text-heading">{count}</span>
       <span className="text-muted">·</span>
-      <span className={compact ? 'text-muted' : 'text-body'}>{tier}</span>
+      <span className={compact ? 'text-muted' : 'text-body'}>
+        {t(`reputation.tiers.${tierKey}`)}
+      </span>
     </div>
   )
 }

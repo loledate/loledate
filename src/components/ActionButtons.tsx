@@ -1,4 +1,5 @@
 import { Heart, Star, X } from 'lucide-react'
+import { useLanguage } from '../context/LanguageContext'
 
 interface ActionButtonsProps {
   onPass: () => void
@@ -13,12 +14,14 @@ export default function ActionButtons({
   onSuperLike,
   disabled = false,
 }: ActionButtonsProps) {
+  const { t } = useLanguage()
+
   return (
     <div className="flex items-center justify-center gap-4">
       <button
         onClick={onPass}
         disabled={disabled}
-        aria-label="Rechazar"
+        aria-label={t('swipe.pass')}
         className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-rose-200 bg-white text-rose-400 shadow-sm transition-all hover:border-rose-400 hover:text-rose-600 disabled:opacity-30 dark:border-white/20 dark:bg-black dark:text-white/50 dark:hover:border-white/40 dark:hover:text-white"
       >
         <X className="h-5 w-5" />

@@ -38,6 +38,7 @@ interface AppContextType {
   unreadMessageCount: number
   refreshMatches: () => Promise<void>
   refreshMatchesSilent: () => Promise<void>
+  clearMatchUnread: (matchId: string) => void
   applyFilters: () => void
   clearFilters: () => void
   refreshDiscover: () => Promise<void>
@@ -169,6 +170,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [user])
 
+  const clearMatchUnread = useCallback((matchId: string) => {
+    setMatches((prev) =>
+      prev.map((match) =>
+        match.id === matchId
+          ? { ...match, unreadCount: 0, unread: false }
+          : match
+      )
+    )
+  }, [])
+
   useEffect(() => {
     if (user) {
       refreshMatches()
@@ -225,7 +236,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const saveUserProfile = useCallback(
     async (profile: Profile) => {
-      if (!user) return { error: 'No hay sesión activa.' }
+      if (!user) return { error: 'profile.noSession' }
 
       try {
         const saved = await saveProfile(user.id, profile)
@@ -234,7 +245,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return { error: null }
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : 'Error al guardar el perfil.'
+          err instanceof Error ? err.message : 'profile.saveFailed'
         return { error: message }
       }
     },
@@ -268,6 +279,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         refreshDiscover,
         refreshMatches,
         refreshMatchesSilent,
+        clearMatchUnread,
       }}
     >
       {children}

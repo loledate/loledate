@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import { validateUsername } from '../lib/auth'
 
 export default function LoginPage() {
   const { signIn, isConfigured } = useAuth()
+  const { t } = useLanguage()
   const navigate = useNavigate()
   const location = useLocation()
   const from = (location.state as { from?: string; registered?: boolean })?.from ?? '/profile'
@@ -40,28 +42,25 @@ export default function LoginPage() {
   return (
     <div className="mx-auto max-w-sm px-4 py-16">
       <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
-        Iniciar sesión
+        {t('auth.loginTitle')}
       </h1>
-      <p className="mb-8 text-sm text-muted">
-        Entra con tu usuario y contraseña.
-      </p>
+      <p className="mb-8 text-sm text-muted">{t('auth.loginSubtitle')}</p>
 
       {justRegistered && (
         <p className="mb-6 border border-theme bg-rose-50 dark:bg-white/5 p-4 text-sm text-body">
-          Cuenta creada. Ya puedes iniciar sesión.
+          {t('auth.accountCreated')}
         </p>
       )}
 
       {!isConfigured && (
         <p className="mb-6 border border-theme p-4 text-sm text-body">
-          Supabase no está configurado. Añade las variables de entorno antes de
-          continuar.
+          {t('auth.supabaseMissing')}
         </p>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-1.5 block text-xs text-muted">Usuario</label>
+          <label className="mb-1.5 block text-xs text-muted">{t('auth.username')}</label>
           <input
             type="text"
             value={username}
@@ -74,7 +73,7 @@ export default function LoginPage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs text-muted">Contraseña</label>
+          <label className="mb-1.5 block text-xs text-muted">{t('auth.password')}</label>
           <input
             type="password"
             value={password}
@@ -85,21 +84,21 @@ export default function LoginPage() {
           />
         </div>
 
-        {error && <p className="text-sm text-body">{error}</p>}
+        {error && <p className="text-sm text-body">{t(error)}</p>}
 
         <button
           type="submit"
           disabled={loading || !isConfigured}
           className="btn-primary w-full disabled:opacity-40"
         >
-          {loading ? 'Entrando...' : 'Entrar'}
+          {loading ? t('auth.loggingIn') : t('nav.login')}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
-        ¿No tienes cuenta?{' '}
+        {t('auth.noAccount')}{' '}
         <Link to="/register" className="text-body underline underline-offset-2">
-          Registrarse
+          {t('nav.register')}
         </Link>
       </p>
     </div>

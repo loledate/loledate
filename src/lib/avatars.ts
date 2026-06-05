@@ -26,10 +26,10 @@ function extensionForType(type: string): string {
 
 export function validateAvatarFile(file: File): string | null {
   if (!ALLOWED_TYPES.has(file.type)) {
-    return 'Formato no válido. Usa JPG, PNG, WebP o GIF.'
+    return 'avatar.invalidFormat'
   }
   if (file.size > MAX_BYTES) {
-    return 'La imagen no puede superar 5 MB.'
+    return 'avatar.tooLarge'
   }
   return null
 }

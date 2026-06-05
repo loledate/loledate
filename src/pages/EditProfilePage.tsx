@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import { fetchProfileReputation } from '../lib/reputation'
 import { CITIES, INTEREST_OPTIONS, isProfileComplete } from '../data/constants'
 import { CHAMPIONS, isValidChampion } from '../data/champions'
 import type { Role, LookingFor, Profile } from '../types'
-import { LOOKING_FOR_LABELS } from '../types'
 import Badge from '../components/Badge'
 import ProfileCard from '../components/ProfileCard'
 import ProfilePhotoEditor from '../components/ProfilePhotoEditor'
@@ -23,6 +23,7 @@ const LOOKING_FOR_OPTIONS: LookingFor[] = [
 export default function EditProfilePage() {
   const { userProfile, profileLoading, saveUserProfile } = useApp()
   const { user } = useAuth()
+  const { t, lookingForLabel, interestLabel } = useLanguage()
   const [form, setForm] = useState<Profile | null>(userProfile)
   const [isEditing, setIsEditing] = useState(false)
   const [initialized, setInitialized] = useState(false)
@@ -61,7 +62,7 @@ export default function EditProfilePage() {
   if (profileLoading || !form) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
-        <p className="text-sm text-muted">Cargando perfil...</p>
+        <p className="text-sm text-muted">{t('profile.loading')}</p>
       </div>
     )
   }
@@ -135,7 +136,7 @@ export default function EditProfilePage() {
   }
 
   const handlePhotoChange = async (photoUrl: string | null) => {
-    if (!form) return { error: 'No hay perfil cargado.' }
+    if (!form) return { error: 'profile.notLoaded' }
 
     const updated = { ...form, photoUrl }
     setForm(updated)
@@ -163,27 +164,26 @@ export default function EditProfilePage() {
       <div className="mx-auto max-w-lg px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
-            Mi perfil
+            {t('profile.myProfile')}
           </h1>
           <button
             type="button"
             onClick={startEditing}
             className="btn-secondary px-4 py-2 text-xs"
           >
-            Editar
+            {t('profile.edit')}
           </button>
         </div>
 
         {saved && (
           <p className="mb-4 border border-theme p-3 text-center text-sm text-body">
-            Perfil guardado.
+            {t('profile.saved')}
           </p>
         )}
 
         {!profileComplete && (
           <p className="mb-6 border border-theme p-4 text-sm text-body">
-            Tu perfil está incompleto. Pulsa Editar para añadir Riot ID y el
-            resto de datos.
+            {t('profile.incompleteView')}
           </p>
         )}
 
@@ -192,7 +192,7 @@ export default function EditProfilePage() {
         <div className="mt-6 flex flex-wrap gap-3">
           {profileComplete && (
             <Link to="/discover" className="btn-primary px-6 py-3 text-sm">
-              Descubrir jugadores
+              {t('profile.discoverPlayers')}
             </Link>
           )}
           <button
@@ -200,7 +200,7 @@ export default function EditProfilePage() {
             onClick={startEditing}
             className="btn-secondary px-6 py-3 text-sm"
           >
-            Editar perfil
+            {t('profile.editProfile')}
           </button>
         </div>
       </div>
@@ -212,11 +212,9 @@ export default function EditProfilePage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
-            Editar perfil
+            {t('profile.editProfile')}
           </h1>
-          <p className="mt-1 text-xs text-muted">
-            Cambia tus datos y pulsa Guardar.
-          </p>
+          <p className="mt-1 text-xs text-muted">{t('profile.editHint')}</p>
         </div>
         {profileComplete && (
           <button
@@ -224,15 +222,14 @@ export default function EditProfilePage() {
             onClick={cancelEditing}
             className="text-sm text-muted hover:text-heading"
           >
-            Cancelar
+            {t('common.cancel')}
           </button>
         )}
       </div>
 
       {!profileComplete && (
         <p className="mb-6 border border-theme p-4 text-sm text-body">
-          Completa nombre, edad, ciudad y Riot ID para poder descubrir otros
-          jugadores.
+          {t('profile.incompleteEdit')}
         </p>
       )}
 
@@ -248,7 +245,7 @@ export default function EditProfilePage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-xs text-muted">Nombre</label>
+            <label className="mb-1.5 block text-xs text-muted">{t('profile.name')}</label>
             <input
               type="text"
               value={form.name}
@@ -257,7 +254,7 @@ export default function EditProfilePage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted">Edad</label>
+            <label className="mb-1.5 block text-xs text-muted">{t('profile.age')}</label>
             <input
               type="number"
               min={18}
@@ -268,7 +265,7 @@ export default function EditProfilePage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted">Ciudad</label>
+            <label className="mb-1.5 block text-xs text-muted">{t('profile.region')}</label>
             <select
               value={form.city}
               onChange={(e) => update('city', e.target.value)}
@@ -282,12 +279,12 @@ export default function EditProfilePage() {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted">Elo</label>
+            <label className="mb-1.5 block text-xs text-muted">{t('profile.rank')}</label>
             <input
               type="text"
               value={form.elo}
               onChange={(e) => update('elo', e.target.value)}
-              placeholder="Oro II"
+              placeholder={t('profile.rankPlaceholder')}
               className="input-field"
             />
           </div>
@@ -295,11 +292,11 @@ export default function EditProfilePage() {
 
         <div className="border border-theme p-5">
           <h3 className="mb-4 text-xs font-medium uppercase tracking-widest text-muted">
-            Cuenta LoL
+            {t('profile.lolAccount')}
           </h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-xs text-muted">Riot ID</label>
+              <label className="mb-1.5 block text-xs text-muted">{t('profile.riotId')}</label>
               <input
                 type="text"
                 value={form.riotId}
@@ -309,7 +306,7 @@ export default function EditProfilePage() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs text-muted">OP.GG</label>
+              <label className="mb-1.5 block text-xs text-muted">{t('profile.opgg')}</label>
               <input
                 type="url"
                 value={form.opggUrl}
@@ -321,7 +318,7 @@ export default function EditProfilePage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-2 block text-xs text-muted">Rol</label>
+            <label className="mb-2 block text-xs text-muted">{t('profile.role')}</label>
             <div className="flex flex-wrap gap-2">
               {ROLES.map((role) => (
                 <button
@@ -337,7 +334,7 @@ export default function EditProfilePage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-2 block text-xs text-muted">Campeones</label>
+            <label className="mb-2 block text-xs text-muted">{t('profile.champions')}</label>
             <div className="mb-2 flex flex-wrap gap-2">
               {form.favoriteChampions.map((champ) => (
                 <button
@@ -361,7 +358,7 @@ export default function EditProfilePage() {
                 onChange={(e) => setChampInput(e.target.value)}
                 className="input-field flex-1"
               >
-                <option value="">Elige un campeón...</option>
+                <option value="">{t('profile.pickChampion')}</option>
                 {availableChampions.map((champ) => (
                   <option key={champ} value={champ}>
                     {champ}
@@ -374,7 +371,7 @@ export default function EditProfilePage() {
                 disabled={!champInput}
                 className="btn-secondary px-4 disabled:opacity-40"
               >
-                Añadir
+                {t('common.add')}
               </button>
             </div>
           </div>
@@ -382,11 +379,11 @@ export default function EditProfilePage() {
 
         <div className="border border-theme p-5">
           <h3 className="mb-4 text-xs font-medium uppercase tracking-widest text-muted">
-            Redes sociales
+            {t('profile.socials')}
           </h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-xs text-muted">Discord</label>
+              <label className="mb-1.5 block text-xs text-muted">{t('profile.discord')}</label>
               <input
                 type="text"
                 value={form.discordUsername}
@@ -396,9 +393,7 @@ export default function EditProfilePage() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs text-muted">
-                X (Twitter)
-              </label>
+              <label className="mb-1.5 block text-xs text-muted">{t('profile.x')}</label>
               <input
                 type="text"
                 value={form.xUsername}
@@ -411,7 +406,7 @@ export default function EditProfilePage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs text-muted">Bio</label>
+          <label className="mb-1.5 block text-xs text-muted">{t('profile.bio')}</label>
           <textarea
             value={form.bio}
             onChange={(e) => update('bio', e.target.value)}
@@ -421,7 +416,7 @@ export default function EditProfilePage() {
         </div>
 
         <div>
-          <label className="mb-2 block text-xs text-muted">Busco</label>
+          <label className="mb-2 block text-xs text-muted">{t('profile.lookingFor')}</label>
           <div className="flex flex-wrap gap-2">
             {LOOKING_FOR_OPTIONS.map((lf) => (
               <button
@@ -430,14 +425,14 @@ export default function EditProfilePage() {
                 onClick={() => toggleLookingFor(lf)}
                 className={`rounded border px-3 py-1.5 text-sm transition-colors ${toggleClass(form.lookingFor.includes(lf))}`}
               >
-                {LOOKING_FOR_LABELS[lf]}
+                {lookingForLabel(lf)}
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <label className="mb-2 block text-xs text-muted">Intereses</label>
+          <label className="mb-2 block text-xs text-muted">{t('profile.interests')}</label>
           <div className="flex flex-wrap gap-2">
             {INTEREST_OPTIONS.map((interest) => (
               <button
@@ -446,24 +441,24 @@ export default function EditProfilePage() {
                 onClick={() => toggleInterest(interest)}
                 className={`rounded border px-3 py-1 text-sm transition-colors ${toggleClass(form.interests.includes(interest))}`}
               >
-                {interest}
+                {interestLabel(interest)}
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs text-muted">Horario</label>
+          <label className="mb-1.5 block text-xs text-muted">{t('profile.schedule')}</label>
           <input
             type="text"
             value={form.playSchedule}
             onChange={(e) => update('playSchedule', e.target.value)}
-            placeholder="18:00 - 01:00"
+            placeholder={t('profile.schedulePlaceholder')}
             className="input-field"
           />
         </div>
 
-        {error && <p className="text-sm text-body">{error}</p>}
+        {error && <p className="text-sm text-body">{t(error)}</p>}
 
         <button
           type="button"
@@ -471,7 +466,7 @@ export default function EditProfilePage() {
           disabled={saving}
           className="btn-primary w-full py-3 disabled:opacity-40"
         >
-          {saving ? 'Guardando...' : 'Guardar'}
+          {saving ? t('common.saving') : t('common.save')}
         </button>
       </div>
     </div>

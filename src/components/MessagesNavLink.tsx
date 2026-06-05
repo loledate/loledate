@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { MessageCircle } from 'lucide-react'
 import { useApp } from '../context/AppContext'
+import { useLanguage } from '../context/LanguageContext'
 
 interface MessagesNavLinkProps {
   className?: string
@@ -15,6 +16,7 @@ export default function MessagesNavLink({
 }: MessagesNavLinkProps) {
   const location = useLocation()
   const { unreadMessageCount } = useApp()
+  const { t } = useLanguage()
   const active =
     location.pathname === '/matches' || location.pathname.startsWith('/chat/')
 
@@ -31,8 +33,8 @@ export default function MessagesNavLink({
       onClick={onClick}
       aria-label={
         unreadMessageCount > 0
-          ? `Mensajes, ${unreadMessageCount} sin leer`
-          : 'Mensajes'
+          ? t('nav.messagesUnread', { n: unreadMessageCount })
+          : t('nav.messages')
       }
       className={`relative inline-flex items-center gap-1.5 ${className}`}
     >
@@ -44,7 +46,7 @@ export default function MessagesNavLink({
           </span>
         )}
       </span>
-      {showLabel && <span>Mensajes</span>}
+      {showLabel && <span>{t('nav.messages')}</span>}
     </Link>
   )
 }

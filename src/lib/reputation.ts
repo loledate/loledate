@@ -1,25 +1,25 @@
 import type { Profile } from '../types'
 import { requireSupabase } from './supabase'
 
-export type ReputationTier =
-  | 'Sin valorar'
-  | 'Nuevo'
-  | 'Conocido'
-  | 'Respetado'
-  | 'Leyenda'
+export type ReputationTierKey =
+  | 'unrated'
+  | 'new'
+  | 'known'
+  | 'respected'
+  | 'legend'
 
 export interface ProfileReputation {
   count: number
   likedByMe: boolean
-  tier: ReputationTier
+  tier: ReputationTierKey
 }
 
-export function getReputationTier(count: number): ReputationTier {
-  if (count <= 0) return 'Sin valorar'
-  if (count < 5) return 'Nuevo'
-  if (count < 15) return 'Conocido'
-  if (count < 50) return 'Respetado'
-  return 'Leyenda'
+export function getReputationTier(count: number): ReputationTierKey {
+  if (count <= 0) return 'unrated'
+  if (count < 5) return 'new'
+  if (count < 15) return 'known'
+  if (count < 50) return 'respected'
+  return 'legend'
 }
 
 function buildReputation(count: number, likedByMe: boolean): ProfileReputation {
@@ -99,7 +99,7 @@ export async function toggleProfileLike(
   currentlyLiked: boolean
 ): Promise<ProfileReputation> {
   if (targetUserId === currentUserId) {
-    throw new Error('No puedes dar like a tu propio perfil.')
+    throw new Error('reputation.selfLike')
   }
 
   const client = requireSupabase()

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import {
   fetchProfileReputation,
   toggleProfileLike,
@@ -18,6 +19,7 @@ export default function ProfileLikeButton({
   onReputationChange,
 }: ProfileLikeButtonProps) {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [reputation, setReputation] = useState<ProfileReputation | null>(null)
   const [loading, setLoading] = useState(true)
   const [toggling, setToggling] = useState(false)
@@ -39,9 +41,9 @@ export default function ProfileLikeButton({
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(
-            err instanceof Error ? err.message : 'No se pudo cargar la reputación.'
-          )
+          const message =
+            err instanceof Error ? err.message : 'reputation.loadFailed'
+          setError(message)
         }
       })
       .finally(() => {
@@ -68,9 +70,9 @@ export default function ProfileLikeButton({
       setReputation(next)
       onReputationChange?.(next)
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'No se pudo actualizar el like.'
-      )
+      const message =
+        err instanceof Error ? err.message : 'reputation.toggleFailed'
+      setError(message)
     } finally {
       setToggling(false)
     }
@@ -80,17 +82,19 @@ export default function ProfileLikeButton({
 
   if (loading) {
     return (
-      <p className="text-center text-sm text-muted">Cargando reputación...</p>
+      <p className="text-center text-sm text-muted">{t('reputation.loading')}</p>
     )
   }
 
   if (!reputation) {
-    return error ? <p className="text-center text-sm text-body">{error}</p> : null
+    return error ? (
+      <p className="text-center text-sm text-body">{t(error)}</p>
+    ) : null
   }
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <ReputationBadge count={reputation.count} tier={reputation.tier} />
+      <ReputationBadge count={reputation.count} tierKey={reputation.tier} />
       <button
         type="button"
         onClick={() => void handleToggle()}
@@ -107,10 +111,10 @@ export default function ProfileLikeButton({
         {toggling
           ? '...'
           : reputation.likedByMe
-            ? 'Quitar like'
-            : 'Dar like al perfil'}
+            ? t('reputation.unlike')
+            : t('reputation.like')}
       </button>
-      {error && <p className="text-xs text-body">{error}</p>}
+      {error && <p className="text-xs text-body">{t(error)}</p>}
     </div>
   )
 }

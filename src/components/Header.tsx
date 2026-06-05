@@ -2,15 +2,11 @@ import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
+import { useLanguage } from '../context/LanguageContext'
 import SocialLinks from './SocialLinks'
 import ThemeToggle from './ThemeToggle'
 import MessagesNavLink from './MessagesNavLink'
-
-const navItems = [
-  { to: '/', label: 'Inicio' },
-  { to: '/discover', label: 'Descubrir' },
-  { to: '/profile', label: 'Perfil' },
-]
+import LanguageToggle from './LanguageToggle'
 
 interface HeaderProps {
   transparent?: boolean
@@ -25,9 +21,15 @@ export default function Header({ transparent = false }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { user, signOut, loading } = useAuth()
   const { theme } = useTheme()
+  const { t } = useLanguage()
+
+  const navItems = [
+    { to: '/discover', label: t('nav.discover') },
+    { to: '/profile', label: t('nav.profile') },
+  ]
 
   const handleSignOut = async () => {
-    const confirmed = window.confirm('¿Seguro que quieres cerrar sesión?')
+    const confirmed = window.confirm(t('nav.logoutConfirm'))
     if (!confirmed) return
     await signOut()
     setMobileOpen(false)
@@ -62,10 +64,16 @@ export default function Header({ transparent = false }: HeaderProps) {
 
   return (
     <header className={headerClass}>
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link to="/" className={`text-sm font-semibold tracking-wide ${brandClass}`}>
-          Lol-edate
-        </Link>
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <LanguageToggle />
+          <Link
+            to="/"
+            className={`truncate text-sm font-semibold tracking-wide ${brandClass}`}
+          >
+            Lol-edate
+          </Link>
+        </div>
 
         <div className="flex items-center gap-2 md:gap-3">
           <SocialLinks />
@@ -73,7 +81,7 @@ export default function Header({ transparent = false }: HeaderProps) {
 
           <nav className="hidden items-center gap-5 md:flex">
             {user &&
-              navItems.slice(1).map(({ to, label }) => {
+              navItems.map(({ to, label }) => {
                 const active = isNavActive(location.pathname, to)
                 return (
                   <Link
@@ -99,17 +107,20 @@ export default function Header({ transparent = false }: HeaderProps) {
             {!loading && !user && (
               <>
                 <Link to="/login" className={`text-sm font-medium ${linkMuted}`}>
-                  Entrar
+                  {t('nav.login')}
                 </Link>
                 <Link to="/register" className="btn-primary px-4 py-2 text-xs">
-                  Registro
+                  {t('nav.register')}
                 </Link>
               </>
             )}
 
             {user && (
-              <button onClick={handleSignOut} className={`text-sm font-medium ${linkMuted}`}>
-                Salir
+              <button
+                onClick={handleSignOut}
+                className={`text-sm font-medium ${linkMuted}`}
+              >
+                {t('nav.logout')}
               </button>
             )}
           </nav>
@@ -117,9 +128,9 @@ export default function Header({ transparent = false }: HeaderProps) {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className={`text-sm font-medium md:hidden ${brandClass}`}
-            aria-label="Menú"
+            aria-label={t('common.menu')}
           >
-            {mobileOpen ? 'Cerrar' : 'Menú'}
+            {mobileOpen ? t('common.close') : t('common.menu')}
           </button>
         </div>
       </div>
@@ -135,7 +146,7 @@ export default function Header({ transparent = false }: HeaderProps) {
           }`}
         >
           {user &&
-            navItems.slice(1).map(({ to, label }) => {
+            navItems.map(({ to, label }) => {
               const active = isNavActive(location.pathname, to)
               return (
                 <Link
@@ -168,14 +179,14 @@ export default function Header({ transparent = false }: HeaderProps) {
                 onClick={() => setMobileOpen(false)}
                 className={`block py-2 text-sm ${linkMuted}`}
               >
-                Entrar
+                {t('nav.login')}
               </Link>
               <Link
                 to="/register"
                 onClick={() => setMobileOpen(false)}
                 className="block py-2 text-sm font-semibold text-heading"
               >
-                Registro
+                {t('nav.register')}
               </Link>
             </>
           )}
@@ -185,7 +196,7 @@ export default function Header({ transparent = false }: HeaderProps) {
               onClick={handleSignOut}
               className={`block py-2 text-sm ${linkMuted}`}
             >
-              Salir
+              {t('nav.logout')}
             </button>
           )}
         </nav>

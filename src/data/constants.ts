@@ -1,26 +1,7 @@
 import type { Profile, Role } from '../types'
+import { DEFAULT_CITY } from './locations'
 
-
-
-export const CITIES = [
-
-  'Madrid',
-
-  'Barcelona',
-
-  'Valencia',
-
-  'Sevilla',
-
-  'Málaga',
-
-  'Granada',
-
-  'Bilbao',
-
-  'Zaragoza',
-
-]
+export { CITIES, DEFAULT_CITY } from './locations'
 
 
 
@@ -98,7 +79,7 @@ export function createEmptyProfile(userId: string, name: string): Profile {
 
     age: 18,
 
-    city: CITIES[0],
+    city: DEFAULT_CITY,
 
     distanceKm: 0,
 

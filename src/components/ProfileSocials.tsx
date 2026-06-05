@@ -1,4 +1,5 @@
 import type { Profile } from '../types'
+import { useLanguage } from '../context/LanguageContext'
 import { xProfileUrl } from '../lib/social'
 import { DiscordIcon, XIcon } from './SocialLinks'
 
@@ -11,6 +12,7 @@ export default function ProfileSocials({
   profile,
   compact = false,
 }: ProfileSocialsProps) {
+  const { t } = useLanguage()
   const discord = profile.discordUsername.trim()
   const xHandle = profile.xUsername.trim()
 
@@ -46,7 +48,7 @@ export default function ProfileSocials({
 
   return (
     <div>
-      <p className="mb-2 text-xs text-muted">Redes</p>
+      <p className="mb-2 text-xs text-muted">{t('card.socials')}</p>
       <div className="space-y-2">{items}</div>
     </div>
   )

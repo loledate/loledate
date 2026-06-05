@@ -1,4 +1,5 @@
 import { Moon, Sun } from 'lucide-react'
+import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
 
 const iconButtonClass =
@@ -6,6 +7,7 @@ const iconButtonClass =
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
+  const { t } = useLanguage()
   const isDark = theme === 'dark'
 
   return (
@@ -13,8 +15,8 @@ export default function ThemeToggle() {
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className={iconButtonClass}
-      aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-      title={isDark ? 'Modo claro' : 'Modo oscuro'}
+      aria-label={isDark ? t('theme.toLight') : t('theme.toDark')}
+      title={isDark ? t('theme.light') : t('theme.dark')}
     >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </button>

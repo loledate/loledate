@@ -1,17 +1,21 @@
+import { useLanguage } from '../context/LanguageContext'
+
 interface LikeAnimationProps {
   type: 'like' | 'super_like' | 'match'
   show: boolean
 }
 
 export default function LikeAnimation({ type, show }: LikeAnimationProps) {
+  const { t } = useLanguage()
+
   if (!show) return null
 
   const label =
     type === 'match'
-      ? '¡Match!'
+      ? t('swipe.match')
       : type === 'super_like'
-        ? 'Super like enviado'
-        : 'Like enviado'
+        ? t('swipe.superLike')
+        : t('swipe.like')
 
   return (
     <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">

@@ -1,17 +1,19 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
-
-const steps = [
-  { title: 'Regístrate', desc: 'Elige usuario y contraseña.' },
-  { title: 'Completa tu perfil', desc: 'Riot ID, elo, rol e intereses.' },
-  { title: 'Filtra', desc: 'Ciudad, elo, rol e intereses.' },
-  { title: 'Match', desc: 'Conecta y habla.' },
-]
 
 export default function LandingPage() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const { coverImage, theme } = useTheme()
+
+  const steps = [
+    { title: t('landing.step1Title'), desc: t('landing.step1Desc') },
+    { title: t('landing.step2Title'), desc: t('landing.step2Desc') },
+    { title: t('landing.step3Title'), desc: t('landing.step3Desc') },
+    { title: t('landing.step4Title'), desc: t('landing.step4Desc') },
+  ]
 
   return (
     <div className="animate-fade-in">
@@ -39,34 +41,33 @@ export default function LandingPage() {
                 theme === 'dark' ? 'text-white/50' : 'text-body/80'
               }`}
             >
-              Matchmaking LoL
+              {t('landing.eyebrow')}
             </p>
             <p
               className={`mb-8 text-lg leading-relaxed sm:text-xl ${
                 theme === 'dark' ? 'text-white/90' : 'text-heading/90'
               }`}
             >
-              Encuentra duoQ, amigos o algo más según tu elo, rol, main y
-              ciudad.
+              {t('landing.hero')}
             </p>
 
             <div className="flex flex-wrap gap-3">
               {user ? (
                 <>
                   <Link to="/discover" className="btn-primary px-8 py-4">
-                    Descubrir
+                    {t('landing.discover')}
                   </Link>
                   <Link to="/profile" className="btn-secondary px-8 py-4">
-                    Mi perfil
+                    {t('landing.myProfile')}
                   </Link>
                 </>
               ) : (
                 <>
                   <Link to="/register" className="btn-primary px-8 py-4">
-                    Registrarse
+                    {t('landing.signUp')}
                   </Link>
                   <Link to="/login" className="btn-secondary px-8 py-4">
-                    Iniciar sesión
+                    {t('landing.logIn')}
                   </Link>
                 </>
               )}
@@ -81,7 +82,7 @@ export default function LandingPage() {
         )}
         <div className="relative mx-auto max-w-5xl">
           <h2 className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted">
-            Cómo funciona
+            {t('landing.howItWorks')}
           </h2>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -101,7 +102,7 @@ export default function LandingPage() {
       <footer className="border-t border-theme bg-white/60 px-4 py-8 backdrop-blur-sm dark:border-white/10 dark:bg-black">
         <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-heading">Lol-edate</span>
-          <p className="text-xs text-muted">No afiliado a Riot Games.</p>
+          <p className="text-xs text-muted">{t('landing.footerDisclaimer')}</p>
         </div>
       </footer>
     </div>

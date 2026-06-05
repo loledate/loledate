@@ -1,45 +1,52 @@
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useApp } from '../context/AppContext'
+import { useLanguage } from '../context/LanguageContext'
+import { isNewMatchPlaceholder } from '../lib/chatConstants'
 import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
 
-function formatTime(iso: string) {
-  const date = new Date(iso)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
-
-  if (diffHours < 1) return 'Ahora'
-  if (diffHours < 24) return `Hace ${diffHours}h`
-  const diffDays = Math.floor(diffHours / 24)
-  if (diffDays === 1) return 'Ayer'
-  return `Hace ${diffDays}d`
-}
-
 export default function MatchesPage() {
-  const { matches, matchesLoading } = useApp()
+  const { matches, matchesLoading, refreshMatchesSilent, clearMatchUnread } =
+    useApp()
+  const { t } = useLanguage()
+
+  useEffect(() => {
+    void refreshMatchesSilent()
+  }, [refreshMatchesSilent])
+
+  function formatTime(iso: string) {
+    const date = new Date(iso)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+
+    if (diffHours < 1) return t('messages.now')
+    if (diffHours < 24) return t('messages.hoursAgo', { n: diffHours })
+    const diffDays = Math.floor(diffHours / 24)
+    if (diffDays === 1) return t('messages.yesterday')
+    return t('messages.daysAgo', { n: diffDays })
+  }
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
-        Mensajes
+        {t('messages.title')}
       </h1>
-      <p className="mb-8 text-sm text-muted">Tus conversaciones.</p>
+      <p className="mb-8 text-sm text-muted">{t('messages.subtitle')}</p>
 
       {matchesLoading ? (
         <div className="flex flex-col items-center rounded border border-theme py-20 text-center">
-          <p className="text-sm text-muted">Cargando conversaciones...</p>
+          <p className="text-sm text-muted">{t('messages.loading')}</p>
         </div>
       ) : matches.length === 0 ? (
         <div className="flex flex-col items-center rounded border border-theme py-20 text-center">
           <h2 className="mb-2 text-sm font-medium text-heading">
-            Sin conversaciones
+            {t('messages.emptyTitle')}
           </h2>
-          <p className="max-w-xs text-sm text-muted">
-            Cuando hagas match con alguien, podrás escribirle aquí.
-          </p>
+          <p className="max-w-xs text-sm text-muted">{t('messages.emptyBody')}</p>
           <Link to="/discover" className="btn-primary mt-6">
-            Descubrir
+            {t('nav.discover')}
           </Link>
         </div>
       ) : (
@@ -48,6 +55,7 @@ export default function MatchesPage() {
             <Link
               key={match.id}
               to={`/chat/${match.id}`}
+              onClick={() => clearMatchUnread(match.id)}
               className="group flex items-center gap-4 p-4 transition-colors hover:bg-white/[0.02]"
             >
               <div className="relative flex-shrink-0">
@@ -85,7 +93,9 @@ export default function MatchesPage() {
                     match.unread ? 'font-medium text-heading' : 'text-muted'
                   }`}
                 >
-                  {match.lastMessage}
+                  {isNewMatchPlaceholder(match.lastMessage)
+                    ? t('messages.newMatch')
+                    : match.lastMessage}
                 </p>
               </div>
             </Link>

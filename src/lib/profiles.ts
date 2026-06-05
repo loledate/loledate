@@ -12,6 +12,8 @@ import {
   attachReputationToProfiles,
   fetchReputationForUsers,
 } from './reputation'
+import { NEW_MATCH_PLACEHOLDER } from './chatConstants'
+import { fetchUnreadCountsByMatch } from './messages'
 
 type ProfileRow = DbProfile & {
   lol_accounts: DbLolAccount[] | DbLolAccount | null
@@ -338,20 +340,10 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
     }
   }
 
-  const { data: unreadRows } = await client
-    .from('messages')
-    .select('match_id')
-    .in('match_id', matchIds)
-    .neq('sender_id', currentUserId)
-    .is('read_at', null)
-
-  const unreadCountByMatch = new Map<string, number>()
-  for (const row of unreadRows ?? []) {
-    unreadCountByMatch.set(
-      row.match_id,
-      (unreadCountByMatch.get(row.match_id) ?? 0) + 1
-    )
-  }
+  const unreadCountByMatch = await fetchUnreadCountsByMatch(
+    matchIds,
+    currentUserId
+  )
 
   const profiles = [...profileByUserId.values()]
   const reputationByUser = await fetchReputationForUsers(
@@ -378,7 +370,7 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
       return {
         id: row.id,
         profile,
-        lastMessage: last?.content ?? '¡Nuevo match! Escríbele un mensaje.',
+        lastMessage: last?.content ?? NEW_MATCH_PLACEHOLDER,
         lastMessageAt: last?.created_at ?? row.matched_at,
         unread: unreadCount > 0,
         unreadCount,
@@ -445,7 +437,7 @@ export async function fetchMatchById(
   return {
     id: matchRow.id,
     profile: mapRowToProfile(profileRow as ProfileRow),
-    lastMessage: last?.content ?? '¡Nuevo match! Escríbele un mensaje.',
+    lastMessage: last?.content ?? NEW_MATCH_PLACEHOLDER,
     lastMessageAt: last?.created_at ?? matchRow.matched_at,
     unread: (unreadCount ?? 0) > 0,
     unreadCount: unreadCount ?? 0,

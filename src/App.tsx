@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
+import { LanguageProvider } from './context/LanguageContext'
 import { AuthProvider } from './context/AuthContext'
 import { AppProvider } from './context/AppContext'
 import Layout from './components/Layout'
@@ -18,8 +19,9 @@ import UserProfilePage from './pages/UserProfilePage'
 export default function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <AppProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <AppProvider>
           <BrowserRouter>
             <ThemePicker />
             <Routes>
@@ -85,7 +87,8 @@ export default function App() {
             </Routes>
           </BrowserRouter>
         </AppProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   )
 }
