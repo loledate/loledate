@@ -12,6 +12,7 @@ export const es = {
     menu: 'Menú',
     close: 'Cerrar',
     km: '{{n}} km',
+    beta: 'BETA',
   },
   lang: {
     es: 'ES',
@@ -140,8 +141,8 @@ export const es = {
     photoHint: 'JPG, PNG, WebP o GIF. Máximo 5 MB.',
     photoUploadFailed: 'No se pudo subir la foto.',
     photoRemoveFailed: 'No se pudo quitar la foto.',
-    songTitle: 'Canción de perfil',
-    songDescription: 'Sube un MP3 o MP4 y sonará al entrar en tu perfil.',
+    songTitle: 'Mi canción favorita',
+    songDescription: 'Sube un MP3 o MP4 y se verá en tu perfil como tu canción favorita.',
     uploadSong: 'Subir canción',
     changeSong: 'Cambiar canción',
     removeSong: 'Quitar canción',
@@ -157,6 +158,9 @@ export const es = {
     songMute: 'Silenciar',
     songUnmute: 'Activar sonido',
     songAutoplayBlocked: 'Pulsa play para escuchar',
+    songTheme: 'Tema de {{name}}',
+    songSpotifyStyle: 'Perfil track',
+    songSeek: 'Posición de la canción',
     saveFailed: 'Error al guardar el perfil.',
     noSession: 'No hay sesión activa.',
     reloadFailed: 'No se pudo cargar el perfil guardado.',
@@ -205,6 +209,8 @@ export const es = {
     bio: 'Bio',
     schedule: 'Horario',
     hasSong: 'Canción',
+    favoriteSongMine: 'Mi canción favorita',
+    favoriteSong: 'Canción favorita de {{name}}',
   },
   lookingFor: {
     duoQ: 'DuoQ',
@@ -244,6 +250,18 @@ export const es = {
     darkDesc: 'Portada dark',
     toLight: 'Cambiar a modo claro',
     toDark: 'Cambiar a modo oscuro',
+  },
+  updates: {
+    badge: 'Novedad',
+    favoriteSongTitle: '¡Ahora puedes poner tu canción favorita!',
+    favoriteSongBody:
+      'Sube un MP3 o MP4 y aparecerá en tu perfil. Tus matches la verán al entrar — estilo Spotify.',
+    favoriteSongCta: 'Ir a mi perfil',
+    favoriteSongLater: 'Ahora no',
+  },
+  presence: {
+    online: 'En línea',
+    offline: 'Desconectado',
   },
   avatar: {
     invalidFormat: 'Formato no válido. Usa JPG, PNG, WebP o GIF.',

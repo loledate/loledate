@@ -1,0 +1,3 @@
+-- Presencia online (Realtime)
+-- En Supabase Dashboard → Project Settings → API → Realtime: debe estar activo.
+-- No requiere tablas extra: usa Supabase Realtime Presence (canal global-online).

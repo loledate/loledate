@@ -8,6 +8,11 @@ const MP4_TYPES = new Set(['video/mp4', 'audio/mp4'])
 
 export type ProfileSongFormat = 'mp3' | 'mp4'
 
+export function isProfileSongVideo(url: string): boolean {
+  const path = url.split('?')[0].toLowerCase()
+  return path.endsWith('.mp4')
+}
+
 export function getProfileSongFormat(file: File): ProfileSongFormat | null {
   const name = file.name.toLowerCase()
 

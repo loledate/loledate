@@ -100,7 +100,9 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:py-8">
+    <div
+      className={`mx-auto max-w-2xl px-4 py-6 sm:py-8 ${profile.songUrl ? 'pb-44 sm:pb-48' : ''}`}
+    >
       <div className="mb-6">
         <Link to={backTo} className="text-sm text-muted hover:text-heading">
           {t('common.back')}
@@ -110,9 +112,7 @@ export default function UserProfilePage() {
         </h1>
       </div>
 
-      <ProfileSongPlayer songUrl={profile.songUrl} profileName={profile.name} />
-
-      <ProfileCard profile={profile} />
+      <ProfileCard profile={profile} showOnline />
 
       <div className="mt-6">
         <ProfileLikeButton
@@ -120,6 +120,13 @@ export default function UserProfilePage() {
           onReputationChange={applyReputation}
         />
       </div>
+
+      <ProfileSongPlayer
+        songUrl={profile.songUrl}
+        profileName={profile.name}
+        photoUrl={profile.photoUrl}
+        sticky
+      />
     </div>
   )
 }

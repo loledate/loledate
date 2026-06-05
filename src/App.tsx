@@ -3,8 +3,11 @@ import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { AuthProvider } from './context/AuthContext'
 import { AppProvider } from './context/AppContext'
+import { PresenceProvider } from './context/PresenceContext'
 import Layout from './components/Layout'
 import ThemePicker from './components/ThemePicker'
+import BetaBadge from './components/BetaBadge'
+import FavoriteSongUpdateModal from './components/FavoriteSongUpdateModal'
 import ProtectedRoute from './components/ProtectedRoute'
 import GuestRoute from './components/GuestRoute'
 import LandingPage from './pages/LandingPage'
@@ -21,9 +24,12 @@ export default function App() {
     <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
+          <PresenceProvider>
           <AppProvider>
           <BrowserRouter>
+            <BetaBadge />
             <ThemePicker />
+            <FavoriteSongUpdateModal />
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<LandingPage />} />
@@ -87,6 +93,7 @@ export default function App() {
             </Routes>
           </BrowserRouter>
         </AppProvider>
+          </PresenceProvider>
         </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>

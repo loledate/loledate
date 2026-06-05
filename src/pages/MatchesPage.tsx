@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { isNewMatchPlaceholder } from '../lib/chatConstants'
 import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
+import OnlineIndicator from '../components/OnlineIndicator'
 
 export default function MatchesPage() {
   const { matches, matchesLoading, refreshMatchesSilent, clearMatchUnread } =
@@ -65,6 +66,7 @@ export default function MatchesPage() {
                   className="h-12 w-12"
                   fit="contain"
                 />
+                <OnlineIndicator userId={match.profile.userId} />
                 {match.unreadCount > 0 && (
                   <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white dark:bg-white dark:text-black">
                     {match.unreadCount > 99 ? '99+' : match.unreadCount}

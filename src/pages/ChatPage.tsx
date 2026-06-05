@@ -13,6 +13,8 @@ import {
 } from '../lib/messages'
 import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
+import OnlineIndicator from '../components/OnlineIndicator'
+import OnlineStatusLabel from '../components/OnlineStatusLabel'
 
 export default function ChatPage() {
   const { matchId } = useParams<{ matchId: string }>()
@@ -230,19 +232,21 @@ export default function ChatPage() {
           state={{ from: `/chat/${matchId}` }}
           className="flex min-w-0 flex-1 items-center gap-2.5 transition-opacity hover:opacity-80 sm:gap-3"
         >
-          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-rose-100 dark:bg-zinc-900 sm:h-10 sm:w-10">
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-rose-100 dark:bg-zinc-900 sm:h-10 sm:w-10">
             <Avatar
               url={match.profile.photoUrl}
               name={match.profile.name}
               className="h-full w-full"
               fit="contain"
             />
+            <OnlineIndicator userId={match.profile.userId} size="sm" />
           </div>
           <div className="min-w-0 flex-1">
             <h2 className="truncate text-sm font-medium text-heading">
               {match.profile.name}
             </h2>
-            <div className="flex min-w-0 items-center gap-2 text-xs text-muted">
+            <OnlineStatusLabel userId={match.profile.userId} />
+            <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-muted">
               <span className="truncate">{match.profile.city}</span>
               {match.profile.elo && (
                 <Badge className="!px-1.5 !py-0 shrink-0 text-[10px]">

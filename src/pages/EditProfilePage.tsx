@@ -182,7 +182,9 @@ export default function EditProfilePage() {
 
   if (!isEditing) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-6 sm:py-8">
+      <div
+        className={`mx-auto max-w-2xl px-4 py-6 sm:py-8 ${form.songUrl ? 'pb-44 sm:pb-48' : ''}`}
+      >
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
             {t('profile.myProfile')}
@@ -208,9 +210,7 @@ export default function EditProfilePage() {
           </p>
         )}
 
-        <ProfileSongPlayer songUrl={form.songUrl} profileName={form.name} />
-
-        <ProfileCard profile={form} />
+        <ProfileCard profile={form} isOwnProfile />
 
         <div className="mt-6 flex flex-wrap gap-3">
           {profileComplete && (
@@ -226,6 +226,14 @@ export default function EditProfilePage() {
             {t('profile.editProfile')}
           </button>
         </div>
+
+        <ProfileSongPlayer
+          songUrl={form.songUrl}
+          profileName={form.name}
+          photoUrl={form.photoUrl}
+          sticky
+          isOwnProfile
+        />
       </div>
     )
   }

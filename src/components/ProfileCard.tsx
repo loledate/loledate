@@ -1,9 +1,11 @@
 import type { Profile } from '../types'
-import { Music2 } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import Badge from './Badge'
 import Avatar from './Avatar'
+import OnlineIndicator from './OnlineIndicator'
+import OnlineStatusLabel from './OnlineStatusLabel'
 import ProfileSocials from './ProfileSocials'
+import FavoriteSongMedia from './FavoriteSongMedia'
 import ReputationBadge from './ReputationBadge'
 import type { ReputationTierKey } from '../lib/reputation'
 import { getReputationTier } from '../lib/reputation'
@@ -11,14 +13,18 @@ import { getReputationTier } from '../lib/reputation'
 interface ProfileCardProps {
   profile: Profile
   compact?: boolean
+  showOnline?: boolean
+  isOwnProfile?: boolean
 }
 
 function ProfilePhoto({
   profile,
   className = 'h-24 w-24 sm:h-32 sm:w-32',
+  showOnline = false,
 }: {
   profile: Profile
   className?: string
+  showOnline?: boolean
 }) {
   return (
     <div
@@ -30,6 +36,7 @@ function ProfilePhoto({
         className="h-full w-full"
         fit="contain"
       />
+      {showOnline && <OnlineIndicator userId={profile.userId} size="md" />}
     </div>
   )
 }
@@ -38,10 +45,12 @@ function ProfileHeader({
   profile,
   reputationCount,
   reputationTierKey,
+  showOnline = false,
 }: {
   profile: Profile
   reputationCount: number
   reputationTierKey: ReputationTierKey
+  showOnline?: boolean
 }) {
   const { t } = useLanguage()
 
@@ -56,6 +65,9 @@ function ProfileHeader({
             </span>
           </h2>
           <p className="truncate text-sm text-body">{profile.city}</p>
+          {showOnline && (
+            <OnlineStatusLabel userId={profile.userId} className="mt-0.5" />
+          )}
         </div>
         {profile.distanceKm > 0 && (
           <span className="shrink-0 rounded-full border border-theme px-2 py-1 text-xs text-muted">
@@ -72,12 +84,6 @@ function ProfileHeader({
         />
         {profile.elo && <Badge className="text-xs">{profile.elo}</Badge>}
         <Badge className="text-xs">{profile.role}</Badge>
-        {profile.songUrl && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-theme px-2 py-1 text-xs text-muted">
-            <Music2 className="h-3 w-3" aria-hidden />
-            {t('card.hasSong')}
-          </span>
-        )}
       </div>
 
       <ProfileSocials profile={profile} compact />
@@ -85,7 +91,12 @@ function ProfileHeader({
   )
 }
 
-export default function ProfileCard({ profile, compact = false }: ProfileCardProps) {
+export default function ProfileCard({
+  profile,
+  compact = false,
+  showOnline = false,
+  isOwnProfile = false,
+}: ProfileCardProps) {
   const { t, lookingForLabel, interestLabel } = useLanguage()
   const reputationCount = profile.reputationCount ?? 0
   const reputationTierKey: ReputationTierKey =
@@ -96,11 +107,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
     return (
       <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
         <div className="flex gap-3 p-3">
-          <ProfilePhoto profile={profile} className="h-20 w-20" />
+          <ProfilePhoto profile={profile} className="h-20 w-20" showOnline={showOnline} />
           <ProfileHeader
             profile={profile}
             reputationCount={reputationCount}
             reputationTierKey={reputationTierKey}
+            showOnline={showOnline}
           />
         </div>
       </div>
@@ -110,11 +122,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
   return (
     <div className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
       <div className="flex gap-4 border-b border-theme p-4 sm:gap-5 sm:p-5">
-        <ProfilePhoto profile={profile} />
+        <ProfilePhoto profile={profile} showOnline={showOnline} />
         <ProfileHeader
           profile={profile}
           reputationCount={reputationCount}
           reputationTierKey={reputationTierKey}
+          showOnline={showOnline}
         />
       </div>
 
@@ -186,6 +199,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
             <p className="text-sm text-body">{profile.playSchedule}</p>
           </div>
         )}
+
+        <FavoriteSongMedia
+          songUrl={profile.songUrl}
+          profileName={profile.name}
+          isOwnProfile={isOwnProfile}
+        />
       </div>
     </div>
   )

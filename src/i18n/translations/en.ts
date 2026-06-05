@@ -12,6 +12,7 @@ export const en = {
     menu: 'Menu',
     close: 'Close',
     km: '{{n}} km',
+    beta: 'BETA',
   },
   lang: {
     es: 'ES',
@@ -141,8 +142,8 @@ export const en = {
     photoHint: 'JPG, PNG, WebP or GIF. Max 5 MB.',
     photoUploadFailed: 'Could not upload photo.',
     photoRemoveFailed: 'Could not remove photo.',
-    songTitle: 'Profile song',
-    songDescription: 'Upload an MP3 or MP4 and it plays when someone opens your profile.',
+    songTitle: 'My favorite song',
+    songDescription: 'Upload an MP3 or MP4 and it will show on your profile as your favorite song.',
     uploadSong: 'Upload song',
     changeSong: 'Change song',
     removeSong: 'Remove song',
@@ -158,6 +159,9 @@ export const en = {
     songMute: 'Mute',
     songUnmute: 'Unmute',
     songAutoplayBlocked: 'Tap play to listen',
+    songTheme: "{{name}}'s theme",
+    songSpotifyStyle: 'Profile track',
+    songSeek: 'Song position',
     saveFailed: 'Could not save profile.',
     noSession: 'No active session.',
     reloadFailed: 'Could not reload saved profile.',
@@ -206,6 +210,8 @@ export const en = {
     bio: 'Bio',
     schedule: 'Schedule',
     hasSong: 'Song',
+    favoriteSongMine: 'My favorite song',
+    favoriteSong: "{{name}}'s favorite song",
   },
   lookingFor: {
     duoQ: 'DuoQ',
@@ -245,6 +251,18 @@ export const en = {
     darkDesc: 'Dark cover',
     toLight: 'Switch to light mode',
     toDark: 'Switch to dark mode',
+  },
+  updates: {
+    badge: 'Update',
+    favoriteSongTitle: 'You can now add your favorite song!',
+    favoriteSongBody:
+      'Upload an MP3 or MP4 and it appears on your profile. Your matches will see it when they visit — Spotify style.',
+    favoriteSongCta: 'Go to my profile',
+    favoriteSongLater: 'Not now',
+  },
+  presence: {
+    online: 'Online',
+    offline: 'Offline',
   },
   avatar: {
     invalidFormat: 'Invalid format. Use JPG, PNG, WebP or GIF.',
