@@ -11,7 +11,10 @@ import Badge from '../components/Badge'
 import ProfileCard from '../components/ProfileCard'
 import ProfilePhotoEditor from '../components/ProfilePhotoEditor'
 import ProfileSongEditor from '../components/ProfileSongEditor'
+import ProfileColorEditor from '../components/ProfileColorEditor'
 import ProfileSongPlayer from '../components/ProfileSongPlayer'
+import type { CustomBackgroundConfig } from '../lib/backgroundPresets'
+import type { ProfileColorPreset } from '../lib/profileColors'
 
 const ROLES: Role[] = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 const LOOKING_FOR_OPTIONS: LookingFor[] = [
@@ -175,6 +178,31 @@ export default function EditProfilePage() {
     return { error: null }
   }
 
+  const handleProfileColorChange = async (
+    preset: ProfileColorPreset,
+    custom: CustomBackgroundConfig
+  ) => {
+    if (!form) return
+
+    const updated = {
+      ...form,
+      profileColorPreset: preset,
+      profileColorCustom: custom,
+    }
+    setForm(updated)
+    setSaved(false)
+    setError('')
+
+    const { error: saveError } = await saveUserProfile(updated)
+    if (saveError) {
+      setError(saveError)
+      return
+    }
+
+    setSaved(true)
+    setTimeout(() => setSaved(false), 3000)
+  }
+
   const toggleClass = (active: boolean) =>
     active
       ? 'border-white text-heading'
@@ -281,6 +309,12 @@ export default function EditProfilePage() {
             onSongChange={handleSongChange}
           />
         )}
+
+        <ProfileColorEditor
+          preset={form.profileColorPreset}
+          custom={form.profileColorCustom}
+          onChange={handleProfileColorChange}
+        />
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>

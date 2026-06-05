@@ -1,3 +1,6 @@
+import type { CustomBackgroundConfig } from '../lib/backgroundPresets'
+import type { ProfileColorPreset } from '../lib/profileColors'
+
 export type Role = 'Top' | 'Jungle' | 'Mid' | 'ADC' | 'Support'
 
 export type LookingFor = 'duoQ' | 'amistad' | 'cita' | 'casual' | 'ranked'
@@ -38,6 +41,8 @@ export interface Profile {
   reputationTier?: string
   reputationLikedByMe?: boolean
   lastSeenAt?: string | null
+  profileColorPreset: ProfileColorPreset
+  profileColorCustom: CustomBackgroundConfig
 }
 
 export interface Filters {

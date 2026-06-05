@@ -14,6 +14,10 @@ import {
 } from './reputation'
 import { NEW_MATCH_PLACEHOLDER } from './chatConstants'
 import { fetchUnreadCountsByMatch } from './messages'
+import {
+  parseProfileColorCustom,
+  parseProfileColorPreset,
+} from './profileColors'
 import { toAppError } from './rateLimit'
 
 type ProfileRow = DbProfile & {
@@ -51,6 +55,8 @@ function mapRowToProfile(row: ProfileRow): Profile {
     discordUsername: row.discord_username ?? '',
     xUsername: row.x_username ?? '',
     lastSeenAt: row.last_seen_at ?? null,
+    profileColorPreset: parseProfileColorPreset(row.profile_color_preset),
+    profileColorCustom: parseProfileColorCustom(row),
   }
 }
 
@@ -157,6 +163,10 @@ export async function saveProfile(
     play_schedule: profile.playSchedule,
     discord_username: discordUsername || null,
     x_username: xUsername || null,
+    profile_color_preset: profile.profileColorPreset,
+    profile_color_1: profile.profileColorCustom.color1,
+    profile_color_2: profile.profileColorCustom.color2,
+    profile_color_gradient: profile.profileColorCustom.gradient,
     updated_at: new Date().toISOString(),
   }
 

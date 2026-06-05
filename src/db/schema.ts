@@ -265,6 +265,14 @@ export interface DbProfile {
 
   last_seen_at: string | null
 
+  profile_color_preset: string | null
+
+  profile_color_1: string | null
+
+  profile_color_2: string | null
+
+  profile_color_gradient: boolean | null
+
 }
 
 

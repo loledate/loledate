@@ -9,6 +9,7 @@ import ThemePicker from './components/ThemePicker'
 import BetaBadge from './components/BetaBadge'
 import BackgroundSettings from './components/BackgroundSettings'
 import FavoriteSongUpdateModal from './components/FavoriteSongUpdateModal'
+import PresenceUpdateModal from './components/PresenceUpdateModal'
 import Seo from './components/Seo'
 import ProtectedRoute from './components/ProtectedRoute'
 import GuestRoute from './components/GuestRoute'
@@ -34,6 +35,7 @@ export default function App() {
             <BackgroundSettings />
             <ThemePicker />
             <FavoriteSongUpdateModal />
+            <PresenceUpdateModal />
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<LandingPage />} />

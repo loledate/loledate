@@ -157,6 +157,9 @@ export const es = {
     uploadSong: 'Subir canción',
     changeSong: 'Cambiar canción',
     removeSong: 'Quitar canción',
+    colorTitle: 'Color de tu perfil',
+    colorDescription:
+      'Elige un color por rol o personalízalo. Lo verán todos en tu perfil y en Discover.',
     uploadingSong: 'Subiendo...',
     songHint: 'MP3 o MP4. Máximo 10 MB.',
     songUploadFailed: 'No se pudo subir la canción.',
@@ -286,6 +289,10 @@ export const es = {
       'Sube un MP3 o MP4 y aparecerá en tu perfil. Tus matches la verán al entrar — estilo Spotify.',
     favoriteSongCta: 'Ir a mi perfil',
     favoriteSongLater: 'Ahora no',
+    presenceTitle: '¡Ahora ves quién está en línea!',
+    presenceBody:
+      'Hemos añadido estado en línea y última conexión. Verás un punto verde cuando alguien está activo y cuándo fue su última vez conectado.',
+    presenceCta: 'Entendido',
   },
   presence: {
     online: 'En línea',

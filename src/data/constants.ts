@@ -1,7 +1,10 @@
 import type { Profile, Role } from '../types'
 import { DEFAULT_CITY } from './locations'
+import { defaultProfileColorCustom } from '../lib/profileColors'
 
 export { CITIES, DEFAULT_CITY } from './locations'
+export type { ProfileColorPreset } from '../lib/profileColors'
+export { defaultProfileColorCustom } from '../lib/profileColors'
 
 export const MIN_AGE = 16
 export const MAX_AGE = 99
@@ -111,6 +114,10 @@ export function createEmptyProfile(userId: string, name: string): Profile {
     discordUsername: '',
 
     xUsername: '',
+
+    profileColorPreset: 'default',
+
+    profileColorCustom: defaultProfileColorCustom(),
 
   }
 

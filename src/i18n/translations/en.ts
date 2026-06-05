@@ -158,6 +158,9 @@ export const en = {
     uploadSong: 'Upload song',
     changeSong: 'Change song',
     removeSong: 'Remove song',
+    colorTitle: 'Profile color',
+    colorDescription:
+      'Pick a role color or customize your own. Everyone will see it on your profile and in Discover.',
     uploadingSong: 'Uploading...',
     songHint: 'MP3 or MP4. Max 10 MB.',
     songUploadFailed: 'Could not upload song.',
@@ -287,6 +290,10 @@ export const en = {
       'Upload an MP3 or MP4 and it appears on your profile. Your matches will see it when they visit — Spotify style.',
     favoriteSongCta: 'Go to my profile',
     favoriteSongLater: 'Not now',
+    presenceTitle: 'You can now see who is online!',
+    presenceBody:
+      'We added online status and last connected time. A green dot means someone is active, and you can see when they were last online.',
+    presenceCta: 'Got it',
   },
   presence: {
     online: 'Online',
