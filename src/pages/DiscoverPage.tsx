@@ -27,29 +27,17 @@ export default function DiscoverPage() {
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   const [likeAnim, setLikeAnim] = useState<{
-
     show: boolean
-
-    type: 'like' | 'super_like'
-
+    type: 'like' | 'super_like' | 'match'
   }>({ show: false, type: 'like' })
 
-
-
   const currentProfile = discoverProfiles[currentIndex]
-
   const noMoreProfiles = !currentProfile
 
-
-
-  const handleLike = (type: 'like' | 'super_like') => {
-
-    setLikeAnim({ show: true, type })
-
-    likeProfile(type)
-
-    setTimeout(() => setLikeAnim({ show: false, type }), 800)
-
+  const handleLike = async (type: 'like' | 'super_like') => {
+    const isMatch = await likeProfile(type)
+    setLikeAnim({ show: true, type: isMatch ? 'match' : type })
+    setTimeout(() => setLikeAnim({ show: false, type: 'like' }), isMatch ? 1500 : 800)
   }
 
 

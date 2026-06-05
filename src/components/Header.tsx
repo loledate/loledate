@@ -23,6 +23,8 @@ export default function Header({ transparent = false }: HeaderProps) {
   const { theme } = useTheme()
 
   const handleSignOut = async () => {
+    const confirmed = window.confirm('¿Seguro que quieres cerrar sesión?')
+    if (!confirmed) return
     await signOut()
     setMobileOpen(false)
   }

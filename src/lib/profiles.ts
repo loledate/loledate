@@ -1,4 +1,5 @@
 import type { Profile } from '../types'
+import type { Match } from '../types'
 import { requireSupabase } from './supabase'
 import type { DbLolAccount, DbProfile } from '../db/schema'
 import { createEmptyProfile } from '../data/constants'
@@ -264,4 +265,87 @@ export async function recordSwipe(
 
   if (matchError) throw matchError
   return true
+}
+
+type DbMatchRow = {
+  id: string
+  user_a: string
+  user_b: string
+  matched_at: string
+}
+
+type DbMessageRow = {
+  match_id: string
+  content: string
+  created_at: string
+  sender_id: string
+  read_at: string | null
+}
+
+export async function fetchMatches(currentUserId: string): Promise<Match[]> {
+  const client = requireSupabase()
+
+  const { data: rows, error } = await client
+    .from('matches')
+    .select('id, user_a, user_b, matched_at')
+    .or(`user_a.eq.${currentUserId},user_b.eq.${currentUserId}`)
+    .order('matched_at', { ascending: false })
+
+  if (error) throw error
+  if (!rows?.length) return []
+
+  const matchRows = rows as DbMatchRow[]
+  const otherUserIds = matchRows.map((row) =>
+    row.user_a === currentUserId ? row.user_b : row.user_a
+  )
+
+  const { data: profileRows, error: profileError } = await client
+    .from('profiles')
+    .select(profileSelect)
+    .in('user_id', otherUserIds)
+
+  if (profileError) throw profileError
+
+  const profileByUserId = new Map(
+    ((profileRows as ProfileRow[]) ?? []).map((row) => [
+      row.user_id,
+      mapRowToProfile(row),
+    ])
+  )
+
+  const matchIds = matchRows.map((row) => row.id)
+  const { data: messageRows } = await client
+    .from('messages')
+    .select('match_id, content, created_at, sender_id, read_at')
+    .in('match_id', matchIds)
+    .order('created_at', { ascending: false })
+
+  const lastMessageByMatch = new Map<string, DbMessageRow>()
+  for (const msg of (messageRows as DbMessageRow[]) ?? []) {
+    if (!lastMessageByMatch.has(msg.match_id)) {
+      lastMessageByMatch.set(msg.match_id, msg)
+    }
+  }
+
+  return matchRows
+    .map((row) => {
+      const otherUserId =
+        row.user_a === currentUserId ? row.user_b : row.user_a
+      const profile = profileByUserId.get(otherUserId)
+      if (!profile) return null
+
+      const last = lastMessageByMatch.get(row.id)
+      const unread = last
+        ? last.sender_id !== currentUserId && last.read_at === null
+        : false
+
+      return {
+        id: row.id,
+        profile,
+        lastMessage: last?.content ?? '¡Nuevo match! Escríbele un mensaje.',
+        lastMessageAt: last?.created_at ?? row.matched_at,
+        unread,
+      }
+    })
+    .filter((m): m is NonNullable<typeof m> => m !== null)
 }

@@ -17,6 +17,7 @@ import {
   createProfile,
   saveProfile,
   recordSwipe,
+  fetchMatches,
 } from '../lib/profiles'
 import { isSupabaseConfigured } from '../lib/supabase'
 
@@ -31,8 +32,10 @@ interface AppContextType {
   discoverProfiles: Profile[]
   currentIndex: number
   passProfile: () => void
-  likeProfile: (type: 'like' | 'super_like') => void
+  likeProfile: (type: 'like' | 'super_like') => Promise<boolean>
   matches: Match[]
+  matchesLoading: boolean
+  refreshMatches: () => Promise<void>
   applyFilters: () => void
   clearFilters: () => void
   refreshDiscover: () => Promise<void>
@@ -71,7 +74,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [activeFilters, setActiveFilters] = useState<Filters>(DEFAULT_FILTERS)
   const [currentIndex] = useState(0)
   const [localPassedIds, setLocalPassedIds] = useState<Set<string>>(new Set())
-  const [matches] = useState<Match[]>([])
+  const [matches, setMatches] = useState<Match[]>([])
+  const [matchesLoading, setMatchesLoading] = useState(false)
 
   useEffect(() => {
     if (!user || !isSupabaseConfigured) {
@@ -137,6 +141,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [user])
 
+  const refreshMatches = useCallback(async () => {
+    if (!user || !isSupabaseConfigured) {
+      setMatches([])
+      return
+    }
+
+    setMatchesLoading(true)
+    try {
+      setMatches(await fetchMatches(user.id))
+    } catch {
+      setMatches([])
+    } finally {
+      setMatchesLoading(false)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (user) {
+      refreshMatches()
+    } else {
+      setMatches([])
+    }
+  }, [user, refreshMatches])
+
   useEffect(() => {
     if (user && userProfile) {
       refreshDiscover()
@@ -157,14 +185,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [currentIndex, filteredProfiles, user])
 
   const likeProfile = useCallback(
-    (type: 'like' | 'super_like') => {
+    async (type: 'like' | 'super_like') => {
       const current = filteredProfiles[currentIndex]
-      if (!current || !user) return
+      if (!current || !user) return false
 
       setLocalPassedIds((prev) => new Set([...prev, current.id]))
-      recordSwipe(user.id, current.userId, type).catch(() => {})
+
+      try {
+        const isMatch = await recordSwipe(user.id, current.userId, type)
+        if (isMatch) await refreshMatches()
+        return isMatch
+      } catch {
+        return false
+      }
     },
-    [currentIndex, filteredProfiles, user]
+    [currentIndex, filteredProfiles, user, refreshMatches]
   )
 
   const applyFilters = useCallback(() => {
@@ -209,9 +244,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         passProfile,
         likeProfile,
         matches,
+        matchesLoading,
         applyFilters,
         clearFilters,
         refreshDiscover,
+        refreshMatches,
       }}
     >
       {children}
