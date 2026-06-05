@@ -14,6 +14,8 @@ CREATE TABLE profiles (
   avatar_url TEXT,
   bio TEXT,
   play_schedule TEXT,
+  discord_username TEXT,
+  x_username TEXT,
   latitude DECIMAL(10, 8),
   longitude DECIMAL(11, 8),
   created_at TIMESTAMPTZ DEFAULT NOW(),

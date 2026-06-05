@@ -31,6 +31,8 @@ export interface Profile {
   bio: string
   interests: string[]
   playSchedule: string
+  discordUsername: string
+  xUsername: string
 }
 
 export interface Filters {

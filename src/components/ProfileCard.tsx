@@ -2,6 +2,7 @@ import type { Profile } from '../types'
 import { LOOKING_FOR_LABELS } from '../types'
 import Badge from './Badge'
 import Avatar from './Avatar'
+import ProfileSocials from './ProfileSocials'
 
 interface ProfileCardProps {
   profile: Profile
@@ -81,6 +82,8 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
             )}
           </div>
         )}
+
+        <ProfileSocials profile={profile} />
 
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted">Rol</span>

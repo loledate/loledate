@@ -1,0 +1,3 @@
+ALTER TABLE profiles
+  ADD COLUMN IF NOT EXISTS discord_username TEXT,
+  ADD COLUMN IF NOT EXISTS x_username TEXT;

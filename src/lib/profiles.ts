@@ -1,7 +1,11 @@
 import type { Profile } from '../types'
+import { requireSupabase } from './supabase'
 import type { DbLolAccount, DbProfile } from '../db/schema'
 import { createEmptyProfile } from '../data/constants'
-import { requireSupabase } from './supabase'
+import {
+  normalizeDiscordUsername,
+  normalizeXUsername,
+} from './social'
 
 type ProfileRow = DbProfile & {
   lol_accounts: DbLolAccount[] | DbLolAccount | null
@@ -34,6 +38,8 @@ function mapRowToProfile(row: ProfileRow): Profile {
     bio: row.bio ?? '',
     interests: row.interests?.map((x) => x.interest) ?? [],
     playSchedule: row.play_schedule ?? '',
+    discordUsername: row.discord_username ?? '',
+    xUsername: row.x_username ?? '',
   }
 }
 
@@ -120,17 +126,27 @@ export async function saveProfile(
 
   let profileId = existing?.id
 
+  const discordUsername = normalizeDiscordUsername(profile.discordUsername)
+  const xUsername = normalizeXUsername(profile.xUsername)
+
+  const profilePayload = {
+    name: profile.name,
+    age: profile.age,
+    city: profile.city,
+    avatar_url: profile.photoUrl,
+    bio: profile.bio,
+    play_schedule: profile.playSchedule,
+    discord_username: discordUsername || null,
+    x_username: xUsername || null,
+    updated_at: new Date().toISOString(),
+  }
+
   if (!profileId) {
     const { data: created, error: createError } = await client
       .from('profiles')
       .insert({
         user_id: userId,
-        name: profile.name,
-        age: profile.age,
-        city: profile.city,
-        avatar_url: profile.photoUrl,
-        bio: profile.bio,
-        play_schedule: profile.playSchedule,
+        ...profilePayload,
       })
       .select('id')
       .single()
@@ -140,15 +156,7 @@ export async function saveProfile(
   } else {
     const { error: updateError } = await client
       .from('profiles')
-      .update({
-        name: profile.name,
-        age: profile.age,
-        city: profile.city,
-        avatar_url: profile.photoUrl,
-        bio: profile.bio,
-        play_schedule: profile.playSchedule,
-        updated_at: new Date().toISOString(),
-      })
+      .update(profilePayload)
       .eq('id', profileId)
 
     if (updateError) throw updateError

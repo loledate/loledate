@@ -10,6 +10,8 @@ import Badge from '../components/Badge'
 
 import Avatar from '../components/Avatar'
 
+import ProfileSocials from '../components/ProfileSocials'
+
 
 
 function formatMessageTime(iso: string) {
@@ -148,6 +150,8 @@ export default function ChatPage() {
             )}
 
           </div>
+
+          <ProfileSocials profile={match.profile} compact />
 
         </div>
 

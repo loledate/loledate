@@ -122,6 +122,10 @@ export function createEmptyProfile(userId: string, name: string): Profile {
 
     playSchedule: '',
 
+    discordUsername: '',
+
+    xUsername: '',
+
   }
 
 }

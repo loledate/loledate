@@ -27,6 +27,10 @@ CREATE TABLE profiles (
 
   play_schedule TEXT,
 
+  discord_username TEXT,
+
+  x_username TEXT,
+
   latitude DECIMAL(10, 8),
 
   longitude DECIMAL(11, 8),
@@ -242,6 +246,10 @@ export interface DbProfile {
   bio: string | null
 
   play_schedule: string | null
+
+  discord_username: string | null
+
+  x_username: string | null
 
   latitude: number | null
 
