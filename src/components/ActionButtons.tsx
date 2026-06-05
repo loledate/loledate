@@ -35,7 +35,7 @@ export default function ActionButtons({
         onClick={onLike}
         disabled={disabled}
         aria-label="Like"
-        className="h-14 w-14 rounded-full border-2 border-rose-400 bg-gradient-to-br from-rose-400 to-pink-500 text-sm font-semibold text-white shadow-glow transition-all hover:scale-105 disabled:opacity-30 dark:border-rose-500 dark:from-rose-600 dark:to-pink-700"
+        className="h-14 w-14 rounded-full border-2 border-rose-400 bg-gradient-to-br from-rose-400 to-pink-500 text-sm font-semibold text-white shadow-glow transition-all hover:scale-105 disabled:opacity-30 dark:border-white dark:bg-white dark:from-white dark:to-white dark:text-black dark:shadow-none"
       >
         +
       </button>

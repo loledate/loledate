@@ -30,19 +30,19 @@
 
 @layer components {
   .input-field {
-    @apply w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm text-rose-950 placeholder-rose-300 outline-none transition-all focus:border-rose-400 focus:shadow-glow dark:border-white/15 dark:bg-zinc-950 dark:text-white dark:placeholder-white/30 dark:focus:border-rose-500/50 dark:focus:shadow-glow-dark;
+    @apply w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm text-rose-950 placeholder-rose-300 outline-none transition-all focus:border-rose-400 focus:shadow-glow dark:border-white/15 dark:bg-black dark:text-white dark:placeholder-white/30 dark:focus:border-white/40 dark:focus:shadow-none;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-lol-gold to-amber-400 px-6 py-3 text-sm font-semibold text-rose-950 shadow-glow-gold transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] dark:from-rose-600 dark:to-pink-600 dark:text-white dark:shadow-glow-dark;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-lol-gold to-amber-400 px-6 py-3 text-sm font-semibold text-rose-950 shadow-glow-gold transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] dark:bg-white dark:from-white dark:to-white dark:text-black dark:shadow-none dark:hover:brightness-100;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-white/80 px-6 py-3 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all hover:border-rose-400 hover:bg-white hover:shadow-glow dark:border-white/20 dark:bg-white/5 dark:text-white/80 dark:hover:border-white/40 dark:hover:bg-white/10;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-white/80 px-6 py-3 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all hover:border-rose-400 hover:bg-white hover:shadow-glow dark:border-white/20 dark:bg-black dark:text-white/80 dark:hover:border-white/40 dark:hover:bg-black dark:hover:shadow-none;
   }
 
   .glass-card {
-    @apply rounded-2xl border border-white/60 bg-white/70 p-6 shadow-card backdrop-blur-md dark:border-white/10 dark:bg-zinc-950/80 dark:shadow-card-dark;
+    @apply rounded-2xl border border-white/60 bg-white/70 p-6 shadow-card backdrop-blur-md dark:border-white/10 dark:bg-black dark:shadow-none;
   }
 
   .range-slider {

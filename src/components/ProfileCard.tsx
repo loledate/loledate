@@ -12,14 +12,14 @@ interface ProfileCardProps {
 export default function ProfileCard({ profile, compact = false }: ProfileCardProps) {
   if (compact) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-zinc-950 dark:shadow-card-dark">
+      <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
         <div className="relative aspect-[3/4] overflow-hidden">
           <Avatar
             url={profile.photoUrl}
             name={profile.name}
             className="h-full w-full"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-rose-900/50 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-rose-900/50 via-transparent to-transparent dark:bg-black/55" />
           <div className="absolute bottom-0 left-0 right-0 p-3">
             <h3 className="text-sm font-semibold text-white">
               {profile.name}, {profile.age}
@@ -36,14 +36,14 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
   }
 
   return (
-    <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-zinc-950 dark:shadow-card-dark">
+    <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
       <div className="relative aspect-[3/4] overflow-hidden">
         <Avatar
           url={profile.photoUrl}
           name={profile.name}
           className="h-full w-full"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/40 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/40 via-transparent to-transparent dark:bg-black/55" />
 
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
           <span className="rounded-full bg-white/80 px-2 py-1 text-xs font-medium text-rose-700 backdrop-blur-sm dark:bg-black/60 dark:text-white/80">

@@ -186,8 +186,8 @@ export default function ChatPage() {
               className={`max-w-[75%] px-4 py-2.5 ${
 
                 msg.isOwn
-                  ? 'rounded-2xl rounded-br-md bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-glow'
-                  : 'rounded-2xl rounded-bl-md border border-theme bg-white text-heading'
+                  ? 'rounded-2xl rounded-br-md bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-glow dark:bg-white dark:from-white dark:to-white dark:text-black dark:shadow-none'
+                  : 'rounded-2xl rounded-bl-md border border-theme bg-white text-heading dark:bg-black dark:text-white'
 
               }`}
 
@@ -199,7 +199,7 @@ export default function ChatPage() {
 
                 className={`mt-1 text-[10px] ${
 
-                  msg.isOwn ? 'text-white/70' : 'text-muted'
+                  msg.isOwn ? 'text-white/70 dark:text-black/50' : 'text-muted'
 
                 }`}
 

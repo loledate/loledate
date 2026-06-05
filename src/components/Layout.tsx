@@ -15,7 +15,7 @@ export default function Layout() {
             ? 'bg-black'
             : 'bg-lol-cream'
           : theme === 'dark'
-            ? 'bg-gradient-to-b from-zinc-950 to-black'
+            ? 'bg-black'
             : 'bg-gradient-to-b from-rose-50 to-lol-cream'
       }`}
     >

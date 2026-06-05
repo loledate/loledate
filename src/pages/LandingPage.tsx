@@ -22,23 +22,21 @@ export default function LandingPage() {
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
-        {theme === 'light' ? (
+        {theme === 'light' && (
           <>
             <div className="absolute inset-0 bg-gradient-to-r from-rose-100/20 via-transparent to-pink-900/10" />
             <div className="absolute inset-0 bg-gradient-to-t from-lol-cream via-rose-50/30 to-transparent" />
           </>
-        ) : (
-          <>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-          </>
+        )}
+        {theme === 'dark' && (
+          <div className="absolute inset-0 bg-black/50" />
         )}
 
         <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-4 pb-10 pt-24 sm:pb-14">
           <div className="max-w-xl">
             <p
               className={`mb-2 text-sm font-medium uppercase tracking-[0.2em] ${
-                theme === 'dark' ? 'text-muted/80' : 'text-body/80'
+                theme === 'dark' ? 'text-white/50' : 'text-body/80'
               }`}
             >
               Matchmaking LoL
@@ -77,12 +75,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="relative px-4 py-20">
-        <div
-          className={`pointer-events-none absolute inset-0 ${
-            theme === 'dark' ? 'bg-page-glow-dark' : 'bg-page-glow'
-          }`}
-        />
+      <section className={`relative px-4 py-20 ${theme === 'dark' ? 'bg-black' : ''}`}>
+        {theme === 'light' && (
+          <div className="pointer-events-none absolute inset-0 bg-page-glow" />
+        )}
         <div className="relative mx-auto max-w-5xl">
           <h2 className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted">
             Cómo funciona
@@ -91,7 +87,7 @@ export default function LandingPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, i) => (
               <div key={step.title} className="glass-card animate-shimmer">
-                <p className="mb-3 text-xs font-bold text-lol-gold-dark dark:text-lol-gold">
+                <p className="mb-3 text-xs font-bold text-lol-gold-dark dark:text-white/40">
                   {String(i + 1).padStart(2, '0')}
                 </p>
                 <h3 className="mb-2 font-semibold text-heading">{step.title}</h3>
@@ -102,30 +98,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="px-4 pb-20">
-        <div
-          className={`mx-auto max-w-3xl overflow-hidden rounded-3xl border p-10 text-center shadow-glow dark:shadow-glow-dark ${
-            theme === 'dark'
-              ? 'border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900'
-              : 'border-theme/80 bg-gradient-to-br from-white via-rose-50 to-amber-50'
-          }`}
-        >
-          <h2 className="mb-3 text-2xl font-semibold text-heading">
-            Tu duo te espera
-          </h2>
-          <p className="mb-8 text-body">
-            Perfiles reales de jugadores. Sin fotos de ejemplo.
-          </p>
-          <Link
-            to={user ? '/discover' : '/register'}
-            className="btn-primary inline-flex px-10 py-4"
-          >
-            {user ? 'Empezar a descubrir' : 'Crear cuenta'}
-          </Link>
-        </div>
-      </section>
-
-      <footer className="border-t border-theme bg-white/60 px-4 py-8 backdrop-blur-sm dark:bg-black/60">
+      <footer className="border-t border-theme bg-white/60 px-4 py-8 backdrop-blur-sm dark:border-white/10 dark:bg-black">
         <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-heading">Lol-edate</span>
           <p className="text-xs text-muted">No afiliado a Riot Games.</p>
