@@ -33,6 +33,9 @@ export interface Profile {
   playSchedule: string
   discordUsername: string
   xUsername: string
+  reputationCount?: number
+  reputationTier?: string
+  reputationLikedByMe?: boolean
 }
 
 export interface Filters {

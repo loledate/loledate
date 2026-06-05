@@ -3,6 +3,9 @@ import { LOOKING_FOR_LABELS } from '../types'
 import Badge from './Badge'
 import Avatar from './Avatar'
 import ProfileSocials from './ProfileSocials'
+import ReputationBadge from './ReputationBadge'
+import type { ReputationTier } from '../lib/reputation'
+import { getReputationTier } from '../lib/reputation'
 
 interface ProfileCardProps {
   profile: Profile
@@ -10,6 +13,11 @@ interface ProfileCardProps {
 }
 
 export default function ProfileCard({ profile, compact = false }: ProfileCardProps) {
+  const reputationCount = profile.reputationCount ?? 0
+  const reputationTier: ReputationTier =
+    (profile.reputationTier as ReputationTier | undefined) ??
+    getReputationTier(reputationCount)
+
   if (compact) {
     return (
       <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
@@ -45,11 +53,18 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         />
         <div className="absolute inset-0 bg-gradient-to-t from-rose-900/40 via-transparent to-transparent dark:bg-black/55" />
 
-        <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
+        <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-2">
           <span className="rounded-full bg-white/80 px-2 py-1 text-xs font-medium text-rose-700 backdrop-blur-sm dark:bg-black/60 dark:text-white/80">
             {profile.distanceKm} km
           </span>
-          {profile.elo && <Badge className="text-xs">{profile.elo}</Badge>}
+          <div className="flex flex-col items-end gap-1">
+            <ReputationBadge
+              count={reputationCount}
+              tier={reputationTier}
+              compact
+            />
+            {profile.elo && <Badge className="text-xs">{profile.elo}</Badge>}
+          </div>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -64,6 +79,10 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
       </div>
 
       <div className="space-y-4 p-5">
+        <div className="flex justify-center">
+          <ReputationBadge count={reputationCount} tier={reputationTier} />
+        </div>
+
         {profile.riotId && (
           <div className="flex items-center justify-between rounded-xl bg-rose-50 p-3 dark:bg-white/5">
             <div>

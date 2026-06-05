@@ -8,6 +8,10 @@ import {
   normalizeDiscordUsername,
   normalizeXUsername,
 } from './social'
+import {
+  attachReputationToProfiles,
+  fetchReputationForUsers,
+} from './reputation'
 
 type ProfileRow = DbProfile & {
   lol_accounts: DbLolAccount[] | DbLolAccount | null
@@ -84,9 +88,16 @@ export async function fetchDiscoverProfiles(
 
   if (error) throw error
 
-  return ((data as ProfileRow[]) ?? [])
+  const profiles = ((data as ProfileRow[]) ?? [])
     .filter((row) => !swipedUserIds.has(row.user_id))
     .map(mapRowToProfile)
+
+  const reputationByUser = await fetchReputationForUsers(
+    profiles.map((p) => p.userId),
+    currentUserId
+  )
+
+  return attachReputationToProfiles(profiles, reputationByUser)
 }
 
 export async function createProfile(
@@ -327,11 +338,23 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
     }
   }
 
+  const profiles = [...profileByUserId.values()]
+  const reputationByUser = await fetchReputationForUsers(
+    profiles.map((p) => p.userId),
+    currentUserId
+  )
+  const enrichedByUserId = new Map(
+    attachReputationToProfiles(profiles, reputationByUser).map((p) => [
+      p.userId,
+      p,
+    ])
+  )
+
   return matchRows
     .map((row) => {
       const otherUserId =
         row.user_a === currentUserId ? row.user_b : row.user_a
-      const profile = profileByUserId.get(otherUserId)
+      const profile = enrichedByUserId.get(otherUserId)
       if (!profile) return null
 
       const last = lastMessageByMatch.get(row.id)

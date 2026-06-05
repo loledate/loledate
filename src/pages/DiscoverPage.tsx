@@ -114,7 +114,15 @@ export default function DiscoverPage() {
 
           <ProfileCard profile={currentProfile} />
 
-
+          <div className="mt-4 text-center">
+            <Link
+              to={`/user/${currentProfile.userId}`}
+              state={{ from: '/discover' }}
+              className="text-sm text-muted underline underline-offset-2 hover:text-heading"
+            >
+              Ver perfil y dar like
+            </Link>
+          </div>
 
           <div className="mt-8">
 

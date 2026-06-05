@@ -13,6 +13,7 @@ import DiscoverPage from './pages/DiscoverPage'
 import EditProfilePage from './pages/EditProfilePage'
 import MatchesPage from './pages/MatchesPage'
 import ChatPage from './pages/ChatPage'
+import UserProfilePage from './pages/UserProfilePage'
 
 export default function App() {
   return (
@@ -69,6 +70,14 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <ChatPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="user/:userId"
+                  element={
+                    <ProtectedRoute>
+                      <UserProfilePage />
                     </ProtectedRoute>
                   }
                 />

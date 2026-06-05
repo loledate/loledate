@@ -181,25 +181,31 @@ export default function ChatPage() {
         <Link to="/matches" className="text-sm text-muted hover:text-heading">
           Volver
         </Link>
-        <Avatar
-          url={match.profile.photoUrl}
-          name={match.profile.name}
-          className="h-8 w-8 rounded"
-        />
-        <div className="min-w-0 flex-1">
-          <h2 className="truncate text-sm font-medium text-heading">
-            {match.profile.name}
-          </h2>
-          <div className="flex items-center gap-2 text-xs text-muted">
-            {match.profile.city}
-            {match.profile.elo && (
-              <Badge className="!px-1.5 !py-0 text-[10px]">
-                {match.profile.elo}
-              </Badge>
-            )}
+        <Link
+          to={`/user/${match.profile.userId}`}
+          state={{ from: `/chat/${matchId}` }}
+          className="flex min-w-0 flex-1 items-center gap-3 transition-opacity hover:opacity-80"
+        >
+          <Avatar
+            url={match.profile.photoUrl}
+            name={match.profile.name}
+            className="h-8 w-8 rounded"
+          />
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-sm font-medium text-heading">
+              {match.profile.name}
+            </h2>
+            <div className="flex items-center gap-2 text-xs text-muted">
+              {match.profile.city}
+              {match.profile.elo && (
+                <Badge className="!px-1.5 !py-0 text-[10px]">
+                  {match.profile.elo}
+                </Badge>
+              )}
+            </div>
+            <ProfileSocials profile={match.profile} compact />
           </div>
-          <ProfileSocials profile={match.profile} compact />
-        </div>
+        </Link>
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">

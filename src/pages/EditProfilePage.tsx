@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import { useAuth } from '../context/AuthContext'
+import { fetchProfileReputation } from '../lib/reputation'
 import { CITIES, INTEREST_OPTIONS, isProfileComplete } from '../data/constants'
 import { CHAMPIONS, isValidChampion } from '../data/champions'
 import type { Role, LookingFor, Profile } from '../types'
@@ -20,6 +22,7 @@ const LOOKING_FOR_OPTIONS: LookingFor[] = [
 
 export default function EditProfilePage() {
   const { userProfile, profileLoading, saveUserProfile } = useApp()
+  const { user } = useAuth()
   const [form, setForm] = useState<Profile | null>(userProfile)
   const [isEditing, setIsEditing] = useState(false)
   const [initialized, setInitialized] = useState(false)
@@ -36,6 +39,24 @@ export default function EditProfilePage() {
       setInitialized(true)
     }
   }, [userProfile, initialized])
+
+  useEffect(() => {
+    if (!user || !userProfile || isEditing) return
+
+    fetchProfileReputation(user.id, user.id)
+      .then((rep) => {
+        setForm((prev) =>
+          prev
+            ? {
+                ...prev,
+                reputationCount: rep.count,
+                reputationTier: rep.tier,
+              }
+            : prev
+        )
+      })
+      .catch(() => {})
+  }, [user, userProfile, isEditing])
 
   if (profileLoading || !form) {
     return (

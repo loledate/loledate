@@ -75,12 +75,23 @@ CREATE TABLE swipes (
   UNIQUE(swiper_id, swiped_id)
 );
 
+CREATE TABLE profile_likes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  liker_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  liked_user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(liker_id, liked_user_id),
+  CHECK (liker_id != liked_user_id)
+);
+
 -- Índices
 CREATE INDEX idx_profiles_city ON profiles(city);
 CREATE INDEX idx_lol_accounts_elo ON lol_accounts(elo);
 CREATE INDEX idx_lol_accounts_role ON lol_accounts(main_role);
 CREATE INDEX idx_messages_match_id ON messages(match_id);
 CREATE INDEX idx_swipes_swiper ON swipes(swiper_id);
+CREATE INDEX idx_profile_likes_liked_user ON profile_likes(liked_user_id);
+CREATE INDEX idx_profile_likes_liker ON profile_likes(liker_id);
 
 -- Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -90,6 +101,7 @@ ALTER TABLE profile_looking_for ENABLE ROW LEVEL SECURITY;
 ALTER TABLE matches ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE swipes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_likes ENABLE ROW LEVEL SECURITY;
 
 -- Políticas: perfiles
 CREATE POLICY "Perfiles visibles para autenticados"
@@ -148,6 +160,18 @@ CREATE POLICY "Usuario actualiza swipes"
 CREATE POLICY "Usuario ve swipes"
   ON swipes FOR SELECT TO authenticated
   USING (auth.uid() = swiper_id OR auth.uid() = swiped_id);
+
+-- Políticas: likes de perfil (reputación)
+CREATE POLICY "Likes visibles para autenticados"
+  ON profile_likes FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Usuario da like a perfil"
+  ON profile_likes FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = liker_id AND liker_id != liked_user_id);
+
+CREATE POLICY "Usuario quita like"
+  ON profile_likes FOR DELETE TO authenticated
+  USING (auth.uid() = liker_id);
 
 -- Políticas: matches
 CREATE POLICY "Usuario ve sus matches"
