@@ -251,6 +251,23 @@ export const es = {
     toLight: 'Cambiar a modo claro',
     toDark: 'Cambiar a modo oscuro',
   },
+  backgroundSettings: {
+    title: 'Fondo',
+    ariaLabel: 'Ajustes de fondo',
+    default: 'Por defecto',
+    custom: 'Personalizar',
+    customColor1: 'Color principal',
+    customColor2: 'Color secundario',
+    customGradient: 'Degradado',
+    resetCustom: 'Restablecer colores',
+    roles: {
+      top: 'Top',
+      jungle: 'Jungla',
+      mid: 'Mid',
+      adc: 'ADC',
+      support: 'Support',
+    },
+  },
   updates: {
     badge: 'Novedad',
     favoriteSongTitle: '¡Ahora puedes poner tu canción favorita!',

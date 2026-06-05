@@ -7,6 +7,7 @@ import { PresenceProvider } from './context/PresenceContext'
 import Layout from './components/Layout'
 import ThemePicker from './components/ThemePicker'
 import BetaBadge from './components/BetaBadge'
+import BackgroundSettings from './components/BackgroundSettings'
 import FavoriteSongUpdateModal from './components/FavoriteSongUpdateModal'
 import ProtectedRoute from './components/ProtectedRoute'
 import GuestRoute from './components/GuestRoute'
@@ -28,6 +29,7 @@ export default function App() {
           <AppProvider>
           <BrowserRouter>
             <BetaBadge />
+            <BackgroundSettings />
             <ThemePicker />
             <FavoriteSongUpdateModal />
             <Routes>

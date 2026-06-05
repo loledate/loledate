@@ -252,6 +252,23 @@ export const en = {
     toLight: 'Switch to light mode',
     toDark: 'Switch to dark mode',
   },
+  backgroundSettings: {
+    title: 'Background',
+    ariaLabel: 'Background settings',
+    default: 'Default',
+    custom: 'Customize',
+    customColor1: 'Primary color',
+    customColor2: 'Secondary color',
+    customGradient: 'Gradient',
+    resetCustom: 'Reset colors',
+    roles: {
+      top: 'Top',
+      jungle: 'Jungle',
+      mid: 'Mid',
+      adc: 'ADC',
+      support: 'Support',
+    },
+  },
   updates: {
     badge: 'Update',
     favoriteSongTitle: 'You can now add your favorite song!',

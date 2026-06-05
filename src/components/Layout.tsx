@@ -7,21 +7,22 @@ export default function Layout() {
   const location = useLocation()
   const isHome = location.pathname === '/'
   const isChat = location.pathname.startsWith('/chat/')
-  const { theme } = useTheme()
+  const { theme, backgroundCss, hasCustomBackground } = useTheme()
+
+  const defaultBgClass = isHome
+    ? theme === 'dark'
+      ? 'bg-black'
+      : 'bg-lol-cream'
+    : theme === 'dark'
+      ? 'bg-black'
+      : 'bg-gradient-to-b from-rose-50 to-lol-cream'
 
   return (
     <div
       className={`flex flex-col ${
         isChat ? 'h-dvh overflow-hidden' : 'min-h-dvh'
-      } ${
-        isHome
-          ? theme === 'dark'
-            ? 'bg-black'
-            : 'bg-lol-cream'
-          : theme === 'dark'
-            ? 'bg-black'
-            : 'bg-gradient-to-b from-rose-50 to-lol-cream'
-      }`}
+      } ${hasCustomBackground ? '' : defaultBgClass}`}
+      style={backgroundCss ? { background: backgroundCss } : undefined}
     >
       <MessageNotifications />
       <Header transparent={isHome} />

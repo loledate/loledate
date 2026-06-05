@@ -6,7 +6,7 @@ import { useTheme } from '../context/ThemeContext'
 export default function LandingPage() {
   const { user } = useAuth()
   const { t } = useLanguage()
-  const { coverImage, theme } = useTheme()
+  const { coverImage, theme, hasCustomBackground } = useTheme()
 
   const steps = [
     { title: t('landing.step1Title'), desc: t('landing.step1Desc') },
@@ -76,8 +76,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`relative px-4 py-20 ${theme === 'dark' ? 'bg-black' : ''}`}>
-        {theme === 'light' && (
+      <section
+        className={`relative px-4 py-20 ${
+          hasCustomBackground ? 'bg-transparent' : theme === 'dark' ? 'bg-black' : ''
+        }`}
+      >
+        {theme === 'light' && !hasCustomBackground && (
           <div className="pointer-events-none absolute inset-0 bg-page-glow" />
         )}
         <div className="relative mx-auto max-w-5xl">
@@ -99,7 +103,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-theme bg-white/60 px-4 py-8 backdrop-blur-sm dark:border-white/10 dark:bg-black">
+      <footer
+        className={`border-t border-theme px-4 py-8 backdrop-blur-sm dark:border-white/10 ${
+          hasCustomBackground
+            ? 'bg-black/20 dark:bg-black/30'
+            : 'bg-white/60 dark:bg-black'
+        }`}
+      >
         <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-heading">Lol-edate</span>
           <p className="text-xs text-muted">{t('landing.footerDisclaimer')}</p>
