@@ -1,6 +1,5 @@
 const AUTH_EMAIL_DOMAIN = 'users.loledate.app'
 
-/** Supabase Auth exige email internamente; el usuario solo ve username. */
 export function usernameToAuthEmail(username: string): string {
   const normalized = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
   if (!normalized) {

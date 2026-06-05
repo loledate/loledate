@@ -78,10 +78,7 @@ export default function ChatPage() {
 
     setInput('')
 
-    // TODO: Supabase → INSERT INTO messages + realtime
-
   }
-
 
 
   if (!match) {
