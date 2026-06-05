@@ -325,7 +325,7 @@ export default function EditProfilePage() {
                   key={role}
                   type="button"
                   onClick={() => update('role', role)}
-                  className={`rounded border px-3 py-1.5 text-sm transition-colors ${toggleClass(form.role === role)}`}
+                  className={`rounded border px-3 py-2.5 text-sm transition-colors ${toggleClass(form.role === role)}`}
                 >
                   {role}
                 </button>
@@ -423,7 +423,7 @@ export default function EditProfilePage() {
                 key={lf}
                 type="button"
                 onClick={() => toggleLookingFor(lf)}
-                className={`rounded border px-3 py-1.5 text-sm transition-colors ${toggleClass(form.lookingFor.includes(lf))}`}
+                className={`rounded border px-3 py-2.5 text-sm transition-colors ${toggleClass(form.lookingFor.includes(lf))}`}
               >
                 {lookingForLabel(lf)}
               </button>
@@ -439,7 +439,7 @@ export default function EditProfilePage() {
                 key={interest}
                 type="button"
                 onClick={() => toggleInterest(interest)}
-                className={`rounded border px-3 py-1 text-sm transition-colors ${toggleClass(form.interests.includes(interest))}`}
+                className={`rounded border px-3 py-2.5 text-sm transition-colors ${toggleClass(form.interests.includes(interest))}`}
               >
                 {interestLabel(interest)}
               </button>

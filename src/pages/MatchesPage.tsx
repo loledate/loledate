@@ -29,7 +29,7 @@ export default function MatchesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className="mx-auto max-w-2xl px-4 py-4 sm:py-8">
       <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-muted">
         {t('messages.title')}
       </h1>
@@ -58,11 +58,12 @@ export default function MatchesPage() {
               onClick={() => clearMatchUnread(match.id)}
               className="group flex items-center gap-4 p-4 transition-colors hover:bg-white/[0.02]"
             >
-              <div className="relative flex-shrink-0">
+              <div className="relative shrink-0 overflow-hidden rounded bg-rose-100 dark:bg-zinc-900">
                 <Avatar
                   url={match.profile.photoUrl}
                   name={match.profile.name}
-                  className="h-12 w-12 rounded"
+                  className="h-12 w-12"
+                  fit="contain"
                 />
                 {match.unreadCount > 0 && (
                   <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white dark:bg-white dark:text-black">

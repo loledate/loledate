@@ -194,8 +194,8 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-3.5rem)] max-w-2xl flex-col">
-      <div className="flex items-center gap-3 border-b border-theme px-4 py-3">
+    <div className="mx-auto flex w-full max-w-2xl min-h-0 flex-1 flex-col">
+      <div className="flex shrink-0 items-center gap-3 border-b border-theme px-4 py-3">
         <Link to="/matches" className="text-sm text-muted hover:text-heading">
           {t('common.back')}
         </Link>
@@ -204,11 +204,14 @@ export default function ChatPage() {
           state={{ from: `/chat/${matchId}` }}
           className="flex min-w-0 flex-1 items-center gap-3 transition-opacity hover:opacity-80"
         >
-          <Avatar
-            url={match.profile.photoUrl}
-            name={match.profile.name}
-            className="h-8 w-8 rounded"
-          />
+          <div className="h-8 w-8 shrink-0 overflow-hidden rounded bg-rose-100 dark:bg-zinc-900">
+            <Avatar
+              url={match.profile.photoUrl}
+              name={match.profile.name}
+              className="h-full w-full"
+              fit="contain"
+            />
+          </div>
           <div className="min-w-0 flex-1">
             <h2 className="truncate text-sm font-medium text-heading">
               {match.profile.name}
@@ -221,14 +224,16 @@ export default function ChatPage() {
                 </Badge>
               )}
             </div>
-            <ProfileSocials profile={match.profile} compact />
+            <div className="hidden sm:block">
+              <ProfileSocials profile={match.profile} compact />
+            </div>
           </div>
         </Link>
       </div>
 
       <div
         ref={messagesContainerRef}
-        className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
+        className="flex-1 space-y-3 overflow-y-auto overscroll-y-contain px-4 py-4"
       >
         {messagesLoading ? (
           <p className="py-8 text-center text-sm text-muted">
@@ -266,13 +271,13 @@ export default function ChatPage() {
               className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[75%] px-4 py-2.5 ${
+                className={`max-w-[85%] break-words px-4 py-2.5 sm:max-w-[75%] ${
                   msg.isOwn
                     ? 'rounded-2xl rounded-br-md bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-glow dark:bg-white dark:from-white dark:to-white dark:text-black dark:shadow-none'
                     : 'rounded-2xl rounded-bl-md border border-theme bg-white text-heading dark:bg-black dark:text-white'
                 }`}
               >
-                <p className="text-sm leading-relaxed">{msg.text}</p>
+                <p className="break-words text-sm leading-relaxed">{msg.text}</p>
                 <p
                   className={`mt-1 text-[10px] ${
                     msg.isOwn ? 'text-white/70 dark:text-black/50' : 'text-muted'
@@ -287,7 +292,7 @@ export default function ChatPage() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-theme p-4">
+      <div className="shrink-0 border-t border-theme p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         {error && (
           <p className="mb-2 text-center text-xs text-body">{error}</p>
         )}

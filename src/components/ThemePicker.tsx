@@ -12,7 +12,7 @@ export default function ThemePicker() {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 pb-safe backdrop-blur-sm">
       <div className="w-full max-w-md animate-slide-up rounded-2xl border border-rose-200 bg-white p-8 shadow-card dark:border-white/10 dark:bg-zinc-950">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-rose-400 dark:text-rose-300">
           {t('theme.welcome')}

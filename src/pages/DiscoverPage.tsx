@@ -33,14 +33,14 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto max-w-lg px-4 py-4 sm:py-8">
+      <div className="mb-4 flex items-center justify-between sm:mb-6">
         <h1 className="text-sm font-medium uppercase tracking-widest text-muted">
           {t('discover.title')}
         </h1>
         <button
           onClick={() => setFiltersOpen(true)}
-          className="text-sm text-body hover:text-heading"
+          className="inline-flex min-h-11 items-center px-3 py-2 text-sm text-body hover:text-heading"
         >
           {t('discover.filters')}
         </button>

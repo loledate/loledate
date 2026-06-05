@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
 
 const iconButtonClass =
-  'flex h-8 w-8 items-center justify-center rounded-full border border-theme text-muted transition-colors hover:border-rose-400/40 hover:text-heading dark:hover:border-white/30 dark:hover:text-white'
+  'flex h-11 w-11 items-center justify-center rounded-full border border-theme text-muted transition-colors hover:border-rose-400/40 hover:text-heading dark:hover:border-white/30 dark:hover:text-white'
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()

@@ -3,12 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply overflow-x-clip;
+    -webkit-text-size-adjust: 100%;
+  }
+
   * {
     @apply border-rose-200/60 dark:border-white/10;
   }
 
   body {
-    @apply bg-lol-cream font-body text-rose-950 antialiased dark:bg-black dark:text-white;
+    @apply overflow-x-clip bg-lol-cream font-body text-rose-950 antialiased dark:bg-black dark:text-white;
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::-webkit-scrollbar {
@@ -30,15 +36,18 @@
 
 @layer components {
   .input-field {
-    @apply w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm text-rose-950 placeholder-rose-300 outline-none transition-all focus:border-rose-400 focus:shadow-glow dark:border-white/15 dark:bg-black dark:text-white dark:placeholder-white/30 dark:focus:border-white/40 dark:focus:shadow-none;
+    @apply w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-base text-rose-950 placeholder-rose-300 outline-none transition-all focus:border-rose-400 focus:shadow-glow dark:border-white/15 dark:bg-black dark:text-white dark:placeholder-white/30 dark:focus:border-white/40 dark:focus:shadow-none md:text-sm;
+    touch-action: manipulation;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-lol-gold to-amber-400 px-6 py-3 text-sm font-semibold text-rose-950 shadow-glow-gold transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] dark:bg-white dark:from-white dark:to-white dark:text-black dark:shadow-none dark:hover:brightness-100;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-lol-gold to-amber-400 px-6 py-3 text-sm font-semibold text-rose-950 shadow-glow-gold transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] dark:bg-white dark:from-white dark:to-white dark:text-black dark:shadow-none dark:hover:brightness-100;
+    touch-action: manipulation;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-white/80 px-6 py-3 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all hover:border-rose-400 hover:bg-white hover:shadow-glow dark:border-white/20 dark:bg-black dark:text-white/80 dark:hover:border-white/40 dark:hover:bg-black dark:hover:shadow-none;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-rose-300 bg-white/80 px-6 py-3 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all hover:border-rose-400 hover:bg-white hover:shadow-glow dark:border-white/20 dark:bg-black dark:text-white/80 dark:hover:border-white/40 dark:hover:bg-black dark:hover:shadow-none;
+    touch-action: manipulation;
   }
 
   .glass-card {
@@ -50,7 +59,7 @@
   }
 
   .range-slider::-webkit-slider-thumb {
-    @apply h-4 w-4 cursor-pointer appearance-none rounded-full bg-rose-500 shadow-glow dark:bg-rose-400;
+    @apply h-6 w-6 cursor-pointer appearance-none rounded-full bg-rose-500 shadow-glow dark:bg-rose-400;
   }
 
   .text-muted {
@@ -71,5 +80,20 @@
 
   .bg-theme-card {
     @apply bg-white dark:bg-zinc-950;
+  }
+}
+
+@layer utilities {
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .px-safe {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 }

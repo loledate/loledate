@@ -36,14 +36,14 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <div className="absolute inset-0 bg-rose-900/40" onClick={onClose} />
-      <div className="animate-slide-up relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto border border-theme bg-white p-6 shadow-card dark:bg-black sm:rounded">
+      <div className="animate-slide-up relative z-10 max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-theme bg-white p-6 pb-safe shadow-card dark:bg-black sm:max-h-[85vh] sm:rounded">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-sm font-medium uppercase tracking-widest text-muted">
             {t('filters.title')}
           </h2>
           <button
             onClick={onClose}
-            className="text-sm text-muted hover:text-heading"
+            className="inline-flex min-h-11 items-center px-2 text-sm text-muted hover:text-heading"
           >
             {t('common.close')}
           </button>
@@ -199,7 +199,7 @@ export default function FiltersPanel({ isOpen, onClose }: FiltersPanelProps) {
                 <button
                   key={interest}
                   onClick={() => setFilters({ ...filters, interests: interest })}
-                  className="rounded border border-theme px-2 py-1 text-xs text-muted hover:border-theme hover:text-body"
+                  className="rounded border border-theme px-3 py-2 text-xs text-muted hover:border-theme hover:text-body"
                 >
                   {interestLabel(interest)}
                 </button>

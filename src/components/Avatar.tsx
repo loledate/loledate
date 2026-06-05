@@ -2,15 +2,25 @@ interface AvatarProps {
   url: string | null
   name: string
   className?: string
+  fit?: 'cover' | 'contain'
 }
 
-export default function Avatar({ url, name, className = '' }: AvatarProps) {
+export default function Avatar({
+  url,
+  name,
+  className = '',
+  fit = 'contain',
+}: AvatarProps) {
   if (url) {
     return (
       <img
         src={url}
         alt={name}
-        className={`object-cover ${className}`}
+        loading="lazy"
+        decoding="async"
+        className={`${
+          fit === 'contain' ? 'object-contain' : 'object-cover object-top'
+        } ${className}`}
       />
     )
   }

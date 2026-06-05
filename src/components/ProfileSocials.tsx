@@ -23,7 +23,7 @@ export default function ProfileSocials({
       {discord && (
         <div className={itemClass(compact)}>
           <DiscordIcon className="h-4 w-4 shrink-0 text-muted" />
-          <span className="font-medium text-heading">{discord}</span>
+          <span className="max-w-full truncate font-medium text-heading">{discord}</span>
         </div>
       )}
       {xHandle && (
@@ -34,7 +34,7 @@ export default function ProfileSocials({
           className={`${itemClass(compact)} transition-colors hover:text-heading`}
         >
           <XIcon className="h-4 w-4 shrink-0 text-muted" />
-          <span className="font-medium text-heading">
+          <span className="max-w-full truncate font-medium text-heading">
             @{xHandle.replace(/^@+/, '')}
           </span>
         </a>

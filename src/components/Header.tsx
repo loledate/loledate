@@ -63,8 +63,8 @@ export default function Header({ transparent = false }: HeaderProps) {
     location.pathname === '/matches' || location.pathname.startsWith('/chat/')
 
   return (
-    <header className={headerClass}>
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
+    <header className={`${headerClass} pt-safe`}>
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 px-safe sm:gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <LanguageToggle />
           <Link
@@ -75,8 +75,10 @@ export default function Header({ transparent = false }: HeaderProps) {
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-3">
-          <SocialLinks />
+        <div className="flex items-center gap-1.5 md:gap-3">
+          <div className="hidden sm:block">
+            <SocialLinks />
+          </div>
           <ThemeToggle />
 
           <nav className="hidden items-center gap-5 md:flex">
@@ -127,7 +129,7 @@ export default function Header({ transparent = false }: HeaderProps) {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`text-sm font-medium md:hidden ${brandClass}`}
+            className={`flex min-h-11 min-w-11 items-center justify-center text-sm font-medium md:hidden ${brandClass}`}
             aria-label={t('common.menu')}
           >
             {mobileOpen ? t('common.close') : t('common.menu')}
@@ -137,7 +139,7 @@ export default function Header({ transparent = false }: HeaderProps) {
 
       {mobileOpen && (
         <nav
-          className={`border-t px-4 py-3 md:hidden ${
+          className={`border-t px-4 px-safe py-3 pb-safe md:hidden ${
             theme === 'dark'
               ? 'border-white/10 bg-black/90'
               : transparent
@@ -153,7 +155,7 @@ export default function Header({ transparent = false }: HeaderProps) {
                   key={to}
                   to={to}
                   onClick={() => setMobileOpen(false)}
-                  className={`block py-2 text-sm font-medium ${
+                  className={`block py-3 text-sm font-medium ${
                     active ? linkActive : linkMuted
                   }`}
                 >
@@ -166,7 +168,7 @@ export default function Header({ transparent = false }: HeaderProps) {
             <MessagesNavLink
               onClick={() => setMobileOpen(false)}
               showLabel
-              className={`block py-2 text-sm font-medium ${
+              className={`block py-3 text-sm font-medium ${
                 messagesActive ? linkActive : linkMuted
               }`}
             />
@@ -177,14 +179,14 @@ export default function Header({ transparent = false }: HeaderProps) {
               <Link
                 to="/login"
                 onClick={() => setMobileOpen(false)}
-                className={`block py-2 text-sm ${linkMuted}`}
+                className={`block py-3 text-sm ${linkMuted}`}
               >
                 {t('nav.login')}
               </Link>
               <Link
                 to="/register"
                 onClick={() => setMobileOpen(false)}
-                className="block py-2 text-sm font-semibold text-heading"
+                className="block py-3 text-sm font-semibold text-heading"
               >
                 {t('nav.register')}
               </Link>
@@ -194,7 +196,7 @@ export default function Header({ transparent = false }: HeaderProps) {
           {user && (
             <button
               onClick={handleSignOut}
-              className={`block py-2 text-sm ${linkMuted}`}
+              className={`block py-3 text-sm ${linkMuted}`}
             >
               {t('nav.logout')}
             </button>

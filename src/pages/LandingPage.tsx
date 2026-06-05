@@ -17,11 +17,11 @@ export default function LandingPage() {
 
   return (
     <div className="animate-fade-in">
-      <section className="relative min-h-[88vh] overflow-hidden">
+      <section className="relative min-h-[88dvh] overflow-hidden">
         <img
           src={coverImage}
           alt="LoL E-DATE"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full bg-black object-contain object-center sm:object-cover sm:object-[center_30%]"
         />
 
         {theme === 'light' && (
@@ -34,7 +34,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-black/50" />
         )}
 
-        <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-4 pb-10 pt-24 sm:pb-14">
+        <div className="relative mx-auto flex min-h-[88dvh] max-w-6xl flex-col justify-end px-4 pb-10 pt-[max(6rem,calc(env(safe-area-inset-top)+4rem))] sm:pb-14">
           <div className="max-w-xl">
             <p
               className={`mb-2 text-sm font-medium uppercase tracking-[0.2em] ${

@@ -67,11 +67,14 @@ export default function ProfilePhotoEditor({
         {t('profile.photoTitle')}
       </h3>
       <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-        <Avatar
-          url={photoUrl}
-          name={name}
-          className="h-24 w-24 rounded-xl"
-        />
+        <div className="relative aspect-[3/4] w-28 shrink-0 overflow-hidden rounded-xl border border-theme bg-rose-100 dark:bg-zinc-900 sm:w-32">
+          <Avatar
+            url={photoUrl}
+            name={name}
+            className="h-full w-full"
+            fit="contain"
+          />
+        </div>
         <div className="flex flex-col gap-2">
           <input
             ref={inputRef}

@@ -5,7 +5,7 @@ export default function LanguageToggle() {
 
   return (
     <div
-      className="flex items-center rounded-full border border-theme p-0.5 text-[10px] font-semibold uppercase tracking-wider"
+      className="flex min-h-10 items-center rounded-full border border-theme p-0.5 text-xs font-semibold uppercase tracking-wider"
       role="group"
       aria-label={t('lang.switchTo', {
         lang: locale === 'es' ? 'English' : 'Español',
@@ -16,7 +16,7 @@ export default function LanguageToggle() {
           key={code}
           type="button"
           onClick={() => setLocale(code)}
-          className={`rounded-full px-2 py-1 transition-colors ${
+          className={`rounded-full px-3 py-2 text-xs transition-colors ${
             locale === code
               ? 'bg-heading text-white dark:bg-white dark:text-black'
               : 'text-muted hover:text-heading'

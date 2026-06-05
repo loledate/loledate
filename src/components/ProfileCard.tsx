@@ -22,11 +22,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
   if (compact) {
     return (
       <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
-        <div className="relative aspect-[3/4] overflow-hidden">
+        <div className="relative aspect-[3/4] max-h-[min(70dvh,calc(100vw*4/3))] w-full overflow-hidden bg-rose-100 dark:bg-zinc-900 sm:max-h-none">
           <Avatar
             url={profile.photoUrl}
             name={profile.name}
             className="h-full w-full"
+            fit="contain"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-rose-900/50 via-transparent to-transparent dark:bg-black/55" />
           <div className="absolute bottom-0 left-0 right-0 p-3">
@@ -46,11 +47,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
   return (
     <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-rose-200 bg-white shadow-card dark:border-white/10 dark:bg-black dark:shadow-none">
-      <div className="relative aspect-[3/4] overflow-hidden">
+      <div className="relative aspect-[3/4] max-h-[min(70dvh,calc(100vw*4/3))] w-full overflow-hidden bg-rose-100 dark:bg-zinc-900 sm:max-h-none">
         <Avatar
           url={profile.photoUrl}
           name={profile.name}
           className="h-full w-full"
+          fit="contain"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-rose-900/40 via-transparent to-transparent dark:bg-black/55" />
 
@@ -85,10 +87,12 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
         </div>
 
         {profile.riotId && (
-          <div className="flex items-center justify-between rounded-xl bg-rose-50 p-3 dark:bg-white/5">
-            <div>
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-rose-50 p-3 dark:bg-white/5">
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-muted">{t('card.riotId')}</p>
-              <p className="text-sm font-medium text-heading">{profile.riotId}</p>
+              <p className="truncate text-sm font-medium text-heading">
+                {profile.riotId}
+              </p>
             </div>
             {profile.opggUrl && (
               <a
