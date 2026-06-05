@@ -1,0 +1,28 @@
+interface AvatarProps {
+  url: string | null
+  name: string
+  className?: string
+}
+
+export default function Avatar({ url, name, className = '' }: AvatarProps) {
+  if (url) {
+    return (
+      <img
+        src={url}
+        alt={name}
+        className={`object-cover ${className}`}
+      />
+    )
+  }
+
+  const initial = name.trim().charAt(0).toUpperCase() || '?'
+
+  return (
+    <div
+      className={`flex items-center justify-center border border-rose-200 bg-gradient-to-br from-rose-100 to-amber-50 text-rose-600 ${className}`}
+      aria-hidden
+    >
+      <span className="text-sm font-semibold">{initial}</span>
+    </div>
+  )
+}

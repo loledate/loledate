@@ -1,0 +1,316 @@
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { useApp } from '../context/AppContext'
+import { CITIES, INTEREST_OPTIONS, isProfileComplete } from '../data/constants'
+import type { Role, LookingFor } from '../types'
+import { LOOKING_FOR_LABELS } from '../types'
+import Badge from '../components/Badge'
+import Avatar from '../components/Avatar'
+
+const ROLES: Role[] = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
+const LOOKING_FOR_OPTIONS: LookingFor[] = [
+  'duoQ',
+  'amistad',
+  'cita',
+  'casual',
+  'ranked',
+]
+
+export default function EditProfilePage() {
+  const { userProfile, profileLoading, saveUserProfile } = useApp()
+  const [form, setForm] = useState(userProfile)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [champInput, setChampInput] = useState('')
+
+  useEffect(() => {
+    if (userProfile) setForm(userProfile)
+  }, [userProfile])
+
+  if (profileLoading || !form) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center px-4">
+        <p className="text-sm text-rose-400">Cargando perfil...</p>
+      </div>
+    )
+  }
+
+  const update = (field: string, value: unknown) => {
+    setForm((prev) => (prev ? { ...prev, [field]: value } : prev))
+    setSaved(false)
+    setError('')
+  }
+
+  const toggleLookingFor = (lf: LookingFor) => {
+    const current = form.lookingFor
+    const updated = current.includes(lf)
+      ? current.filter((x) => x !== lf)
+      : [...current, lf]
+    update('lookingFor', updated)
+  }
+
+  const toggleInterest = (interest: string) => {
+    const current = form.interests
+    const updated = current.includes(interest)
+      ? current.filter((x) => x !== interest)
+      : [...current, interest]
+    update('interests', updated)
+  }
+
+  const addChampion = () => {
+    if (champInput.trim() && !form.favoriteChampions.includes(champInput.trim())) {
+      update('favoriteChampions', [...form.favoriteChampions, champInput.trim()])
+      setChampInput('')
+    }
+  }
+
+  const removeChampion = (champ: string) => {
+    update(
+      'favoriteChampions',
+      form.favoriteChampions.filter((c) => c !== champ)
+    )
+  }
+
+  const handleSave = async () => {
+    setSaving(true)
+    setError('')
+    const { error: saveError } = await saveUserProfile(form)
+    setSaving(false)
+
+    if (saveError) {
+      setError(saveError)
+      return
+    }
+
+    setSaved(true)
+    setTimeout(() => setSaved(false), 3000)
+  }
+
+  const toggleClass = (active: boolean) =>
+    active
+      ? 'border-white text-rose-900'
+      : 'border-rose-200 text-rose-400 hover:border-white/30'
+
+  const profileComplete = isProfileComplete(form)
+
+  return (
+    <div className="mx-auto max-w-2xl px-4 py-8">
+      <h1 className="mb-2 text-sm font-medium uppercase tracking-widest text-rose-400">
+        Perfil
+      </h1>
+      <p className="mb-8 text-sm text-rose-400">
+        Completa tus datos. Las fotos se subirán desde Supabase Storage cuando
+        esté configurado.
+      </p>
+
+      {!profileComplete && (
+        <p className="mb-6 border border-rose-200 p-4 text-sm text-rose-500">
+          Completa nombre, edad, ciudad y Riot ID para poder descubrir otros
+          jugadores.{' '}
+          <Link to="/discover" className="underline underline-offset-2">
+            Ir a descubrir
+          </Link>
+        </p>
+      )}
+
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Avatar
+            url={form.photoUrl}
+            name={form.name}
+            className="h-20 w-20 rounded"
+          />
+          <p className="text-xs text-rose-900/30">
+            Sin foto de perfil todavía. La subida de imagen llegará en la
+            siguiente fase.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-xs text-rose-400">Nombre</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => update('name', e.target.value)}
+              className="input-field"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs text-rose-400">Edad</label>
+            <input
+              type="number"
+              min={18}
+              max={99}
+              value={form.age}
+              onChange={(e) => update('age', Number(e.target.value))}
+              className="input-field"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs text-rose-400">Ciudad</label>
+            <select
+              value={form.city}
+              onChange={(e) => update('city', e.target.value)}
+              className="input-field"
+            >
+              {CITIES.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs text-rose-400">Elo</label>
+            <input
+              type="text"
+              value={form.elo}
+              onChange={(e) => update('elo', e.target.value)}
+              placeholder="Oro II"
+              className="input-field"
+            />
+          </div>
+        </div>
+
+        <div className="border border-rose-200 p-5">
+          <h3 className="mb-4 text-xs font-medium uppercase tracking-widest text-rose-400">
+            Cuenta LoL
+          </h3>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-xs text-rose-400">Riot ID</label>
+              <input
+                type="text"
+                value={form.riotId}
+                onChange={(e) => update('riotId', e.target.value)}
+                placeholder="Nombre#TAG"
+                className="input-field"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs text-rose-400">OP.GG</label>
+              <input
+                type="url"
+                value={form.opggUrl}
+                onChange={(e) => update('opggUrl', e.target.value)}
+                placeholder="https://op.gg/..."
+                className="input-field"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="mb-2 block text-xs text-rose-400">Rol</label>
+            <div className="flex flex-wrap gap-2">
+              {ROLES.map((role) => (
+                <button
+                  key={role}
+                  onClick={() => update('role', role)}
+                  className={`rounded border px-3 py-1.5 text-sm transition-colors ${toggleClass(form.role === role)}`}
+                >
+                  {role}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="mb-2 block text-xs text-rose-400">Campeones</label>
+            <div className="mb-2 flex flex-wrap gap-2">
+              {form.favoriteChampions.map((champ) => (
+                <button
+                  key={champ}
+                  onClick={() => removeChampion(champ)}
+                  className="group"
+                >
+                  <Badge>
+                    {champ}
+                    <span className="ml-1 text-rose-300 group-hover:text-rose-600">
+                      x
+                    </span>
+                  </Badge>
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={champInput}
+                onChange={(e) => setChampInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && addChampion()}
+                placeholder="Campeon"
+                className="input-field flex-1"
+              />
+              <button onClick={addChampion} className="btn-secondary px-4">
+                Añadir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs text-rose-400">Bio</label>
+          <textarea
+            value={form.bio}
+            onChange={(e) => update('bio', e.target.value)}
+            rows={3}
+            className="input-field resize-none"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-xs text-rose-400">Busco</label>
+          <div className="flex flex-wrap gap-2">
+            {LOOKING_FOR_OPTIONS.map((lf) => (
+              <button
+                key={lf}
+                onClick={() => toggleLookingFor(lf)}
+                className={`rounded border px-3 py-1.5 text-sm transition-colors ${toggleClass(form.lookingFor.includes(lf))}`}
+              >
+                {LOOKING_FOR_LABELS[lf]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-xs text-rose-400">Intereses</label>
+          <div className="flex flex-wrap gap-2">
+            {INTEREST_OPTIONS.map((interest) => (
+              <button
+                key={interest}
+                onClick={() => toggleInterest(interest)}
+                className={`rounded border px-3 py-1 text-sm transition-colors ${toggleClass(form.interests.includes(interest))}`}
+              >
+                {interest}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs text-rose-400">Horario</label>
+          <input
+            type="text"
+            value={form.playSchedule}
+            onChange={(e) => update('playSchedule', e.target.value)}
+            placeholder="18:00 - 01:00"
+            className="input-field"
+          />
+        </div>
+
+        {error && <p className="text-sm text-rose-600">{error}</p>}
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="btn-primary w-full py-3 disabled:opacity-40"
+        >
+          {saving ? 'Guardando...' : saved ? 'Guardado' : 'Guardar'}
+        </button>
+      </div>
+    </div>
+  )
+}
