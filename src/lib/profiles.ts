@@ -349,3 +349,59 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
     })
     .filter((m): m is NonNullable<typeof m> => m !== null)
 }
+
+export async function fetchMatchById(
+  matchId: string,
+  currentUserId: string
+): Promise<Match | null> {
+  const client = requireSupabase()
+
+  const { data: row, error } = await client
+    .from('matches')
+    .select('id, user_a, user_b, matched_at')
+    .eq('id', matchId)
+    .maybeSingle()
+
+  if (error) throw error
+  if (!row) return null
+
+  const matchRow = row as DbMatchRow
+  if (
+    matchRow.user_a !== currentUserId &&
+    matchRow.user_b !== currentUserId
+  ) {
+    return null
+  }
+
+  const otherUserId =
+    matchRow.user_a === currentUserId ? matchRow.user_b : matchRow.user_a
+
+  const { data: profileRow, error: profileError } = await client
+    .from('profiles')
+    .select(profileSelect)
+    .eq('user_id', otherUserId)
+    .maybeSingle()
+
+  if (profileError) throw profileError
+  if (!profileRow) return null
+
+  const { data: messageRows } = await client
+    .from('messages')
+    .select('match_id, content, created_at, sender_id, read_at')
+    .eq('match_id', matchId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+  const last = (messageRows as DbMessageRow[] | null)?.[0]
+  const unread = last
+    ? last.sender_id !== currentUserId && last.read_at === null
+    : false
+
+  return {
+    id: matchRow.id,
+    profile: mapRowToProfile(profileRow as ProfileRow),
+    lastMessage: last?.content ?? '¡Nuevo match! Escríbele un mensaje.',
+    lastMessageAt: last?.created_at ?? matchRow.matched_at,
+    unread,
+  }
+}
