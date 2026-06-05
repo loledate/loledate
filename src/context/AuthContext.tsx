@@ -22,16 +22,46 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 function mapAuthError(message: string): string {
-  if (message.includes('Invalid login credentials')) {
+  const lower = message.toLowerCase()
+  if (lower.includes('invalid login credentials')) {
     return 'Usuario o contraseña incorrectos.'
   }
-  if (message.includes('User already registered')) {
+  if (
+    lower.includes('user already registered') ||
+    lower.includes('already been registered')
+  ) {
     return 'Ese usuario ya existe.'
   }
-  if (message.includes('Password should be at least')) {
+  if (lower.includes('password should be at least')) {
     return 'La contraseña debe tener al menos 6 caracteres.'
   }
+  if (lower.includes('rate limit') || lower.includes('too many')) {
+    return 'Demasiados intentos. Espera un momento e inténtalo de nuevo.'
+  }
   return message
+}
+
+async function registerAccount(username: string, password: string) {
+  const response = await fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  })
+
+  const payload = (await response.json().catch(() => ({}))) as {
+    error?: string
+    ok?: boolean
+  }
+
+  if (!response.ok) {
+    return {
+      error: payload.error
+        ? mapAuthError(payload.error)
+        : 'No se pudo crear la cuenta.',
+    }
+  }
+
+  return { error: null as string | null }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -85,16 +115,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const usernameError = validateUsername(username)
     if (usernameError) return { error: usernameError }
 
-    const { error } = await requireSupabase().auth.signUp({
-      email: usernameToAuthEmail(username),
-      password,
-      options: {
-        data: { username: username.trim() },
-        emailRedirectTo: undefined,
-      },
-    })
+    const { error: registerError } = await registerAccount(username, password)
+    if (registerError) return { error: registerError }
 
-    return { error: error ? mapAuthError(error.message) : null }
+    return signIn(username, password)
   }
 
   const signOut = async () => {
