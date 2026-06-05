@@ -8,8 +8,8 @@ import { CHAMPIONS, isValidChampion } from '../data/champions'
 import type { Role, LookingFor, Profile } from '../types'
 import { LOOKING_FOR_LABELS } from '../types'
 import Badge from '../components/Badge'
-import Avatar from '../components/Avatar'
 import ProfileCard from '../components/ProfileCard'
+import ProfilePhotoEditor from '../components/ProfilePhotoEditor'
 
 const ROLES: Role[] = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 const LOOKING_FOR_OPTIONS: LookingFor[] = [
@@ -134,6 +134,25 @@ export default function EditProfilePage() {
     setIsEditing(false)
   }
 
+  const handlePhotoChange = async (photoUrl: string | null) => {
+    if (!form) return { error: 'No hay perfil cargado.' }
+
+    const updated = { ...form, photoUrl }
+    setForm(updated)
+    setSaved(false)
+    setError('')
+
+    const { error: saveError } = await saveUserProfile(updated)
+    if (saveError) {
+      setError(saveError)
+      return { error: saveError }
+    }
+
+    setSaved(true)
+    setTimeout(() => setSaved(false), 3000)
+    return { error: null }
+  }
+
   const toggleClass = (active: boolean) =>
     active
       ? 'border-white text-heading'
@@ -218,17 +237,14 @@ export default function EditProfilePage() {
       )}
 
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Avatar
-            url={form.photoUrl}
+        {user && (
+          <ProfilePhotoEditor
+            userId={user.id}
             name={form.name}
-            className="h-20 w-20 rounded"
+            photoUrl={form.photoUrl}
+            onPhotoChange={handlePhotoChange}
           />
-          <p className="text-xs text-muted">
-            Sin foto de perfil todavía. La subida de imagen llegará en la
-            siguiente fase.
-          </p>
-        </div>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>

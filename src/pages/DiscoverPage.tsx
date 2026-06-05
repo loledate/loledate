@@ -120,7 +120,7 @@ export default function DiscoverPage() {
               state={{ from: '/discover' }}
               className="text-sm text-muted underline underline-offset-2 hover:text-heading"
             >
-              Ver perfil y dar like
+              Ver perfil
             </Link>
           </div>
 
