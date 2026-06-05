@@ -7,6 +7,7 @@ import { fetchProfileReputation, type ProfileReputation } from '../lib/reputatio
 import type { Profile } from '../types'
 import ProfileCard from '../components/ProfileCard'
 import ProfileLikeButton from '../components/ProfileLikeButton'
+import ProfileSongPlayer from '../components/ProfileSongPlayer'
 
 export default function UserProfilePage() {
   const { userId } = useParams<{ userId: string }>()
@@ -108,6 +109,8 @@ export default function UserProfilePage() {
           {t('profile.title')}
         </h1>
       </div>
+
+      <ProfileSongPlayer songUrl={profile.songUrl} profileName={profile.name} />
 
       <ProfileCard profile={profile} />
 

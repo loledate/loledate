@@ -12,6 +12,7 @@ CREATE TABLE profiles (
   age INTEGER NOT NULL CHECK (age >= 16),
   city TEXT NOT NULL,
   avatar_url TEXT,
+  profile_song_url TEXT,
   bio TEXT,
   play_schedule TEXT,
   discord_username TEXT,

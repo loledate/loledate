@@ -23,6 +23,8 @@ CREATE TABLE profiles (
 
   avatar_url TEXT,
 
+  profile_song_url TEXT,
+
   bio TEXT,
 
   play_schedule TEXT,
@@ -242,6 +244,8 @@ export interface DbProfile {
   city: string
 
   avatar_url: string | null
+
+  profile_song_url: string | null
 
   bio: string | null
 

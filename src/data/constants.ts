@@ -88,6 +88,8 @@ export function createEmptyProfile(userId: string, name: string): Profile {
 
     photoUrl: null,
 
+    songUrl: null,
+
     riotId: '',
 
     opggUrl: '',

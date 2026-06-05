@@ -10,6 +10,8 @@ import type { Role, LookingFor, Profile } from '../types'
 import Badge from '../components/Badge'
 import ProfileCard from '../components/ProfileCard'
 import ProfilePhotoEditor from '../components/ProfilePhotoEditor'
+import ProfileSongEditor from '../components/ProfileSongEditor'
+import ProfileSongPlayer from '../components/ProfileSongPlayer'
 
 const ROLES: Role[] = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 const LOOKING_FOR_OPTIONS: LookingFor[] = [
@@ -154,6 +156,25 @@ export default function EditProfilePage() {
     return { error: null }
   }
 
+  const handleSongChange = async (songUrl: string | null) => {
+    if (!form) return { error: 'profile.notLoaded' }
+
+    const updated = { ...form, songUrl }
+    setForm(updated)
+    setSaved(false)
+    setError('')
+
+    const { error: saveError } = await saveUserProfile(updated)
+    if (saveError) {
+      setError(saveError)
+      return { error: saveError }
+    }
+
+    setSaved(true)
+    setTimeout(() => setSaved(false), 3000)
+    return { error: null }
+  }
+
   const toggleClass = (active: boolean) =>
     active
       ? 'border-white text-heading'
@@ -186,6 +207,8 @@ export default function EditProfilePage() {
             {t('profile.incompleteView')}
           </p>
         )}
+
+        <ProfileSongPlayer songUrl={form.songUrl} profileName={form.name} />
 
         <ProfileCard profile={form} />
 
@@ -240,6 +263,14 @@ export default function EditProfilePage() {
             name={form.name}
             photoUrl={form.photoUrl}
             onPhotoChange={handlePhotoChange}
+          />
+        )}
+
+        {user && (
+          <ProfileSongEditor
+            userId={user.id}
+            songUrl={form.songUrl}
+            onSongChange={handleSongChange}
           />
         )}
 

@@ -22,6 +22,7 @@ export interface Profile {
   city: string
   distanceKm: number
   photoUrl: string | null
+  songUrl: string | null
   riotId: string
   opggUrl: string
   elo: string
