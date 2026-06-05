@@ -8,6 +8,7 @@ import {
   fetchMessages,
   sendMessage,
   subscribeToMessages,
+  markMessagesAsRead,
 } from '../lib/messages'
 import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
@@ -23,20 +24,25 @@ function formatMessageTime(iso: string) {
 export default function ChatPage() {
   const { matchId } = useParams<{ matchId: string }>()
   const { user } = useAuth()
-  const { matches, matchesLoading, refreshMatches } = useApp()
+  const { matches, matchesLoading, refreshMatchesSilent } = useApp()
   const [match, setMatch] = useState<Match | null>(null)
   const [matchLoading, setMatchLoading] = useState(true)
   const [messages, setMessages] = useState<
     Awaited<ReturnType<typeof fetchMessages>>
   >([])
   const [messagesLoading, setMessagesLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!matchId || !user) return
+    if (!matchId || !user) {
+      setMatch(null)
+      setMatchLoading(!matchId)
+      return
+    }
 
     const fromList = matches.find((m) => m.id === matchId)
     if (fromList) {
@@ -47,22 +53,65 @@ export default function ChatPage() {
 
     if (matchesLoading) return
 
+    let cancelled = false
     setMatchLoading(true)
+
     fetchMatchById(matchId, user.id)
-      .then(setMatch)
-      .catch(() => setMatch(null))
-      .finally(() => setMatchLoading(false))
+      .then((loaded) => {
+        if (!cancelled) setMatch(loaded)
+      })
+      .catch(() => {
+        if (!cancelled) setMatch(null)
+      })
+      .finally(() => {
+        if (!cancelled) setMatchLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
   }, [matchId, user, matches, matchesLoading])
 
   useEffect(() => {
     if (!matchId || !user) return
 
+    const fromList = matches.find((m) => m.id === matchId)
+    if (fromList) setMatch(fromList)
+  }, [matchId, matches])
+
+  useEffect(() => {
+    if (!matchId || !user) return
+
+    let cancelled = false
     setMessagesLoading(true)
+    setLoadError('')
+
     fetchMessages(matchId, user.id)
-      .then(setMessages)
-      .catch(() => setMessages([]))
-      .finally(() => setMessagesLoading(false))
-  }, [matchId, user])
+      .then((rows) => {
+        if (!cancelled) setMessages(rows)
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setMessages([])
+          setLoadError(
+            err instanceof Error
+              ? err.message
+              : 'No se pudieron cargar los mensajes.'
+          )
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setMessagesLoading(false)
+      })
+
+    markMessagesAsRead(matchId, user.id)
+      .then(() => refreshMatchesSilent())
+      .catch(() => {})
+
+    return () => {
+      cancelled = true
+    }
+  }, [matchId, user, refreshMatchesSilent])
 
   useEffect(() => {
     if (!matchId || !user) return
@@ -72,8 +121,13 @@ export default function ChatPage() {
         if (prev.some((m) => m.id === message.id)) return prev
         return [...prev, message]
       })
+      if (!message.isOwn) {
+        markMessagesAsRead(matchId, user.id)
+          .then(() => refreshMatchesSilent())
+          .catch(() => {})
+      }
     })
-  }, [matchId, user])
+  }, [matchId, user, refreshMatchesSilent])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -92,7 +146,7 @@ export default function ChatPage() {
         return [...prev, message]
       })
       setInput('')
-      await refreshMatches()
+      await refreshMatchesSilent()
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'No se pudo enviar el mensaje.'
@@ -100,9 +154,9 @@ export default function ChatPage() {
     } finally {
       setSending(false)
     }
-  }, [input, match, user, matchId, sending, refreshMatches])
+  }, [input, match, user, matchId, sending, refreshMatchesSilent])
 
-  if (matchLoading || matchesLoading) {
+  if (matchLoading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center px-4">
         <p className="text-sm text-muted">Cargando chat...</p>
@@ -153,6 +207,31 @@ export default function ChatPage() {
           <p className="py-8 text-center text-sm text-muted">
             Cargando mensajes...
           </p>
+        ) : loadError ? (
+          <div className="py-8 text-center">
+            <p className="text-sm text-body">{loadError}</p>
+            <button
+              type="button"
+              onClick={() => {
+                if (!matchId || !user) return
+                setMessagesLoading(true)
+                setLoadError('')
+                fetchMessages(matchId, user.id)
+                  .then(setMessages)
+                  .catch((err) =>
+                    setLoadError(
+                      err instanceof Error
+                        ? err.message
+                        : 'No se pudieron cargar los mensajes.'
+                    )
+                  )
+                  .finally(() => setMessagesLoading(false))
+              }}
+              className="btn-primary mt-4"
+            >
+              Reintentar
+            </button>
+          </div>
         ) : messages.length === 0 ? (
           <p className="py-8 text-center text-sm text-muted">
             Sin mensajes. Escribe el primero.

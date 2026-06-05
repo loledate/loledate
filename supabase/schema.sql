@@ -177,3 +177,18 @@ CREATE POLICY "Usuario envia mensajes"
       WHERE user_a = auth.uid() OR user_b = auth.uid()
     )
   );
+
+CREATE POLICY "Usuario marca mensajes leidos"
+  ON messages FOR UPDATE TO authenticated
+  USING (
+    match_id IN (
+      SELECT id FROM matches
+      WHERE user_a = auth.uid() OR user_b = auth.uid()
+    )
+  )
+  WITH CHECK (
+    match_id IN (
+      SELECT id FROM matches
+      WHERE user_a = auth.uid() OR user_b = auth.uid()
+    )
+  );

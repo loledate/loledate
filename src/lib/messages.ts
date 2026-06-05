@@ -56,6 +56,20 @@ export async function sendMessage(
   return mapMessage(data as MessageRow, senderId)
 }
 
+export async function markMessagesAsRead(
+  matchId: string,
+  currentUserId: string
+): Promise<void> {
+  const { error } = await requireSupabase()
+    .from('messages')
+    .update({ read_at: new Date().toISOString() })
+    .eq('match_id', matchId)
+    .neq('sender_id', currentUserId)
+    .is('read_at', null)
+
+  if (error) throw error
+}
+
 export function subscribeToMessages(
   matchId: string,
   currentUserId: string,

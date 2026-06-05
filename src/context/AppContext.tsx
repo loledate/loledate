@@ -36,6 +36,7 @@ interface AppContextType {
   matches: Match[]
   matchesLoading: boolean
   refreshMatches: () => Promise<void>
+  refreshMatchesSilent: () => Promise<void>
   applyFilters: () => void
   clearFilters: () => void
   refreshDiscover: () => Promise<void>
@@ -157,6 +158,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [user])
 
+  const refreshMatchesSilent = useCallback(async () => {
+    if (!user || !isSupabaseConfigured) return
+
+    try {
+      setMatches(await fetchMatches(user.id))
+    } catch {
+      // Mantener la lista actual si falla un refresh en segundo plano
+    }
+  }, [user])
+
   useEffect(() => {
     if (user) {
       refreshMatches()
@@ -249,6 +260,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         clearFilters,
         refreshDiscover,
         refreshMatches,
+        refreshMatchesSilent,
       }}
     >
       {children}

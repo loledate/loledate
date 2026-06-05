@@ -348,6 +348,10 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
       }
     })
     .filter((m): m is NonNullable<typeof m> => m !== null)
+    .sort(
+      (a, b) =>
+        new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
+    )
 }
 
 export async function fetchMatchById(
