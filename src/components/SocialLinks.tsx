@@ -28,15 +28,6 @@ export default function SocialLinks({ className = '', iconClassName = 'h-4 w-4' 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <a
-        href={SOCIAL_LINKS.discord}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={iconButtonClass}
-        aria-label="Discord"
-      >
-        <DiscordIcon className={iconClassName} />
-      </a>
-      <a
         href={SOCIAL_LINKS.x}
         target="_blank"
         rel="noopener noreferrer"
