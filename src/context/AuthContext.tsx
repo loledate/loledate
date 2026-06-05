@@ -38,6 +38,12 @@ function mapAuthError(message: string): string {
   if (lower.includes('rate limit') || lower.includes('too many')) {
     return 'Demasiados intentos. Espera un momento e inténtalo de nuevo.'
   }
+  if (lower.includes('email logins are disabled')) {
+    return 'El login por email está desactivado en Supabase. Activa el proveedor Email (Confirm email OFF).'
+  }
+  if (lower.includes('database error checking email')) {
+    return 'Error en la base de datos al comprobar el usuario. Ejecuta supabase/fix-auth-triggers.sql en Supabase.'
+  }
   return message
 }
 

@@ -5,8 +5,10 @@
 --
 -- IMPORTANTE (Dashboard, no SQL):
 -- 1. Authentication → Providers → Email
---    - DESACTIVA "Confirm email"
+--    - EL PROVEEDOR EMAIL DEBE ESTAR ACTIVADO (Enable Email provider)
+--    - DESACTIVA solo "Confirm email"
 --    - DESACTIVA "Secure email change" si aparece
+--    - NO desactives el proveedor Email entero (login dejaría de funcionar)
 -- 2. Authentication → Providers → desactiva Magic Link si está activo
 -- 3. Authentication → URL Configuration → Site URL = tu dominio Vercel
 --
@@ -66,20 +68,33 @@ SET search_path = public
 AS $$
 DECLARE
   v_username TEXT;
+  v_safe_username TEXT;
 BEGIN
-  v_username := COALESCE(NEW.raw_user_meta_data->>'username', split_part(NEW.email, '@', 1));
+  v_username := NULLIF(
+    TRIM(COALESCE(NEW.raw_user_meta_data->>'username', split_part(NEW.email, '@', 1))),
+    ''
+  );
 
-  INSERT INTO public.profiles (user_id, name, username, age, city)
-  VALUES (
-    NEW.id,
-    v_username,
-    v_username,
-    18,
-    'Madrid'
-  )
-  ON CONFLICT (user_id) DO UPDATE
-  SET username = EXCLUDED.username,
-      name = COALESCE(profiles.name, EXCLUDED.name);
+  IF v_username IS NULL THEN
+    v_username := 'user_' || substr(replace(NEW.id::text, '-', ''), 1, 8);
+  END IF;
+
+  v_safe_username := v_username;
+
+  BEGIN
+    INSERT INTO public.profiles (user_id, name, username, age, city)
+    VALUES (NEW.id, v_username, v_safe_username, 18, 'Madrid')
+    ON CONFLICT (user_id) DO UPDATE
+    SET
+      username = COALESCE(profiles.username, EXCLUDED.username),
+      name = COALESCE(NULLIF(profiles.name, ''), EXCLUDED.name);
+  EXCEPTION
+    WHEN unique_violation THEN
+      v_safe_username := v_username || '_' || substr(replace(NEW.id::text, '-', ''), 1, 6);
+      INSERT INTO public.profiles (user_id, name, username, age, city)
+      VALUES (NEW.id, v_username, v_safe_username, 18, 'Madrid')
+      ON CONFLICT (user_id) DO NOTHING;
+  END;
 
   RETURN NEW;
 END;
