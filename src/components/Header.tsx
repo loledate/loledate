@@ -4,16 +4,20 @@ import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import SocialLinks from './SocialLinks'
 import ThemeToggle from './ThemeToggle'
+import MessagesNavLink from './MessagesNavLink'
 
 const navItems = [
   { to: '/', label: 'Inicio' },
   { to: '/discover', label: 'Descubrir' },
-  { to: '/matches', label: 'Matches' },
   { to: '/profile', label: 'Perfil' },
 ]
 
 interface HeaderProps {
   transparent?: boolean
+}
+
+function isNavActive(pathname: string, to: string) {
+  return pathname === to
 }
 
 export default function Header({ transparent = false }: HeaderProps) {
@@ -53,6 +57,9 @@ export default function Header({ transparent = false }: HeaderProps) {
         ? 'text-rose-950'
         : 'text-rose-800'
 
+  const messagesActive =
+    location.pathname === '/matches' || location.pathname.startsWith('/chat/')
+
   return (
     <header className={headerClass}>
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
@@ -65,38 +72,46 @@ export default function Header({ transparent = false }: HeaderProps) {
           <ThemeToggle />
 
           <nav className="hidden items-center gap-5 md:flex">
-          {user &&
-            navItems.slice(1).map(({ to, label }) => {
-              const active = location.pathname === to
-              return (
-                <Link
-                  key={to}
-                  to={to}
-                  className={`text-sm font-medium transition-colors ${
-                    active ? linkActive : linkMuted
-                  }`}
-                >
-                  {label}
+            {user &&
+              navItems.slice(1).map(({ to, label }) => {
+                const active = isNavActive(location.pathname, to)
+                return (
+                  <Link
+                    key={to}
+                    to={to}
+                    className={`text-sm font-medium transition-colors ${
+                      active ? linkActive : linkMuted
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                )
+              })}
+
+            {user && (
+              <MessagesNavLink
+                className={`transition-colors ${
+                  messagesActive ? linkActive : linkMuted
+                }`}
+              />
+            )}
+
+            {!loading && !user && (
+              <>
+                <Link to="/login" className={`text-sm font-medium ${linkMuted}`}>
+                  Entrar
                 </Link>
-              )
-            })}
+                <Link to="/register" className="btn-primary px-4 py-2 text-xs">
+                  Registro
+                </Link>
+              </>
+            )}
 
-          {!loading && !user && (
-            <>
-              <Link to="/login" className={`text-sm font-medium ${linkMuted}`}>
-                Entrar
-              </Link>
-              <Link to="/register" className="btn-primary px-4 py-2 text-xs">
-                Registro
-              </Link>
-            </>
-          )}
-
-          {user && (
-            <button onClick={handleSignOut} className={`text-sm font-medium ${linkMuted}`}>
-              Salir
-            </button>
-          )}
+            {user && (
+              <button onClick={handleSignOut} className={`text-sm font-medium ${linkMuted}`}>
+                Salir
+              </button>
+            )}
           </nav>
 
           <button
@@ -121,7 +136,7 @@ export default function Header({ transparent = false }: HeaderProps) {
         >
           {user &&
             navItems.slice(1).map(({ to, label }) => {
-              const active = location.pathname === to
+              const active = isNavActive(location.pathname, to)
               return (
                 <Link
                   key={to}
@@ -135,6 +150,16 @@ export default function Header({ transparent = false }: HeaderProps) {
                 </Link>
               )
             })}
+
+          {user && (
+            <MessagesNavLink
+              onClick={() => setMobileOpen(false)}
+              showLabel
+              className={`block py-2 text-sm font-medium ${
+                messagesActive ? linkActive : linkMuted
+              }`}
+            />
+          )}
 
           {!loading && !user && (
             <>

@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Header from './Header'
+import MessageNotifications from './MessageNotifications'
 import { useTheme } from '../context/ThemeContext'
 
 export default function Layout() {
@@ -19,6 +20,7 @@ export default function Layout() {
             : 'bg-gradient-to-b from-rose-50 to-lol-cream'
       }`}
     >
+      <MessageNotifications />
       <Header transparent={isHome} />
       <main className="flex-1">
         <Outlet />

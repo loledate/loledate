@@ -55,6 +55,7 @@ export interface Match {
   lastMessage: string
   lastMessageAt: string
   unread: boolean
+  unreadCount: number
 }
 
 export interface ChatMessage {

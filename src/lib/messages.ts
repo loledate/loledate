@@ -98,3 +98,33 @@ export function subscribeToMessages(
     client.removeChannel(channel)
   }
 }
+
+type IncomingMessageRow = MessageRow & { match_id: string }
+
+export function subscribeToIncomingMessages(
+  currentUserId: string,
+  onIncoming: (row: IncomingMessageRow) => void
+) {
+  const client = requireSupabase()
+
+  const channel = client
+    .channel(`incoming-messages:${currentUserId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+      },
+      (payload) => {
+        const row = payload.new as IncomingMessageRow
+        if (row.sender_id === currentUserId) return
+        onIncoming(row)
+      }
+    )
+    .subscribe()
+
+  return () => {
+    client.removeChannel(channel)
+  }
+}

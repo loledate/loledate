@@ -338,6 +338,21 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
     }
   }
 
+  const { data: unreadRows } = await client
+    .from('messages')
+    .select('match_id')
+    .in('match_id', matchIds)
+    .neq('sender_id', currentUserId)
+    .is('read_at', null)
+
+  const unreadCountByMatch = new Map<string, number>()
+  for (const row of unreadRows ?? []) {
+    unreadCountByMatch.set(
+      row.match_id,
+      (unreadCountByMatch.get(row.match_id) ?? 0) + 1
+    )
+  }
+
   const profiles = [...profileByUserId.values()]
   const reputationByUser = await fetchReputationForUsers(
     profiles.map((p) => p.userId),
@@ -358,16 +373,15 @@ export async function fetchMatches(currentUserId: string): Promise<Match[]> {
       if (!profile) return null
 
       const last = lastMessageByMatch.get(row.id)
-      const unread = last
-        ? last.sender_id !== currentUserId && last.read_at === null
-        : false
+      const unreadCount = unreadCountByMatch.get(row.id) ?? 0
 
       return {
         id: row.id,
         profile,
         lastMessage: last?.content ?? '¡Nuevo match! Escríbele un mensaje.',
         lastMessageAt: last?.created_at ?? row.matched_at,
-        unread,
+        unread: unreadCount > 0,
+        unreadCount,
       }
     })
     .filter((m): m is NonNullable<typeof m> => m !== null)
@@ -420,15 +434,20 @@ export async function fetchMatchById(
     .limit(1)
 
   const last = (messageRows as DbMessageRow[] | null)?.[0]
-  const unread = last
-    ? last.sender_id !== currentUserId && last.read_at === null
-    : false
+
+  const { count: unreadCount } = await client
+    .from('messages')
+    .select('*', { count: 'exact', head: true })
+    .eq('match_id', matchId)
+    .neq('sender_id', currentUserId)
+    .is('read_at', null)
 
   return {
     id: matchRow.id,
     profile: mapRowToProfile(profileRow as ProfileRow),
     lastMessage: last?.content ?? '¡Nuevo match! Escríbele un mensaje.',
     lastMessageAt: last?.created_at ?? matchRow.matched_at,
-    unread,
+    unread: (unreadCount ?? 0) > 0,
+    unreadCount: unreadCount ?? 0,
   }
 }

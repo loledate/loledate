@@ -36,6 +36,8 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!matchId || !user) {
@@ -130,7 +132,14 @@ export default function ChatPage() {
   }, [matchId, user, refreshMatchesSilent])
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (matchLoading || !match) return
+    inputRef.current?.focus()
+  }, [matchLoading, match, matchId])
+
+  useEffect(() => {
+    const container = messagesContainerRef.current
+    if (!container) return
+    container.scrollTop = container.scrollHeight
   }, [messages])
 
   const handleSend = useCallback(async () => {
@@ -153,6 +162,7 @@ export default function ChatPage() {
       )
     } finally {
       setSending(false)
+      inputRef.current?.focus()
     }
   }, [input, match, user, matchId, sending, refreshMatchesSilent])
 
@@ -208,7 +218,10 @@ export default function ChatPage() {
         </Link>
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+      <div
+        ref={messagesContainerRef}
+        className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
+      >
         {messagesLoading ? (
           <p className="py-8 text-center text-sm text-muted">
             Cargando mensajes...
@@ -276,15 +289,16 @@ export default function ChatPage() {
         )}
         <div className="flex items-center gap-3">
           <input
+            ref={inputRef}
             type="text"
             value={input}
+            autoFocus
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') void handleSend()
             }}
             placeholder="Escribe un mensaje..."
             className="input-field flex-1"
-            disabled={sending}
           />
           <button
             type="button"

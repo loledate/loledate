@@ -35,6 +35,7 @@ interface AppContextType {
   likeProfile: (type: 'like' | 'super_like') => Promise<boolean>
   matches: Match[]
   matchesLoading: boolean
+  unreadMessageCount: number
   refreshMatches: () => Promise<void>
   refreshMatchesSilent: () => Promise<void>
   applyFilters: () => void
@@ -240,6 +241,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [user, refreshDiscover]
   )
 
+  const unreadMessageCount = matches.reduce(
+    (total, match) => total + match.unreadCount,
+    0
+  )
+
   return (
     <AppContext.Provider
       value={{
@@ -256,6 +262,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         likeProfile,
         matches,
         matchesLoading,
+        unreadMessageCount,
         applyFilters,
         clearFilters,
         refreshDiscover,
