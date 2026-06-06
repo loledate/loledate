@@ -76,9 +76,7 @@ export default function Header({ transparent = false }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-3">
-          <div className="hidden sm:block">
-            <SocialLinks />
-          </div>
+          <SocialLinks iconClassName="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           <ThemeToggle />
 
           <nav className="hidden items-center gap-5 md:flex">

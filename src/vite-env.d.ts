@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_SITE_URL?: string
   readonly VITE_DISCORD_URL?: string
   readonly VITE_X_URL?: string
+  readonly VITE_TIKTOK_URL?: string
 }
 
 

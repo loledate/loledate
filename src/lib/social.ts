@@ -1,6 +1,8 @@
 export const SOCIAL_LINKS = {
   discord: import.meta.env.VITE_DISCORD_URL ?? 'https://discord.gg/sn7v9CDgV',
   x: import.meta.env.VITE_X_URL ?? 'https://x.com/loledate',
+  tiktok:
+    import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/@loledate',
 } as const
 
 export function normalizeXUsername(value: string): string {
