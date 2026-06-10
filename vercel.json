@@ -1,8 +1,15 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/google6aa455d7e22da7ab.html", "destination": "/google6aa455d7e22da7ab.html" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
   "headers": [
+    {
+      "source": "/google6aa455d7e22da7ab.html",
+      "headers": [{ "key": "Content-Type", "value": "text/html; charset=utf-8" }]
+    },
     {
       "source": "/robots.txt",
       "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }]
